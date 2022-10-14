@@ -4,4 +4,5 @@
 - Bernard Aire
 - Suhaib Tariq
 - Daniel Jin
+- Etta Liu
 - Ling Lee
