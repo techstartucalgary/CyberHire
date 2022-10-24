@@ -9,5 +9,12 @@
 			"name": "Backend"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"search.exclude": {
+			"**/node_modules": true
+		},
+		"files.exclude": {
+			"**/node_modules": true
+		}
+	}
 }
