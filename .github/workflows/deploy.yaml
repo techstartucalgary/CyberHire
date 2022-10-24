@@ -20,6 +20,7 @@ jobs:
 
       - name: build
         run: |
+          cd frontend
           sudo apt-get -y update
           sudo apt-get -y install nodejs npm
           npm install
