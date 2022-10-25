@@ -34,6 +34,6 @@ jobs:
           full_commit_message: ${{ github.event.head_commit.message }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: production-front
-          publish_dir: frontend/build
+          publish_dir: build
           user_name: github-actions[bot]
           user_email: github-actions[bot]@users.noreply.github.com
