@@ -10,6 +10,8 @@ function App() {
         <ul>
           <li>Ben</li>
           <li>Etta</li>
+          <li>Ana</li>
+          <li>Ling</li>
         </ul>
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
