@@ -9,6 +9,7 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
         <ul>
           <li>Ben</li>
+          <li>Ahsaas</li>
           <li>Etta</li>
           <li>Ana</li>
           <li>Ling</li>
