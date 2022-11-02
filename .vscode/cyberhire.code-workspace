@@ -12,9 +12,13 @@
 	"settings": {
 		"search.exclude": {
 			"**/node_modules": true
+			"**/__pycache__": true
+			"**/.vscode": true
 		},
 		"files.exclude": {
 			"**/node_modules": true
+			"**/__pycache__": true
+			"**/.vscode/": true
 		}
 	}
 }
