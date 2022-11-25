@@ -2,7 +2,7 @@
   "name": "cyberhire",
   "version": "0.1.0",
   "private": true,
-  "homepage" : "https://cyberhire.techstartucalgary.com/",
+  "homepage": "https://cyberhire.techstartucalgary.com/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -11,6 +11,8 @@
     "@types/node": "^16.11.65",
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
+    "react-router": "^6.4.3",
+    "react-router-dom": "^6.4.3",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -41,9 +43,9 @@
     "@typescript-eslint/eslint-plugin": "^5.40.1",
     "@typescript-eslint/parser": "^5.40.1",
     "eslint": "^8.25.0",
-    "typescript": "^4.8.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "typescript": "^4.8.4"
   }
 }
