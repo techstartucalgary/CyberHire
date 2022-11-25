@@ -1,0 +1,5 @@
+#run 'pip install -r reqs.txt'
+fastapi[all]
+uvicorn
+sqlalchemy   
+python-dotenv
