@@ -11,7 +11,7 @@ def get_user_by_email(db: Session, email: str):
     return db.query(models.User).filter(models.User.email == email).first()
 
 def create_user(db: Session, user: schemas.UserCreate):
-    ctx = CryptContext()
+    ctx = CryptContext(schemes=["bcrypt"], deprecated="auto")
     hashed_password = ctx.hash(user.password)
     db_user = models.User(
         username=user.username,
