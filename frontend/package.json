@@ -14,6 +14,8 @@
     "@types/node": "^16.11.65",
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
+    "react-router": "^6.4.4",
+    "react-router-dom": "^6.4.4",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
