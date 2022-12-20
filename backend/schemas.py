@@ -13,7 +13,7 @@ class UserInDb(UserBase):
     Model for reading a user from the database.
     """
     id: int
-    password: str
+    hashed_password: str
     class Config:
         orm_mode = True
 

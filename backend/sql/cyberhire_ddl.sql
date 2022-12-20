@@ -8,3 +8,15 @@ CREATE TABLE IF NOT EXISTS cyberhire."user" (
 	CONSTRAINT user_pkey PRIMARY KEY (id),
 	CONSTRAINT user_username_unique_1 UNIQUE (username)
 )
+
+CREATE TABLE IF NOT EXISTS cyberhire."skill" (
+	id serial4 NOT NULL,
+	skill varchar(30) NOT NULL UNIQUE,
+	CONSTRAINT skill_skill_unique UNIQUE (skill)
+)
+
+CREATE TABLE IF NOT EXISTS cyberhire.user_skill (
+	user_id int4 NOT NULL,
+	skill_id int4 NOT NULL,
+	CONSTRAINT user_skill_user_fk FOREIGN KEY REFERENES
+)

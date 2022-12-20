@@ -3,7 +3,7 @@ import datetime
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from sqlalchemy.orm import Session
-import crud, schemas
+import crud, schemas, models
 from database import SessionLocal
 from passlib.context import CryptContext
 from jose import JWTError, jwt
@@ -17,6 +17,8 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 password_ctx = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 app = FastAPI()
+
+# Utility Functions
 
 def verify_password(plain_password: str, hashed_password: str):
 	"""
@@ -54,27 +56,6 @@ def get_password_hash(password):
 
 	return password_ctx.hash(password)
 
-def get_db():
-	"""
-	Dependency function to get a database instance.
-	
-	Parameters
-	----------
-	None
-
-	Returns
-	-------
-	Session
-		a database session
-	"""
-
-	session = SessionLocal()
-	session.execute("SET SEARCH_PATH to cyberhire")
-	try:
-		yield session
-	finally:
-		session.close()
-
 def get_user(username: str, db: Session):
 	"""
 	Utility function to get a user from the database.
@@ -91,6 +72,7 @@ def get_user(username: str, db: Session):
 	user: models.User
 		a sqlsalchemy user object
 	"""
+	
 	user = crud.get_user_by_username(db, username)
 	
 	return user
@@ -148,9 +130,32 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 	access_token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
 	return access_token
 
+# Dependencies
+
+def get_db():
+	"""
+	Dependency function to get a database instance.
+	
+	Parameters
+	----------
+	None
+
+	Returns
+	-------
+	Session
+		a database session
+	"""
+
+	session = SessionLocal()
+	session.execute("SET SEARCH_PATH to cyberhire")
+	try:
+		yield session
+	finally:
+		session.close()
+
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
 	"""
-	Utility function to get the user from the token.
+	Dependency function to get the user from the token.
 	
 	Parameters
 	----------
@@ -175,12 +180,52 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
 		username = payload.get("sub")
 		if username is None:
 			raise credential_exception
-	except JWTError as e:
+	except JWTError:
 		raise credential_exception
 	user = get_user(username, db)
 	if user is None:
 		raise credential_exception
 	return user
+
+def get_current_recruiter_user(current_user: models.User = Depends(get_current_user)):
+	"""
+	Dependency function to get and authorize a recruiter user.
+
+	Parameters
+	----------
+	current_user : models.User
+		a sqlalchemy user object representing the current user
+	
+	Returns
+	-------
+	models.User
+		a sqlalchemy user object representing the current recruiter user
+	"""
+
+	if not current_user.is_recruiter:
+		raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Not recruiter.")
+	return current_user
+
+def get_current_applicant_user(current_user: models.User = Depends(get_current_user)):
+	"""
+	Dependency function to get and authorize an applicant user.
+
+	Parameters
+	----------
+	current_user : models.User
+		a sqlalchemy user object representing the current user
+	
+	Returns
+	-------
+	models.User
+		a sqlalchemy user object representing the current applicant user
+	"""
+
+	if current_user.is_recruiter:
+		raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Not applicant.")
+	return current_user
+
+# Path Operation Functions
 
 @app.post("/token", response_model=schemas.Token)
 def login(form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
@@ -203,8 +248,9 @@ def login(form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get
 	user = authenticate_user(form.username, form.password, db)
 	if not user:
 		raise HTTPException(
-			status_code=status.HTTP_400_BAD_REQUEST,
-			detail="Incorrect username or password"
+			status_code=status.HTTP_401_UNAUTHORIZED,
+			detail="Incorrect username or password",
+			headers={"WWW-Authenticate": "Bearer"}
 		)
 	access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
 	access_token = create_access_token(
