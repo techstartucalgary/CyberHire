@@ -31,10 +31,3 @@ class User(UserBase):
 
     class Config:
         orm_mode = True
-
-class Token(BaseModel):
-    """
-    Model for returning a token
-    """
-    access_token: str
-    token_type: str

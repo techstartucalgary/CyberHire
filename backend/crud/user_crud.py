@@ -1,8 +1,9 @@
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
-ALGORITHM = "HS256"
+from ..models import user_model
+from ..schemas import user_schema
 
-import models, schemas
+ALGORITHM = "HS256"
 
 def get_user(db: Session, user_id: int):
     """
@@ -14,7 +15,7 @@ def get_user(db: Session, user_id: int):
         the user's id in the database
     """
 
-    return db.query(models.User).filter(models.User.id == user_id).first()
+    return db.query(user_model.User).filter(user_model.User.id == user_id).first()
 
 def get_user_by_email(db: Session, email: str):
     """
@@ -26,7 +27,7 @@ def get_user_by_email(db: Session, email: str):
         the user's email address
     """
 
-    return db.query(models.User).filter(models.User.email == email).first()
+    return db.query(user_model.User).filter(user_model.User.email == email).first()
 
 def get_user_by_username(db: Session, username: str):
     """
@@ -38,9 +39,9 @@ def get_user_by_username(db: Session, username: str):
         the user's username
     """
     
-    return db.query(models.User).filter(models.User.username == username).first()
+    return db.query(user_model.User).filter(user_model.User.username == username).first()
 
-def create_user(db: Session, user: schemas.UserCreate):
+def create_user(db: Session, user: user_schema.UserCreate):
     """
     Utility function to create a user in the database
 
@@ -52,7 +53,7 @@ def create_user(db: Session, user: schemas.UserCreate):
 
     ctx = CryptContext(schemes=["bcrypt"], deprecated="auto")
     hashed_password = ctx.hash(user.password)
-    db_user = models.User(
+    db_user = user_model.User(
         username=user.username,
         password=hashed_password,
         email=user.email,
