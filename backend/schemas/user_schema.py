@@ -1,11 +1,11 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr, Field
 
 class UserBase(BaseModel):
     """
     Base model for user.
     """
-    username: str
-    email: str
+    username: str = Field(max_length=100, min_length=5)
+    email: EmailStr
     is_recruiter: bool
 
 class UserInDb(UserBase):
@@ -21,7 +21,17 @@ class UserCreate(UserBase):
     """
     Model for creating a new user in the database.
     """
-    password: str
+    password: str = Field(max_length=25, min_length=8)
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "username": "MyUsername",
+                "email": "my@example.com",
+                "is_recruiter": "true",
+                "password": "mySecretPassword"
+            }
+        }
 
 class User(UserBase):
     """
@@ -31,3 +41,11 @@ class User(UserBase):
 
     class Config:
         orm_mode = True
+        schema_extra = {
+            "example": {
+                "id": 1,
+                "username": "MyUsername",
+                "email": "my@example.com",
+                "is_recruiter": "true",
+            }
+        }

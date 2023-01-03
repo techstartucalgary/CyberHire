@@ -1,10 +1,10 @@
 from .database import SessionLocal
+from .models import user_model
+from .crud import user_crud
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends, status, HTTPException
 from sqlalchemy.orm import Session
 from jose import JWTError, jwt
-from .models import user_model
-from .crud import user_crud
 from passlib.context import CryptContext
 from datetime import timedelta, datetime
 
@@ -47,7 +47,7 @@ def get_password_hash(password):
 	Returns
 	-------
 	str
-		encrypted versio of password.
+		encrypted version of password.
 	"""
 
 	return password_ctx.hash(password)
@@ -65,7 +65,7 @@ def get_user(username: str, db: Session):
 
 	Returns
 	-------
-	user: models.User
+	user: models.user_model.User
 		a sqlsalchemy user object
 	"""
 	
@@ -88,10 +88,10 @@ def authenticate_user(username: str, password: str, db: Session):
 
 	Returns
 	-------
-	models.User | boolean
+	models.user_model.User | boolean
 		False if the user does not exist with the given username in
 		the database, or if the password is incorrect.
-		models.User if otherwise.
+		models.user_model.User if otherwise.
 	"""
 
 	user = get_user(username, db)
@@ -163,7 +163,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
 
 	Returns
 	-------
-	models.user
+	models.user_model.user
 		a sqlalchemy user object representing the current user
 	"""
 
@@ -195,7 +195,7 @@ def get_current_recruiter_user(current_user: user_model.User = Depends(get_curre
 	
 	Returns
 	-------
-	models.User
+	models.user_model.User
 		a sqlalchemy user object representing the current recruiter user
 	"""
 
@@ -214,7 +214,7 @@ def get_current_applicant_user(current_user: user_model.User = Depends(get_curre
 	
 	Returns
 	-------
-	models.User
+	models.user_model.User
 		a sqlalchemy user object representing the current applicant user
 	"""
 

@@ -2,6 +2,9 @@ from sqlalchemy import Boolean, String, Integer, Column
 from ..database import Base
 
 class User(Base):
+    """
+    Model for the user table in the database.
+    """
     __tablename__ = "user"
 
     id = Column(Integer, primary_key=True, index=True)
