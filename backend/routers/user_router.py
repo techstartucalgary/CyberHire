@@ -5,14 +5,21 @@ from sqlalchemy.orm import Session
 from ..crud import user_crud
 from ..models import user_model
 from ..schemas import user_schema, token_schema
-# from ..database import SessionLocal
 from .. import dependencies
 
 router = APIRouter()
 
 # Path Operation Functions
 
-@router.post("/token", response_model=token_schema.Token)
+@router.post(
+	"/token", 
+	response_model=token_schema.Token, 
+	status_code=status.HTTP_200_OK,
+	tags=["User"],
+	summary="Login route to return an access token.",
+	description="Return an access token if authenticated, otherwise return a 401 status code.",
+	response_description="The access token."
+	)
 def login(form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(dependencies.get_db)):
 	"""
 	Login route to return an access token.
@@ -26,7 +33,7 @@ def login(form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(dep
 
 	Returns
 	-------
-	schemas.Token
+	schemas.token_schema.Token
 		a dict with keys access_token and token_type
 	"""
 	user = dependencies.authenticate_user(form.username, form.password, db)
@@ -44,14 +51,49 @@ def login(form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(dep
 	return {"access_token": access_token, "token_type": "bearer"}
 
 
-@router.post("/users/", response_model=user_schema.User)
+@router.post(
+	"/users/", 
+	response_model=user_schema.User,
+	summary="Create a new user.",
+	description="Create a new user with all information, including username, email, is_recruiter, and password.",
+	status_code=status.HTTP_201_CREATED,
+	tags=["User"],
+	response_description="The created user."
+	)
 def create_user(user: user_schema.UserCreate, db: Session = Depends(dependencies.get_db)):
+
 	existing_user = user_crud.get_user_by_username(db, user.username)
 	if existing_user:
 		raise HTTPException(status_code=400, detail="Username already exists.")
 	return user_crud.create_user(db, user)
 
-@router.get("/users/me", response_model=user_schema.User)
+@router.get(
+	"/users/me", 
+	response_model=user_schema.User,
+	summary="Return current user information.",
+	description="Return current user information, including username, email, is_recruiter, and id.",
+	status_code=status.HTTP_200_OK,
+	tags=["User"],
+	response_description="The current user."
+	)
 def get_user_me(user=Depends(dependencies.get_current_user)):
 	return user
 
+@router.delete(
+	"/users",
+	response_model=user_schema.User,
+	summary="Delete a user from the database.",
+	description="Delete a applicant or a recruiter from the database if their account is no longer required.",
+	status_code=status.HTTP_200_OK,
+	tags=["User"],
+	response_description="The deleted user."
+)
+def delete_user(user=Depends(dependencies.get_current_user), db: Session = Depends(dependencies.get_db)):
+
+	existing_user = user_crud.get_user_by_username(db, user.username)
+	if not existing_user:
+		raise HTTPException(
+			status_code=400,
+			detail="Username does not exist."
+		)
+	return user_crud.delete_user_by_username(db, user.username)
