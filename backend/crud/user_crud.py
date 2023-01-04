@@ -115,3 +115,18 @@ def delete_user_by_username(db: Session, username: str):
     db.delete(db_user)
     db.commit()
     return db_user
+
+def update_user(db: Session, user: user_schema.UserInDb):
+    """
+    Utility function to update a user in the database
+    """
+    current_user = db.query(user_model.User).filter(user_model.User.id == user.id).first()
+    if current_user:
+        current_user.username = user.username
+        current_user.password = user.hashed_password
+        current_user.email = user.email
+        current_user.is_recruiter = user.is_recruiter
+        db.commit()
+        db.refresh(current_user)
+        return current_user
+    
