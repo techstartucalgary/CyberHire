@@ -33,6 +33,15 @@ class UserCreate(UserBase):
             }
         }
 
+class UserPatch(UserBase):
+    """
+    Model for partial updates to a user.
+    """
+    username: str | None = Field(max_length=100, min_length=5)
+    email: EmailStr | None
+    is_recruiter: bool | None
+    password: str | None = Field(max_length=25, min_length=8)
+
 class User(UserBase):
     """
     Model safe to return without the password.
