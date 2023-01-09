@@ -13,8 +13,8 @@ router = APIRouter()
 # Path Operation Functions
 
 @router.post(
-	"/token", 
-	response_model=token_schema.Token, 
+	"/token",
+	response_model=token_schema.Token,
 	status_code=status.HTTP_200_OK,
 	tags=["User"],
 	summary="Login route to return an access token.",
@@ -24,7 +24,7 @@ router = APIRouter()
 def login(form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(dependencies.get_db)):
 	"""
 	Login route to return an access token.
-	
+
 	Parameters
 	----------
 	form: OAuth2PasswordRequestForm
@@ -53,7 +53,7 @@ def login(form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(dep
 
 
 @router.post(
-	"/users/", 
+	"/users/",
 	response_model=user_schema.User,
 	summary="Create a new user.",
 	description="Create a new user with all information, including username, email, is_recruiter, and password.",
@@ -93,7 +93,10 @@ def create_user(user: user_schema.UserCreate, db: Session = Depends(dependencies
 	tags=["User"],
 	response_description="The deleted user."
 )
-def delete_user_me(user: user_model.User = Depends(dependencies.get_current_user), db: Session = Depends(dependencies.get_db)):
+def delete_user_me(
+	user: user_model.User = Depends(dependencies.get_current_user),
+	db: Session = Depends(dependencies.get_db)
+	):
 	"""
 	A delete route for deleting a user from the database.
 
@@ -126,8 +129,8 @@ def delete_user_me(user: user_model.User = Depends(dependencies.get_current_user
 	tags=["User"],
 	response_description="The user's updated account information, including username, email, is_recruiter, and id."
 )
-def patch_user_me(*, 
-	current_user_data: user_model.User = Depends(dependencies.get_current_user), 
+def patch_user_me(*,
+	current_user_data: user_model.User = Depends(dependencies.get_current_user),
 	new_user_data: user_schema.UserPatch,
 	db: Session = Depends(dependencies.get_db)
 ):
@@ -164,7 +167,7 @@ def patch_user_me(*,
 				status_code=status.HTTP_400_BAD_REQUEST,
 				detail="Email is already taken by another user."
 			)
-		
+
 	current_user_model = user_schema.UserInDb(
 		id=int(str(current_user_data.id)),
 		username=str(current_user_data.username),
@@ -176,11 +179,11 @@ def patch_user_me(*,
 	if new_user_data.password:
 		update_data["hashed_password"] = dependencies.get_password_hash(new_user_data.password)
 	updated_user = current_user_model.copy(update=update_data)
-	
+
 	return user_crud.update_user(db, updated_user)
 
 @router.get(
-	"/users/me", 
+	"/users/me",
 	response_model=user_schema.User,
 	summary="Return current user information.",
 	description="Return current user information, including username, email, is_recruiter, and id.",
@@ -196,11 +199,10 @@ def get_user_me(user: user_model.User = Depends(dependencies.get_current_user)):
 	----------
 	user: models.user_model.User
 		a sqlalchemy user object representing the current user
-	
+
 	Returns
 	-------
 	schames.user_schema.User
 		a pydantic user object representing the current user
 	"""
 	return user
-
