@@ -1,3 +1,4 @@
+-- Create the user table
 CREATE TABLE IF NOT EXISTS cyberhire."user" (
 	id serial4 NOT NULL,
 	username varchar(100) NOT NULL,
@@ -9,16 +10,26 @@ CREATE TABLE IF NOT EXISTS cyberhire."user" (
 	CONSTRAINT user_username_unique_1 UNIQUE (username)
 );
 
-CREATE TABLE IF NOT EXISTS cyberhire."skill" (
-	id serial4 NOT NULL,
-	skill varchar(30) NOT NULL UNIQUE,
-	CONSTRAINT skill_pkey PRIMARY KEY (id),
-	CONSTRAINT skill_skill_unique UNIQUE (skill)
+-- Create the user profile table
+CREATE TABLE IF NOT EXISTS cyberhire."user_profile" (
+	user_id int4 NOT NULL PRIMARY KEY,
+	first_name varchar(30) NOT NULL,
+	last_name varchar(30) NOT NULL,
+	profile_picture bytea NULL,
+	resume byteA NULL,
+	CONSTRAINT user_profile_fk FOREIGN KEY (user_id) REFERENCES cyberhire.user (id)
 );
 
+-- Create the skill table
+CREATE TABLE IF NOT EXISTS cyberhire."skill" (
+	id serial4 NOT NULL PRIMARY KEY,
+	skill varchar(30) NOT NULL UNIQUE
+);
+
+-- Create the user_profile_skill 
 CREATE TABLE IF NOT EXISTS cyberhire.user_skill (
-	user_id int4 NOT NULL,
+	user_profile_id int4 NOT NULL,
 	skill_id int4 NOT NULL,
-	CONSTRAINT user_skill_user_fk FOREIGN KEY (user_id) REFERENCES cyberhire.user (id),
+	CONSTRAINT user_skill_user_profile_fk FOREIGN KEY (user_profile_id) REFERENCES cyberhire.user_profile (user_id),
 	CONSTRAINT user_skill_skill_fk2 FOREIGN KEY (skill_id) REFERENCES cyberhire.skill (id)
 );
