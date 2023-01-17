@@ -79,7 +79,7 @@ class UserProfile(UserProfileBase):
     Model for returning a user profile.
     """
 
-    id: int
+    user_id: int
     skills: list[Skill]
 
     class Config:
