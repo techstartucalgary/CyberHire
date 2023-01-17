@@ -1,3 +1,7 @@
+DROP SCHEMA IF EXISTS cyberhire CASCADE;
+
+CREATE SCHEMA IF NOT EXISTS cyberhire;
+
 -- Create the user table
 CREATE TABLE IF NOT EXISTS cyberhire."user" (
 	id serial4 NOT NULL,
