@@ -59,7 +59,7 @@ function PrivacyPolicy() {
         You have the right to access your personal information and request that
         it be corrected or deleted. You may also make a complaint about our
         handling of your personal information. To exercise these rights, please
-        contact our Privacy Compliance Officer at [insert contact information].
+        contact our Privacy Compliance Officer at <a href="mailto:cyberhiretsu+privacy@gmail.com">cyberhiretsu+privacy@gmail.com</a>.
         We will fulfill your request within 30 days.
         <br />
         We may update this Privacy Policy from time to time by updating this
@@ -72,7 +72,7 @@ function PrivacyPolicy() {
         By using our Website, you consent to our collection, use, and storage of
         your personal information as described in this Privacy Policy. If you
         have any questions or concerns, please contact our Privacy Compliance
-        Officer at [insert contact information].
+        Officer at <a href="mailto:cyberhiretsu+privacy@gmail.com">cyberhiretsu+privacy@gmail.com</a>.
       </Typography>
     </Box>
   );
