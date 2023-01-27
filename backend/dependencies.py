@@ -1,6 +1,6 @@
 from .database import SessionLocal
 from .models import user_model
-from .crud import user_crud
+from .crud import user_crud, user_profile_crud
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends, status, HTTPException
 from sqlalchemy.orm import Session
@@ -126,6 +126,15 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 	access_token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
 	return access_token
 
+def user_profile_exists(db: Session, id: int):
+	
+	database_user_profile = user_profile_crud.get_user_profile_by_id(db, id)
+
+	if database_user_profile is None:
+		raise HTTPException(
+			status_code=status.HTTP_400_BAD_REQUEST,
+			detail="User does not have a database profile. Please create one first."
+		)
 
 # Dependencies
 
