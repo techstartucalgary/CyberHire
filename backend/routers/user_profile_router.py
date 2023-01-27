@@ -2,7 +2,6 @@ from fastapi import APIRouter, Depends, HTTPException, status, Path, File, Respo
 from sqlalchemy.orm import Session
 from ..schemas import user_profile_schema
 from ..models import user_profile_model, user_model
-from ..database import SessionLocal
 from .. import dependencies
 from ..crud import user_profile_crud, user_crud
 
@@ -43,7 +42,7 @@ def get_user_profile_me(
 
 @router.get(
     "/users/profile/{username}",
-    response_model=user_profile_schema.UserProfile,
+    response_model=user_profile_schema.UserProfile | None,
     status_code=status.HTTP_200_OK,
     tags=["UserProfile"],
     summary="Get a user's profile information.",
@@ -85,6 +84,23 @@ def create_user_profile(
             detail="User profile already exists."
         )
     return user_profile_crud.create_user_profile(db, current_user.id, user_profile)
+
+@router.delete(
+    "users/profile/me",
+    response_model=user_profile_schema.UserProfile,
+    status_code=status.HTTP_200_OK,
+    tags=["UserProfile"],
+    summary="Delete the current user's profile from the database.",
+    description="Delete the current user's profile from the database, " \
+        "inlcuding their name, profile picture, resume, and skills.",
+    response_description="The deleted user's profile."
+)
+def delete_user_profile_me(
+    db: Session,
+    current_user: user_model.User = Depends(dependencies.get_current_user)
+):
+    pass
+
     
 @router.patch(
     "/users/profile/resume",
@@ -105,11 +121,14 @@ def update_user_resume(
     current_user: user_model.User = Depends(dependencies.get_current_user),
     resume: bytes | None = File(default=None)
 ):
+
+    dependencies.user_profile_exists(db, current_user.id)
     database_user : user_profile_model.UserProfile = user_profile_crud.update_user_resume(
         db,
         current_user.id,
         resume
     )
+
     file = database_user.resume
     return Response(
         content=file,
@@ -128,7 +147,7 @@ def update_user_resume(
     },
     status_code=status.HTTP_200_OK,
     tags=["UserProfile"],
-    summary="Update a user's profile picture",
+    summary="Update a user's profile picture.",
     description="Update a user's profile picture as a bytes string.",
     response_description="The newly updated user's profile picture.",
     response_class=Response
@@ -138,6 +157,8 @@ def update_user_profile_picture(
     current_user: user_model.User = Depends(dependencies.get_current_user),
     profile_picture: bytes | None = File(default=None)
 ):
+
+    dependencies.user_profile_exists(db, current_user.id)
     database_user : user_profile_model.UserProfile = user_profile_crud.update_user_profile_picture(
         db,
         current_user.id,
