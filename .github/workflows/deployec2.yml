@@ -22,6 +22,7 @@ jobs:
           TARGET: ${{secrets.TARGET_DIR}}
 
   build:
+    needs: deploy
     name: Build
     runs-on: ubuntu-latest
     steps:
