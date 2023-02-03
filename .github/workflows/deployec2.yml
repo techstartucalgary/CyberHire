@@ -32,8 +32,8 @@ jobs:
           username: ${{secrets.USERNAME}}
           key: ${{secrets.EC2_SSH_KEY}}
           script: |
-            cd ${{secrets.TARGET_DIR}}
+            cd ${{secrets.TARGET_DIR}}/backend
             pip3 install -r reqs.txt
-            cd ..
+            cd ../../
             uvicorn backend.main:app --reload
 
