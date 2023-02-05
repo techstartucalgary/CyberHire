@@ -35,6 +35,5 @@ jobs:
           script: |
             cd ${{secrets.TARGET_DIR}}/backend
             pip3 install -r reqs.txt
-            cd ../../
-            uvicorn backend.main:app --reload
-
+      - run: cd ~/CyberHire
+      - run: uvicorn backend.main:app
