@@ -22,3 +22,14 @@ CREATE TABLE IF NOT EXISTS cyberhire.user_skill (
 	CONSTRAINT user_skill_user_fk FOREIGN KEY (user_id) REFERENCES cyberhire.user (id),
 	CONSTRAINT user_skill_skill_fk2 FOREIGN KEY (skill_id) REFERENCES cyberhire.skill (id)
 );
+
+CREATE TABLE IF NOT EXISTS cyberhire."job" (
+	id serial4 NOT NULL,
+	title varchar(100) NOT NULL,
+	description varchar(2000) NOT NULL,
+	skills varchar(1000) NOT NULL,
+	location varchar(100) NOT NULL,
+	salary_range varchar(100) NULL,
+	description varchar(1000) NOT NULL,
+	CONSTRAINT job_pkey PRIMARY KEY (id)
+);
