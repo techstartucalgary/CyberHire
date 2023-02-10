@@ -126,15 +126,29 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 	access_token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
 	return access_token
 
-def user_profile_exists(db: Session, id: int):
-	
+def user_profile_exists(db: Session, id):
+	"""
+	Utility function to check if a user has an associated profile
+	in the user_profile table in the database.
+
+	Parameters
+	----------
+	db: Session
+		a database session
+	id: a user id
+
+	Raises
+	------
+	HTTPException
+		if the there is no associated profile with the user id given
+	"""
 	database_user_profile = user_profile_crud.get_user_profile_by_id(db, id)
 
 	if database_user_profile is None:
 		raise HTTPException(
 			status_code=status.HTTP_400_BAD_REQUEST,
 			detail="User does not have a database profile. Please create one first."
-		)
+			)
 
 # Dependencies
 
