@@ -6,6 +6,11 @@ class SkillBase(BaseModel):
     """
     skill: str = Field(max_length=30)
 
+class SkillCreate(SkillBase):
+    """
+    Model for adding a new skill to the database.
+    """
+
 class Skill(SkillBase):
     """
     Model to return a skill.
