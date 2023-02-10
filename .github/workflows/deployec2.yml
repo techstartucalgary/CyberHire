@@ -34,5 +34,5 @@ jobs:
           key: ${{secrets.EC2_SSH_KEY}}
           script: |
             cd ${{secrets.TARGET_DIR}}/backend
-            python3.11 -m pip install -r reqs.txt
+            python3.7 -m pip install -r reqs.txt
             ./run-server.sh
