@@ -38,6 +38,12 @@ class UserProfilePatch(UserProfileBase):
             }
         }
 
+class UserProfileInDB(UserProfileBase):
+    """
+    Model for updating a user profile in the database.
+    """
+    user_id: int
+
 class UserProfile(UserProfileBase):
     """
     Model for returning a user profile.
