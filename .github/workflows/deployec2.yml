@@ -34,6 +34,5 @@ jobs:
           key: ${{secrets.EC2_SSH_KEY}}
           script: |
             cd ${{secrets.TARGET_DIR}}/backend
-            pip3 install -r reqs.txt
-      - run: cd ~/CyberHire
-      - run: uvicorn backend.main:app
+            python3.11 -m pip install -r reqs.txt
+            ./run-server.sh
