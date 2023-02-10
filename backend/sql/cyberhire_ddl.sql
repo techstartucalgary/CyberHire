@@ -38,3 +38,25 @@ CREATE TABLE IF NOT EXISTS cyberhire.user_profile_skill (
 	CONSTRAINT user_profile_skill_skill_fk2 FOREIGN KEY (skill_id) REFERENCES cyberhire.skill (id),
 	CONSTRAINT user_profile_skill_unique UNIQUE (user_profile_id, skill_id)
 );
+
+-- Create for the job table
+CREATE TABLE IF NOT EXISTS cyberhire."job" (
+	id serial4 NOT NULL,
+	user_profile_id int4 NOT NULL,
+	title varchar(100) NOT NULL,
+	description varchar(2000) NOT NULL,
+	skills varchar(1000) NOT NULL,
+	location varchar(100) NOT NULL,
+	salary_range varchar(100) NULL,
+	CONSTRAINT job_pkey PRIMARY KEY (id),
+	CONSTRAINT job_user_profile_fk FOREIGN KEY (user_profile_id) REFERENCES cyberhire.user_profile (user_id)
+);
+
+-- Create for the job_skill table
+CREATE TABLE IF NOT EXISTS cyberhire."job_skill" (
+	job_id int4 NOT NULL,
+	skill_id int4 NOT NULL,
+	CONSTRAINT job_skill_pkey PRIMARY KEY (job_id, skill_id),
+	CONSTRAINT job_skill_fk FOREIGN KEY (job_id) REFERENCES cyberhire."job" (id),
+	CONSTRAINT job_skill_fk2 FOREIGN KEY (skill_id) REFERENCES cyberhire."skill" (id)
+);
