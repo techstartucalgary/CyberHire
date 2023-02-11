@@ -4,6 +4,8 @@ on:
   push:
     branches: 
       - main
+    paths:
+      - backend/**
 
 jobs:
   deploy:
@@ -20,20 +22,3 @@ jobs:
           REMOTE_HOST: ${{secrets.HOST_DNS}}
           REMOTE_USER: ${{secrets.USERNAME}}
           TARGET: ${{secrets.TARGET_DIR}}
-
-  build:
-    needs: deploy
-    name: Build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Run server
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{secrets.HOST_DNS}}
-          username: ${{secrets.USERNAME}}
-          key: ${{secrets.EC2_SSH_KEY}}
-          script: |
-            cd ${{secrets.TARGET_DIR}}/backend
-            python3 -m pip install -r reqs.txt
-            cd ${{secrets.TARGET_DIR}}
-            ~/.local/bin/uvicorn backend.main:app
