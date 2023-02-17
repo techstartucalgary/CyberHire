@@ -2,6 +2,7 @@ from sqlalchemy import String, Integer, Column
 from ..database import Base
 from sqlalchemy.orm import relationship
 from .user_profile_skill_model import UserProfileSkill
+from .job_skill_model import JobSkill
 
 class Skill(Base):
     """
@@ -13,4 +14,4 @@ class Skill(Base):
     skill = Column(String(30), nullable=False, unique=True)
 
     users = relationship("UserProfile", secondary=UserProfileSkill.__table__, back_populates="skills")
-
+    jobs = relationship("Job", secondary=JobSkill.__table__, back_populates="skills")
