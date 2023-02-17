@@ -4,7 +4,7 @@ on: workflow_dispatch
 
 jobs:
   build:
-    name: Build
+    name: Run
     runs-on: ubuntu-latest
     steps:
       - name: Run server
@@ -17,4 +17,4 @@ jobs:
             cd ${{secrets.TARGET_DIR}}/backend
             python3 -m pip install -r reqs.txt
             cd ${{secrets.TARGET_DIR}}
-            ~/.local/bin/uvicorn backend.main:app --reload
+            screen ~/.local/bin/uvicorn backend.main:app --reload
