@@ -2,6 +2,8 @@ DROP SCHEMA IF EXISTS cyberhire CASCADE;
 
 CREATE SCHEMA IF NOT EXISTS cyberhire;
 
+SET SEARCH_PATH to cyberhire;
+
 -- Create the user table
 CREATE TABLE IF NOT EXISTS cyberhire."user" (
 	id serial4 NOT NULL,
@@ -59,4 +61,34 @@ CREATE TABLE IF NOT EXISTS cyberhire."job_skill" (
 	CONSTRAINT job_skill_pkey PRIMARY KEY (job_id, skill_id),
 	CONSTRAINT job_skill_fk FOREIGN KEY (job_id) REFERENCES cyberhire."job" (id),
 	CONSTRAINT job_skill_fk2 FOREIGN KEY (skill_id) REFERENCES cyberhire."skill" (id)
+);
+
+-- Create for the application_status table
+
+CREATE TABLE IF NOT EXISTS cyberhire."application_status" (
+	id serial4 PRIMARY KEY NOT NULL,
+	status varchar(30) UNIQUE NOT NULL
+);
+
+INSERT INTO cyberhire."application_status" (status)
+VALUES 
+('Application Submitted'),
+('Application Under Review'),
+('Offer Sent'),
+('Rejected')
+;
+
+-- Create for the user_profile_job table
+CREATE TABLE IF NOT EXISTS cyberhire."user_profile_job" (
+	user_profile_id int4 NOT NULL,
+	job_id int4 NOT NULL,
+	application_status_id int4 NOT NULL,
+	application_submitted_date date NOT NULL,
+	application_reviewed_date date NULL,
+	application_offer_sent_date date NULL,
+	application_rejected_date date NULL,
+	CONSTRAINT user_profile_job_pkey PRIMARY KEY (user_profile_id, job_id),
+	CONSTRAINT user_profile_job_fk FOREIGN KEY (user_profile_id) REFERENCES cyberhire."user_profile" (user_id),
+	CONSTRAINT user_profile_job_fk2 FOREIGN KEY (job_id) REFERENCES cyberhire."job" (id),
+	CONSTRAINT user_profile_job_fk3 FOREIGN KEY (application_status_id) REFERENCES application_status (id)
 );
