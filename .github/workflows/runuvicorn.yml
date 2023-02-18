@@ -17,4 +17,5 @@ jobs:
             cd ${{secrets.TARGET_DIR}}/backend
             python3 -m pip install -r reqs.txt
             cd ${{secrets.TARGET_DIR}}
+            script /dev/null
             screen ~/.local/bin/uvicorn backend.main:app --reload
