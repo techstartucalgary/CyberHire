@@ -3,6 +3,7 @@ from ..database import Base
 from sqlalchemy.orm import relationship
 from .user_profile_skill_model import UserProfileSkill
 from .job_skill_model import JobSkill
+from .jobs_model import Job
 
 class Skill(Base):
     """
