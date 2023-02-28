@@ -1,8 +1,9 @@
 from sqlalchemy import String, Integer, Column, ForeignKey
 from ..database import Base
 from sqlalchemy.orm import relationship
-from .skill_model import Skill
+# from .skill_model import Skill
 from .job_skill_model import JobSkill
+from .user_profile_job_model import UserProfileJob
 
 class Job(Base):
     """
@@ -17,4 +18,6 @@ class Job(Base):
     location = Column(String(100), nullable=False)
     salary_range = Column(Integer, nullable=False)
 
+    owner = relationship("UserProfile", back_populates="jobs")
     skills = relationship("Skill", secondary=JobSkill.__table__, back_populates="jobs")
+    applications = relationship("UserProfileJob", back_populates="job")
