@@ -32,6 +32,17 @@ CREATE TABLE IF NOT EXISTS cyberhire."skill" (
 	skill varchar(30) NOT NULL UNIQUE
 );
 
+INSERT INTO cyberhire.skill (skill)
+VALUES
+('Python'),
+('Java'),
+('SQL'),
+('JavaScript'),
+('C++'),
+('C#'),
+('C')
+;
+
 -- Create the user_profile_skill 
 CREATE TABLE IF NOT EXISTS cyberhire.user_profile_skill (
 	user_profile_id int4 NOT NULL,
@@ -47,7 +58,6 @@ CREATE TABLE IF NOT EXISTS cyberhire."job" (
 	user_profile_id int4 NOT NULL,
 	title varchar(100) NOT NULL,
 	description varchar(2000) NOT NULL,
-	skills varchar(1000) NOT NULL,
 	location varchar(100) NOT NULL,
 	salary_range varchar(100) NULL,
 	CONSTRAINT job_pkey PRIMARY KEY (id),
@@ -74,6 +84,7 @@ INSERT INTO cyberhire."application_status" (status)
 VALUES 
 ('Application Submitted'),
 ('Application Under Review'),
+('Application Undergoing Further Screening'),
 ('Offer Sent'),
 ('Rejected')
 ;
