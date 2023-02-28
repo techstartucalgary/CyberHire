@@ -2,6 +2,7 @@ from sqlalchemy import String, Integer, Column, LargeBinary, ForeignKey
 from ..database import Base
 from sqlalchemy.orm import relationship
 from .skill_model import Skill
+
 from .user_profile_skill_model import UserProfileSkill
 
 class UserProfile(Base):
@@ -16,4 +17,6 @@ class UserProfile(Base):
     profile_picture = Column(LargeBinary, nullable=True)
     resume = Column(LargeBinary, nullable=True)
 
+    jobs = relationship("Job", back_populates="owner")
     skills = relationship("Skill", secondary=UserProfileSkill.__table__,  back_populates="users")
+    applications = relationship("UserProfileJob", back_populates="applicant")
