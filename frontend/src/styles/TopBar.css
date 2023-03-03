@@ -9,6 +9,34 @@
 	max-height: 30px;
 }
 
+.buttonContainer {
+	text-align: end;
+}
+
+.signup,
+.signin {
+	width: 100px;
+}
+
+.signin {
+	margin-left: 10px !important;
+}
+
+@media screen and (max-width: 600px) {
+	.signin {
+		margin-left: 0px !important;
+		margin-top: 5px !important;
+	}
+
+	.signup {
+		margin-top: 5px !important;
+	}
+}
+
+.logoContainer {
+	text-align: center;
+}
+
 .logo {
 	max-height: 45px;
 }
