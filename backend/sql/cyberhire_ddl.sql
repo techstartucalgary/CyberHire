@@ -59,7 +59,8 @@ CREATE TABLE IF NOT EXISTS cyberhire."job" (
 	title varchar(100) NOT NULL,
 	description varchar(2000) NOT NULL,
 	location varchar(100) NOT NULL,
-	salary_range varchar(100) NULL,
+	min_salary int4 NULL,
+	max_salary int4 NULL,
 	CONSTRAINT job_pkey PRIMARY KEY (id),
 	CONSTRAINT job_user_profile_fk FOREIGN KEY (user_profile_id) REFERENCES cyberhire.user_profile (user_id)
 );
@@ -84,7 +85,6 @@ INSERT INTO cyberhire."application_status" (status)
 VALUES 
 ('Application Submitted'),
 ('Application Under Review'),
-('Application Undergoing Further Screening'),
 ('Offer Sent'),
 ('Rejected')
 ;
