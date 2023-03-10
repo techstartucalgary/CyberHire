@@ -1,6 +1,6 @@
 import React from "react";
-import { AppBar, Button, Toolbar, Typography, Grid } from "@mui/material";
-import logo from "./CyberHireLogo.png";
+import { Button, Typography } from "@mui/material";
+
 import "../styles/JobPost.css";
 
 function JobPost(props: any) {

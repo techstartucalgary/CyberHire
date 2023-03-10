@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { AppBar, Button, Toolbar, Typography, Grid } from "@mui/material";
-import logo from "./CyberHireLogo.png";
+import { Typography } from "@mui/material";
 import "../styles/JobList.css";
 import JobPost from "./JobPost";
 
