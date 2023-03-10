@@ -108,7 +108,7 @@ def create_job(*, db: Session=Depends(dependencies.get_db),
 def update_job(*, db: Session=Depends(dependencies.get_db),
                recruiter: user_model.User=Depends(dependencies.get_current_recruiter_user),
                new_job: job_schema.JobPatch,
-               job_id: int = Path()):
+               job_id: int=Path()):
     
     # Check if the job exists and the recruiter posted the job
     job_in_db_model = job_crud.get_job_by_id(db, job_id)
@@ -143,7 +143,34 @@ def update_job(*, db: Session=Depends(dependencies.get_db),
     return updated_job
 
 # DELETE /jobs/{job_id} delete a job
+@router.delete(
+    "/jobs/{job_id}",
+    response_model=job_schema.Job,
+    status_code=status.HTTP_200_OK,
+    tags=["Job"],
+    summary="DELETE route to delete a job from the current recruiter.",
+    description="Delete a job from the database. Recruiters can only delete " \
+        "their own jobs from the database.",
+    response_description="The job that was deleted from the database."
+)
+def delete_job(db: Session=Depends(dependencies.get_db),
+               recruiter: user_model.User=Depends(dependencies.get_current_recruiter_user),
+               job_id: int=Path()):
+    
+    # Check if the job exists and the recruiter posted it
+    job_in_db = job_crud.get_job_by_id(db, job_id)
 
+    if job_in_db is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Job with id {job_id} does not exist.")
+    
+    if job_in_db.user_profile_id != recruiter.id:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail=f"Recruiter with id: {recruiter.id} is not authorized to " \
+                                "update this job.")
 
+    # Delete the job from the database
+    job_in_db = job_crud.delete_job(db, job_id)
 
-# POST /jobs/{job_id}/skills 
+    # Return the deleted job
+    return job_in_db

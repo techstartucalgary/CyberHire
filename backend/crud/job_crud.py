@@ -38,3 +38,24 @@ def update_job(db: Session, new_job: job_schema.JobInDb) -> jobs_model.Job | Non
     db.commit()
     db.refresh(current_job)
     return current_job
+
+def delete_job(db: Session, job_id: int) -> jobs_model.Job | None:
+
+    job_in_db = get_job_by_id(db, job_id)
+    job_in_db_copy = None
+
+    if job_in_db is not None:
+        job_in_db_copy = jobs_model.Job(
+            id=job_in_db.id,
+            user_profile_id=job_in_db.user_profile_id,
+            description=job_in_db.description,
+            title=job_in_db.title,
+            location=job_in_db.location,
+            min_salary=job_in_db.min_salary,
+            max_salary=job_in_db.max_salary
+        )
+
+        db.delete(job_in_db)
+        db.commit()
+
+    return job_in_db_copy
