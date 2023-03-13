@@ -17,6 +17,8 @@ class UserProfile(Base):
     profile_picture = Column(LargeBinary, nullable=True)
     resume = Column(LargeBinary, nullable=True)
 
-    jobs = relationship("Job", back_populates="owner")
+    jobs = relationship("Job", back_populates="owner", cascade="save-update, merge, "
+                                                        "delete, delete-orphan")
     skills = relationship("Skill", secondary=UserProfileSkill.__table__,  back_populates="users")
-    applications = relationship("UserProfileJob", back_populates="applicant")
+    applications = relationship("UserProfileJob", back_populates="applicant", cascade="save-update, merge, "
+                                                                                "delete, delete-orphan")

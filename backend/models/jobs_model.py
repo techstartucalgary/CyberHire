@@ -21,4 +21,5 @@ class Job(Base):
 
     owner = relationship("UserProfile", back_populates="jobs")
     skills = relationship("Skill", secondary=JobSkill.__table__, back_populates="jobs")
-    applications = relationship("UserProfileJob", back_populates="job")
+    applications = relationship("UserProfileJob", back_populates="job", cascade="save-update, merge, "
+                                                                                "delete, delete-orphan")
