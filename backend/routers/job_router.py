@@ -25,6 +25,29 @@ def get_all_jobs(db: Session=Depends(dependencies.get_db)):
 
     return job_crud.get_all_jobs(db)
 
+# GET /jobs/me get a list of all a recruiters job postings
+@router.get(
+    "/jobs/me",
+    response_model=list[job_schema.Job],
+    status_code=status.HTTP_200_OK,
+    tags=["Job"],
+    summary="GET route to obtain a list of all the current recruiter's job postings.",
+    description="Return information for all of the current recruiter's job postings. " \
+        "Includes information such as job title, job description, job location, " \
+        " salary range, skills required, and profile of the job poster.",
+    response_description="A list of all the current recruter's job postings."
+)
+def get_all_recruiter_jobs(db: Session=Depends(dependencies.get_db),
+        recruiter: user_model.User=Depends(dependencies.get_current_recruiter_user)):
+
+    jobs = job_crud.get_jobs_by_user_profile_id(db, recruiter.id)
+
+    if len(jobs) == 0:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Recruiter {recruiter.id} has no jobs posted.")    
+
+    return jobs
+
 # GET /jobs/{job_id} get a specific job
 @router.get(
     "/jobs/{job_id}",
@@ -45,28 +68,6 @@ def get_a_job(db: Session=Depends(dependencies.get_db), job_id: int=Path()):
                             detail=f"Job does not exist with id {job_id}")
     return job
 
-# GET /jobs/me get a list of all a recruiters job postings
-@router.get(
-    "/jobs/me",
-    response_model=job_schema.Job,
-    status_code=status.HTTP_200_OK,
-    tags=["Job"],
-    summary="GET route to obtain a list of all the current recruiter's job postings.",
-    description="Return information for all of the current recruiter's job postings. " \
-        "Includes information such as job title, job description, job location, " \
-        " salary range, skills required, and profile of the job poster.",
-    response_description="A list of all the current recruter's job postings."
-)
-def get_all_recruiter_jobs(db: Session=Depends(dependencies.get_db),
-        recruiter: user_model.User=Depends(dependencies.get_current_recruiter_user)):
-
-    jobs = job_crud.get_jobs_by_user_profile_id(db, recruiter.id)
-
-    if len(jobs) == 0:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"Recruiter {recruiter.id} has no jobs posted.")    
-
-    return jobs
 
 # POST /jobs post a new job
 @router.post(
@@ -134,10 +135,11 @@ def update_job(*, db: Session=Depends(dependencies.get_db),
     )
 
     # Update the pydantic model with the new job information
-    job_in_db_schema.copy(update=new_job.dict())
+    update_data = new_job.dict(exclude_unset=True)
+    updated_job_in_db_schema = job_in_db_schema.copy(update=update_data)
 
     # Save the new job information to the database
-    updated_job = job_crud.update_job(db, job_in_db_schema)
+    updated_job = job_crud.update_job(db, updated_job_in_db_schema)
 
     # Return the new job information
     return updated_job
@@ -145,7 +147,6 @@ def update_job(*, db: Session=Depends(dependencies.get_db),
 # DELETE /jobs/{job_id} delete a job
 @router.delete(
     "/jobs/{job_id}",
-    response_model=job_schema.Job,
     status_code=status.HTTP_200_OK,
     tags=["Job"],
     summary="DELETE route to delete a job from the current recruiter.",
@@ -156,14 +157,15 @@ def update_job(*, db: Session=Depends(dependencies.get_db),
 def delete_job(db: Session=Depends(dependencies.get_db),
                recruiter: user_model.User=Depends(dependencies.get_current_recruiter_user),
                job_id: int=Path()):
-    
+
     # Check if the job exists and the recruiter posted it
     job_in_db = job_crud.get_job_by_id(db, job_id)
+
 
     if job_in_db is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Job with id {job_id} does not exist.")
-    
+
     if job_in_db.user_profile_id != recruiter.id:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail=f"Recruiter with id: {recruiter.id} is not authorized to " \
@@ -172,5 +174,4 @@ def delete_job(db: Session=Depends(dependencies.get_db),
     # Delete the job from the database
     job_in_db = job_crud.delete_job(db, job_id)
 
-    # Return the deleted job
-    return job_in_db
+    return f"Successfully deleted job with id: {job_id}"
