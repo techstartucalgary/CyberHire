@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
-from ..models import skill_model, user_profile_skill_model, user_profile_model
+from ..models import skill_model, user_profile_skill_model, \
+                     user_profile_model, job_skill_model
 
 def get_skills(db: Session):
     """
@@ -109,5 +110,17 @@ def create_user_profile_skill(db: Session, user_id, skill_id):
                     user_profile_id=user_id, skill_id=skill_id
                     )
     db.add(db_user_profile_skill)
+    db.commit()
+    return db.query(skill_model.Skill).filter(skill_model.Skill.id == skill_id).first()
+
+def delete_all_job_skills(db: Session, job_id: int) -> int:
+
+    return db.query(job_skill_model.JobSkill).filter(job_skill_model.JobSkill.job_id == job_id).delete()
+
+def create_job_skill(db: Session, job_id: int, skill_id: int) -> skill_model.Skill | None:
+
+    db_job_skill = job_skill_model.JobSkill(job_id=job_id, skill_id=skill_id)
+
+    db.add(db_job_skill)
     db.commit()
     return db.query(skill_model.Skill).filter(skill_model.Skill.id == skill_id).first()
