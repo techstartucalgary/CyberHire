@@ -1,12 +1,12 @@
 from sqlalchemy.orm import Session
 
+from fastapi import APIRouter, Depends, Path, HTTPException
+from fastapi import status
+
 from ..schemas import skill_schema, job_schema
 from .. import dependencies
 from ..crud import job_crud, skill_crud
 from ..models import user_model
-
-from fastapi import APIRouter, Depends, Path, HTTPException
-from fastapi import status
 
 router = APIRouter()
 
@@ -22,6 +22,19 @@ router = APIRouter()
     response_description="A list of all the skills required of the job."
 )
 def get_job_skills(db: Session=Depends(dependencies.get_db), job_id: int=Path()):
+    """
+    GET route to obtain all the skills related to a job
+
+    Parameters
+    ----------
+    db: Session
+        a database session
+
+    Returns
+    -------
+    list[skill_schema.Skill]
+        A list of pydantic models for skills related to the job
+    """
 
     # Check if the job exists
     job = job_crud.get_job_by_id(db, job_id)
@@ -44,11 +57,31 @@ def get_job_skills(db: Session=Depends(dependencies.get_db), job_id: int=Path())
                 "and replace them with the list of the skills provided.",
     response_description="The updated job in the database with new required skills."
 )
-def create_skills_for_job(*, 
+def create_skills_for_job(*,
                           db: Session=Depends(dependencies.get_db),
                           job_id: int=Path(),
                           recruiter: user_model.User=Depends(dependencies.get_current_recruiter_user),
                           new_skills: list[skill_schema.SkillCreate] | None):
+    """
+    POST route to replace all of a jobs related skills
+
+    Parameters
+    ----------
+    db: Session
+        a database sesion
+    job_id: int
+        The unique id of the job
+    recruiter: user_model.User
+        a sqlalchemy object representing the current authenticated recruiter user
+    new_skills: list[skill_schema.SkillCreate] | None
+        a list of pydantic models representing the new skills for the job, or None to only
+        remove previous skills without replacing
+
+    Returns
+    -------
+    job_schema.Job
+        a pydantic model for a job with the newly updated skills information embedded
+    """
 
     # Check if the job exists and it belongs to the recruiter
     job = job_crud.get_job_by_id(db, job_id)

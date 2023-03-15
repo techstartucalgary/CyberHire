@@ -1,5 +1,7 @@
 from sqlalchemy.orm import Session
+
 from fastapi import APIRouter, Depends, status, Path, HTTPException
+
 from .. import dependencies
 from .. models import user_model
 from ..schemas import job_schema
@@ -22,6 +24,19 @@ router = APIRouter()
     response_description="A list of all jobs posted."
 )
 def get_all_jobs(db: Session=Depends(dependencies.get_db)):
+    """
+    GET route to obtain a list of all jobs from the database
+
+    Parameters
+    ----------
+    db: Session
+        a database session
+
+    Returns
+    -------
+    list[job_schema.Job] | None
+        a list of pydantic models for jobs, or none if there are no jobs present
+    """
 
     return job_crud.get_all_jobs(db)
 
@@ -39,12 +54,27 @@ def get_all_jobs(db: Session=Depends(dependencies.get_db)):
 )
 def get_all_recruiter_jobs(db: Session=Depends(dependencies.get_db),
         recruiter: user_model.User=Depends(dependencies.get_current_recruiter_user)):
+    """
+    GET route to obtain a list of jobs posted by the current authenticated recruiter
+
+    Parameters
+    ----------
+    db: Session
+        a database session
+    recruiter: user_model.User
+        a sqlalchemy object representing the current authenticated recruiter user
+
+    Returns
+    -------
+    list[job_schema.Job]
+        a list of pydantic models for jobs posted by the current authenticated recruiter
+    """
 
     jobs = job_crud.get_jobs_by_user_profile_id(db, recruiter.id)
 
     if len(jobs) == 0:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"Recruiter {recruiter.id} has no jobs posted.")    
+                            detail=f"Recruiter {recruiter.id} has no jobs posted.")
 
     return jobs
 
@@ -61,6 +91,21 @@ def get_all_recruiter_jobs(db: Session=Depends(dependencies.get_db),
     response_description="A specific job posted."
 )
 def get_a_job(db: Session=Depends(dependencies.get_db), job_id: int=Path()):
+    """
+    GET route to obtain a job with a unique id = job_id
+
+    Parameters
+    ----------
+    db: Session
+        a database session
+    job_id: int
+        a unique job id
+
+    Returns
+    -------
+    job_schema.Job
+        a pydantic model for the job
+    """
 
     job = job_crud.get_job_by_id(db, job_id)
     if not job:
@@ -81,9 +126,28 @@ def get_a_job(db: Session=Depends(dependencies.get_db), job_id: int=Path()):
         "Salary is optional if not provided.",
     response_description="The newly created job posting in the database."
 )
-def create_job(*, db: Session=Depends(dependencies.get_db),
+def create_job(*,
+               db: Session=Depends(dependencies.get_db),
                recruiter: user_model.User=Depends(dependencies.get_current_recruiter_user),
                new_job: job_schema.JobCreate):
+    """
+    POST route to create a new job that will be related to the current authenticated
+    recruiter. The user must have a user profile to post jobs.
+
+    Parameters
+    ----------
+    db: Session
+        a database session
+    recruiter: user_model.User
+        a sqlalchemy object representing the current authenticated recruiter user
+    new_job: job_schema.JobCreate
+        a pydantic model representing the recruiter's new job
+
+    Returns
+    -------
+    job_schema.Job
+        the current recruiter's new posted job
+    """
     
     # Check if user profile exists
     dependencies.user_profile_exists(db, recruiter.id)
@@ -106,18 +170,41 @@ def create_job(*, db: Session=Depends(dependencies.get_db),
         "in the database remains unchanged.",
     response_description="The job with the updated information."
 )
-def update_job(*, db: Session=Depends(dependencies.get_db),
+def update_job(*,
+               db: Session=Depends(dependencies.get_db),
                recruiter: user_model.User=Depends(dependencies.get_current_recruiter_user),
                new_job: job_schema.JobPatch,
                job_id: int=Path()):
-    
+    """
+    PATCH route to update one of the current authenticated recruiter's jobs. Only the information
+    provided by the user is updated.
+    For example, if the user only passes in a new job title, then only the title is updated.
+
+    Parameters
+    ----------
+    db: Session
+        a database session
+    recruiter: user_model.User
+        a sqlalchemy object representing the current authenticated recruiter user
+    new_job: job_schema.JobPatch
+        a pydantic model representing the current user's new job information. Only attributes
+        that are provided will be updated
+    job_id: int
+        the unique id of the recruiter's job to update
+
+    Returns
+    -------
+    job_schema.Job
+        the updated job
+    """
+
     # Check if the job exists and the recruiter posted the job
     job_in_db_model = job_crud.get_job_by_id(db, job_id)
 
     if job_in_db_model is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Job with id: {job_id} does not exist.")
-    
+
     if job_in_db_model.user_profile_id != recruiter.id:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail=f"Recruiter with id: {recruiter.id} is not authorized to " \
@@ -157,6 +244,25 @@ def update_job(*, db: Session=Depends(dependencies.get_db),
 def delete_job(db: Session=Depends(dependencies.get_db),
                recruiter: user_model.User=Depends(dependencies.get_current_recruiter_user),
                job_id: int=Path()):
+    """
+    a DELETE route to delete a job from the database. Recruiter must own the job to be able
+    to delete it. Deleting a job will also delete all applications for the job and skills
+    related to the job.
+
+    Parameters
+    ----------
+    db: Session
+        a database session
+    recruiter: user_model.User
+        a sqlalchemy user object representing the current authenticated recruiter user
+    job_id: int
+        the unique of the job to delete
+
+    Returns
+    -------
+    str
+        a success message if the job was successfully deleted
+    """
 
     # Check if the job exists and the recruiter posted it
     job_in_db = job_crud.get_job_by_id(db, job_id)
