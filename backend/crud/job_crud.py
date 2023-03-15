@@ -48,7 +48,7 @@ def get_jobs_by_user_profile_id(db: Session, user_profile_id: int) -> list[jobs_
         a database session
     user_profile_id: int
         the recruiters id
-    
+
     Returns
     -------
     list[jobs_model.Job]
@@ -123,7 +123,7 @@ def delete_job(db: Session, job_id: int) -> jobs_model.Job | None:
         a database session
     job_id: int
         the job's id in the database
-    
+
     Returns
     -------
     jobs_model.Job | None

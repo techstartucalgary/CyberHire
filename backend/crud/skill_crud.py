@@ -130,7 +130,8 @@ def delete_all_job_skills(db: Session, job_id: int) -> int:
         the number of rows deleted in the database
     """
 
-    return db.query(job_skill_model.JobSkill).filter(job_skill_model.JobSkill.job_id == job_id).delete()
+    return db.query(job_skill_model.JobSkill)\
+                    .filter(job_skill_model.JobSkill.job_id == job_id).delete()
 
 def create_job_skill(db: Session, job_id: int, skill_id: int) -> skill_model.Skill | None:
     """

@@ -1,6 +1,6 @@
 from sqlalchemy import String, Integer, Column, ForeignKey
-from ..database import Base
 from sqlalchemy.orm import relationship
+from ..database import Base
 # from .skill_model import Skill
 from .job_skill_model import JobSkill
 from .user_profile_job_model import UserProfileJob
