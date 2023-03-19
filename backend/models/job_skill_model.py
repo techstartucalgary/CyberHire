@@ -1,6 +1,5 @@
-from sqlalchemy import Boolean, String, Integer, Column, ForeignKey
+from sqlalchemy import Integer, Column, ForeignKey
 from ..database import Base
-from sqlalchemy.orm import relationship
 
 class JobSkill(Base):
     """

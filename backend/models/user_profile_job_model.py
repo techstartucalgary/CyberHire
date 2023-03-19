@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, String, Integer, Column, ForeignKey, Date
+from sqlalchemy import Integer, Column, ForeignKey, Date
 from ..database import Base
 from sqlalchemy.orm import relationship
 from .application_status_model import ApplicationStatus

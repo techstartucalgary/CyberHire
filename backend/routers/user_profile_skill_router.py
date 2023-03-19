@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
-from sqlalchemy.orm import Session
+
 from fastapi import APIRouter, Depends, status
+
 from ..schemas import user_profile_schema, skill_schema
 from ..models import user_model
 from .. import dependencies

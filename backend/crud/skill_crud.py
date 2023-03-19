@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
-from ..models import skill_model, user_profile_skill_model, user_profile_model
+from ..models import skill_model, user_profile_skill_model, \
+                     user_profile_model, job_skill_model
 
 def get_skills(db: Session):
     """
@@ -109,5 +110,44 @@ def create_user_profile_skill(db: Session, user_id, skill_id):
                     user_profile_id=user_id, skill_id=skill_id
                     )
     db.add(db_user_profile_skill)
+    db.commit()
+    return db.query(skill_model.Skill).filter(skill_model.Skill.id == skill_id).first()
+
+def delete_all_job_skills(db: Session, job_id: int) -> int:
+    """
+    Utility function to delete all the skills related to a job with id = job_id
+
+    Parameters
+    ----------
+    db: Session
+        a database session
+    job_id: int
+        the job's id in the database
+
+    Returns
+    -------
+    int
+        the number of rows deleted in the database
+    """
+
+    return db.query(job_skill_model.JobSkill)\
+                    .filter(job_skill_model.JobSkill.job_id == job_id).delete()
+
+def create_job_skill(db: Session, job_id: int, skill_id: int) -> skill_model.Skill | None:
+    """
+    Utility function to create a new skill relationship for a job
+
+    Parameters
+    ----------
+    db: Session
+        a database session
+    job_id: int
+        the job's id in the database
+    skill_id: int
+        the skill's id in the database
+    """
+    db_job_skill = job_skill_model.JobSkill(job_id=job_id, skill_id=skill_id)
+
+    db.add(db_job_skill)
     db.commit()
     return db.query(skill_model.Skill).filter(skill_model.Skill.id == skill_id).first()
