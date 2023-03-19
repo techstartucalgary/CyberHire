@@ -7,6 +7,7 @@ import About from "./pages/About";
 import Privacy from "./pages/Privacy";
 import TopBar from "./components/TopBar";
 import ApplicantHome from "./pages/ApplicantHome";
+import NotFound from "./pages/NotFound";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -19,7 +20,7 @@ root.render(
       <Route path="/about" element={<About />} />
       <Route path="/privacy" element={<Privacy />}/>
       <Route path="/app" element={<ApplicantHome />} />
-      <Route path="*" element={<App />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   </HashRouter>
 );
