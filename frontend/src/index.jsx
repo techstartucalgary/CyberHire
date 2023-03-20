@@ -10,7 +10,7 @@ import ApplicantHome from "./pages/ApplicantHome";
 import NotFound from "./pages/NotFound";
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+  document.getElementById("root")
 );
 root.render(
   <HashRouter>
