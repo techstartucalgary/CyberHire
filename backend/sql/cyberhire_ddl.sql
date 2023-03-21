@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS cyberhire."job" (
 	user_profile_id int4 NOT NULL,
 	title varchar(100) NOT NULL,
 	description varchar(2000) NOT NULL,
+	company_name varchar(100) NOT NULL,
 	location varchar(100) NOT NULL,
 	min_salary int4 NULL,
 	max_salary int4 NULL,
