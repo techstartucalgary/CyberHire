@@ -88,7 +88,8 @@ def get_applicants_application_by_job_id(db: Session = Depends(dependencies.get_
 )
 def get_applications_by_job_id(db: Session = Depends(dependencies.get_db),
                                recruiter: user_model.User = Depends(dependencies.get_current_recruiter_user),
-                               job_id: int = Path()):
+                               job_id: int = Path(),
+                               q: application_status_model.ApplicationStatusEnum | None = None):
 
     # check if the recruiter owners the job
     job = job_crud.get_job_by_id(db, job_id)
@@ -100,8 +101,13 @@ def get_applications_by_job_id(db: Session = Depends(dependencies.get_db),
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail=f"Recruiter is not authorized to view applications for job {job_id}.")
 
-    # get the applications for the job
-    applications = user_profile_job_crud.get_applications_by_job_id(db, job_id)
+    # check if the query parameter was specified
+    if q is None:
+        # if not get all the applications for the job
+        applications = user_profile_job_crud.get_applications_by_job_id(db, job_id)
+    else:
+        # if yes get all the applications for the job and filter by status
+        applications = user_profile_job_crud.get_applications_by_job_id_and_status(db, job_id, q)
 
     # check if there were any applications
     if len(applications) == 0:
@@ -143,11 +149,38 @@ def create_applicant_application(db: Session,
                             detail=f"Applicant {applicant.id} already applied to job {job_id}.")
 
     # create a new application
+    return user_profile_job_crud.create_applicant_application(db, applicant.id, job_id)
 
-# DELETE /applications/{applicationId} delete an application
+# DELETE /applications/{job_id} delete an application
+@router.delete(
+    "/applications/me/{job_id}",
+    response_model=user_profile_job_schema.UserProfileJob,
+    status_code=status.HTTP_200_OK,
+    tags=["Application"],
+    summary="DELETE route for an applicant to delete an application for a specific job.",
+    description="Delete the current user's application for a specific job from the database.",
+    response_description="The deleted user's application."
+)
+def delete_applicant_application(db: Session = Depends(dependencies.get_db),
+                                  job_id: int = Path(),
+                                  applicant: user_model.User = Depends(dependencies.get_current_applicant_user)):
+    
+    # check if the application exists
+    application = user_profile_job_crud.get_application_by_user_id_and_job_id(db, applicant.id, job_id)
 
-# PATCH /applications/review/{applicationId} change status to under review
+    if application is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Application for applicant {applicant.id} and job {job_id} not found.")
+    
+    # delete the application
+    return user_profile_job_crud.delete_applicant_application(db, applicant.id, job_id)
 
-# PATCH /applications/offer/{applicationId} change status to offer sent
 
-# PATCH /applications/rejected/{applicationId} change status to rejected
+# PATCH /applications/{job_id}_{applicant_id}/review change status to under review
+@router.patch(
+    "/applications/review/"
+)
+
+# PATCH /applications/{job_id}_{applicant_id}/offer change status to offer sent
+
+# PATCH /applications/ applicationId}/rejected change status to rejected
