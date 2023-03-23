@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import "../styles/ApplicantHome.css";
 import JobList from "../components/JobList";
 import { Button, Container, IconButton, Typography, Box } from "@mui/material";

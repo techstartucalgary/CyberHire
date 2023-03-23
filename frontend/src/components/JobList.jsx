@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Typography } from "@mui/material";
 import "../styles/JobList.css";
 import JobPost from "./JobPost";
-import { Job } from "../interfaces/interfaces";
 
-function JobList(props: any) {
-  const [jobs, setJobs] = useState<Job[]>([]);
+function JobList(props) {
+  const [jobs, setJobs] = useState([]);
 
   const getJobs = async () => {
     await fetch("https://chapi.techstartucalgary.com/jobs")

@@ -2,10 +2,9 @@ import React from "react";
 import { Button, Typography } from "@mui/material";
 
 import "../styles/JobPost.css";
-import { Skill } from "../interfaces/interfaces";
 
-function JobPost(props: any) {
-  const formatCurrency = (num: number) => {
+function JobPost(props) {
+  const formatCurrency = (num) => {
     return num.toLocaleString("en-US", {
       style: "currency",
       currency: "CAD",
@@ -31,7 +30,7 @@ function JobPost(props: any) {
           </Typography>
         </div>
       )}
-      {props.job.skills.map((skill: Skill) => {
+      {props.job.skills.map((skill) => {
         return (
           <Typography className="jobSkill" key={skill.id}>
             {skill.skill}
