@@ -178,8 +178,34 @@ def delete_applicant_application(db: Session = Depends(dependencies.get_db),
 
 # PATCH /applications/{job_id}_{applicant_id}/review change status to under review
 @router.patch(
-    "/applications/review/"
+    "/applications/{job_id}_{applicant_id}/review",
+    response_model=user_profile_job_schema.UserProfileJob,
+    status_code=status.HTTP_200_OK,
+    tags=["Application"],
+    summary="PATCH route for a recruiter to change the status of an application to under review.",
+    description="Change the status of an application to under review for a job.",
+    response_description="The updated application status to review."
 )
+def change_application_status_to_under_review(db: Session = Depends(dependencies.get_db),
+                                              job_id: int = Path(),
+                                              applicant_id: int = Path(),
+                                              recruiter: user_model.User = Depends(dependencies.get_current_recruiter_user)):
+    
+    application = user_profile_job_crud.get_application_by_user_id_and_job_id(db, applicant_id, job_id)
+
+    if application is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Application for applicant {applicant_id} and job {job_id} not found.")
+    
+    # check if the recruiter owns the job
+    if application.job.user_profile_id != recruiter.id:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail=f"Recruiter is not authorized to change the status of application {application.id}.")
+    else:  
+        status_to_review = user_profile_job_model.UserProfileJob.application_status_id = application_status_model.ApplicationStatusEnum.in_review
+
+    #TODO : Save to database using db.save()
+    return status_to_review
 
 # PATCH /applications/{job_id}_{applicant_id}/offer change status to offer sent
 
