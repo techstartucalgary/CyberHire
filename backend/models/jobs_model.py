@@ -15,6 +15,7 @@ class Job(Base):
     user_profile_id = Column(Integer, ForeignKey("user_profile.user_id"), nullable=False)
     title = Column(String(100), nullable=False)
     description = Column(String(2000), nullable=False)
+    company_name = Column(String(100), nullable=False)
     location = Column(String(100), nullable=False)
     min_salary = Column(Integer, nullable=True)
     max_salary = Column(Integer, nullable=True)
