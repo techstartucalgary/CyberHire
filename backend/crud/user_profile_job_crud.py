@@ -59,5 +59,13 @@ def create_applicant_application(db: Session, user_id: int, job_id: int) \
     return new_application
 
 def delete_applicant_application(db: Session, user_id: int, job_id: int) \
-                                 -> user_profile_job_model.UserProfileJob:
+                                 -> user_profile_job_model.UserProfileJob | None:
     
+    application = db.query(user_profile_job_model.UserProfileJob) \
+        .filter(user_profile_job_model.UserProfileJob.user_profile_id == user_id and
+                user_profile_job_model.UserProfileJob.job_id == job_id) \
+        .first()
+    
+    db.delete(application)
+    db.commit()
+    return application
