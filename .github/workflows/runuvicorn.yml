@@ -1,0 +1,20 @@
+name: run-uvicorn
+
+on: workflow_dispatch
+
+jobs:
+  build:
+    name: Run
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{secrets.HOST_DNS}}
+          username: ${{secrets.USERNAME}}
+          key: ${{secrets.EC2_SSH_KEY}}
+          script: |
+            cd ${{secrets.TARGET_DIR}}/backend
+            python3 -m pip install -r reqs.txt
+            cd ${{secrets.TARGET_DIR}}
+            /home/ec2-user/.local/bin/gunicorn -w 4 -k uvicorn.workers.UvicornWorker backend.main:app --reload --daemon
