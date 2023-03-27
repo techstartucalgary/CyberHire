@@ -1,30 +1,20 @@
-import React from "react";
-import logo from "./logo.svg";
-import "./styles/App.css";
+import React, { useState } from 'react';
+import SignIn from './components/SignIn';
+import SignUp from './components/SignUp';
+import './styles/App.css';
 
 function App() {
+  const [displayedForm, setDisplayedForm] = useState('signIn');
+
+  const toggleform = (formName: string) => {
+    setDisplayedForm(formName);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <ul>
-          <li>Ben</li>
-          <li>Ahsaas</li>
-          <li>Etta</li>
-          <li>Ana</li>
-          <li>Ling</li>
-          <li>Brandon</li>
-        </ul>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      
+      {displayedForm === 'signIn' ? <SignIn setDisplayedForm={toggleform}/> : <SignUp setDisplayedForm = {toggleform} />}
+    </>
   );
 }
 
