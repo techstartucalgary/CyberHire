@@ -1,7 +1,10 @@
-import React from "react";
-import "../styles/App.css";
+import React, { useState } from 'react';
+import SignIn from './components/SignIn';
+import SignUp from './components/SignUp';
+import './styles/App.css';
 
 function App() {
+
   return (
     <div className="App">
       <header className="App-header">
