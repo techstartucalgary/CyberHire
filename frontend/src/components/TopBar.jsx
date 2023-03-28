@@ -21,10 +21,10 @@ function TopBar() {
             </a>
           </Grid>
           <Grid item className="buttonContainer" xs={1}>
-            <Button variant="contained" className="signup">
+            <Button variant="contained" className="signup" href="#/signup">
               <Typography>Sign-up</Typography>
             </Button>
-            <Button variant="outlined" className="signin">
+            <Button variant="outlined" className="signin" href="#/signin">
               <Typography>Sign in</Typography>
             </Button>
           </Grid>
