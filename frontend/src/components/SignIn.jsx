@@ -8,17 +8,13 @@ const LoginPage = () => {
 	//const [passwordError, setPasswordError] = useState('');
 	const [errorMessage, setErrorMessage] = useState("");
 
-	const handleUsernameChange = (
-		event
-	) => {
+	const handleUsernameChange = (event) => {
 		setUsername(event.target.value);
 		//setUsernameError('');
 		setErrorMessage("");
 	};
 
-	const handlePasswordChange = (
-		event
-	) => {
+	const handlePasswordChange = (event) => {
 		setPassword(event.target.value);
 		//setPasswordError('');
 		setErrorMessage("");
@@ -34,36 +30,58 @@ const LoginPage = () => {
 			setErrorMessage("Password is required");
 			return;
 		}
-		try {
-			const response = await fetch(
-				"https://chapi.techstartucalgary.com/token",
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/x-www-form-urlencoded",
-					},
-					body: new URLSearchParams({
-						grant_type: "password",
-						username,
-						password,
-					}),
+
+		const response = await fetch(
+			"https://chapi.techstartucalgary.com/token",
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/x-www-form-urlencoded",
+				},
+				body: new URLSearchParams({
+					grant_type: "password",
+					username,
+					password,
+				}),
+			}
+		)
+			.then((response) => {
+				if (!response.ok) {
+					if (response.status === 401) {
+						setErrorMessage("Invalid username or password");
+					} else {
+						throw new Error("Login failed");
+					}
 				}
-			);
-			if (response.ok) {
-				const data = await response.json();
 				setUsername("");
 				setPassword("");
-				console.log(data);
-			} else {
-				if (response.status === 401) {
-					setErrorMessage("Invalid username or password");
-				} else {
-					throw new Error("Login failed");
-				}
-			}
-		} catch (error) {
-			console.error(error);
-		}
+				return response.json();
+			})
+			.then((data) => {
+				localStorage.setItem("access_token", data.access_token);
+				fetch("https://chapi.techstartucalgary.com/users/me/", {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${localStorage.getItem(
+							"access_token"
+						)}`,
+					},
+				}).then((response) => {
+					if (!response.ok) {
+						throw new Error("API Error: ", response.status);
+					}
+					return response.json();
+				}).then((data) => {
+					if (data.is_recruiter) {
+						window.location.href = "#/app";
+					} else {
+						window.location.href = "#/recruiter";
+					}
+				});
+			})
+			.catch((error) => console.error(error));
+
 		//setUsername('');
 		//setPassword('');
 	};

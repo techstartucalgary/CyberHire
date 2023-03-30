@@ -23,9 +23,7 @@ const SignUpPage = () => {
 		setFormValid(!usernameError && !passwordError);
 	}, [usernameError, passwordError]);
 
-	const handleUserNameChange = (
-		event
-	) => {
+	const handleUserNameChange = (event) => {
 		setUserName(event.target.value);
 		if (event.target.value.length < 5) {
 			setUserNameError("Username must be at least 5 characters");
@@ -38,9 +36,7 @@ const SignUpPage = () => {
 		setEmail(event.target.value);
 	};
 
-	const handlePasswordChange = (
-		event
-	) => {
+	const handlePasswordChange = (event) => {
 		setPassword(event.target.value);
 		if (event.target.value.length < 8) {
 			setPasswordError("Password must be atleast 8 characters");
@@ -49,9 +45,7 @@ const SignUpPage = () => {
 		}
 	};
 
-	const handleRecommendedByRecruiterChange = (
-		event
-	) => {
+	const handleRecommendedByRecruiterChange = (event) => {
 		setRecommendedByRecruiter(event.target.checked);
 	};
 
@@ -72,15 +66,44 @@ const SignUpPage = () => {
 						is_recruiter,
 					}),
 				}
-			);
-			if (response.ok) {
-				const data = await response.json();
-				console.log(data);
-			} else if (response.status === 400) {
-				throw new Error("Username already exists");
-			} else {
-				throw new Error("Signup failed");
-			}
+			).then((response) => {
+				if (response.ok) {
+					const data = response.json();
+					fetch("https://chapi.techstartucalgary.com/token", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/x-www-form-urlencoded",
+						},
+						body: new URLSearchParams({
+							grant_type: "password",
+							username,
+							password,
+						}),
+					})
+						.then((response) => {
+							if (!response.ok) {
+								throw new Error("API Error: ", response.status);
+							}
+							return response.json();
+						})
+						.then((data) => {
+							localStorage.setItem(
+								"access_token",
+								data.access_token
+							);
+							if (is_recruiter) {
+								window.location.href = "#/recruiter";
+							} else {
+								window.location.href = "#/app";
+							}
+						})
+						.catch((error) => console.error(error));
+				} else if (response.status === 400) {
+					throw new Error("Username already exists");
+				} else {
+					throw new Error("Signup failed");
+				}
+			});
 		} catch (error) {
 			console.error(error);
 		}
@@ -151,7 +174,7 @@ const SignUpPage = () => {
 								onChange={handleRecommendedByRecruiterChange}
 							/>
 						}
-						label="Were you recommended by a recruiter?"
+						label="Would you like to sign up as a recruiter?"
 					/>
 					<Button
 						type="submit"
@@ -166,10 +189,7 @@ const SignUpPage = () => {
 						<Grid item>
 							<Typography>
 								Already have an account?
-								<Link
-									href="#/signin"
-									variant="body2"
-								>
+								<Link href="#/signin" variant="body2">
 									Sign In
 								</Link>
 							</Typography>
