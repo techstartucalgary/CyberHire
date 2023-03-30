@@ -8,17 +8,13 @@ const LoginPage = () => {
 	//const [passwordError, setPasswordError] = useState('');
 	const [errorMessage, setErrorMessage] = useState("");
 
-	const handleUsernameChange = (
-		event
-	) => {
+	const handleUsernameChange = (event) => {
 		setUsername(event.target.value);
 		//setUsernameError('');
 		setErrorMessage("");
 	};
 
-	const handlePasswordChange = (
-		event
-	) => {
+	const handlePasswordChange = (event) => {
 		setPassword(event.target.value);
 		//setPasswordError('');
 		setErrorMessage("");
