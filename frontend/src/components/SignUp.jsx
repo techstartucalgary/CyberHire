@@ -69,7 +69,6 @@ const SignUpPage = () => {
 			).then((response) => {
 				if (response.ok) {
 					const data = response.json();
-					console.log(data);
 					fetch("https://chapi.techstartucalgary.com/token", {
 						method: "POST",
 						headers: {
@@ -92,6 +91,11 @@ const SignUpPage = () => {
 								"access_token",
 								data.access_token
 							);
+							if (is_recruiter) {
+								window.location.href = "#/recruiter";
+							} else {
+								window.location.href = "#/app";
+							}
 						})
 						.catch((error) => console.error(error));
 				} else if (response.status === 400) {
