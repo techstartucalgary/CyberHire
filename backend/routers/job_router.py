@@ -214,6 +214,7 @@ def update_job(*,
     job_in_db_schema = job_schema.JobInDb(
         title=job_in_db_model.title,
         description=job_in_db_model.description,
+        company_name=job_in_db_model.company_name,
         location=job_in_db_model.location,
         min_salary=job_in_db_model.min_salary,
         max_salary=job_in_db_model.max_salary,

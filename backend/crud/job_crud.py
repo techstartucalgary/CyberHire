@@ -106,6 +106,7 @@ def update_job(db: Session, new_job: job_schema.JobInDb) -> jobs_model.Job | Non
     if current_job is not None:
         current_job.title = new_job.title
         current_job.description = new_job.description
+        current_job.company_name = new_job.company_name
         current_job.location = new_job.location
         current_job.min_salary = new_job.min_salary
         current_job.max_salary = new_job.max_salary
