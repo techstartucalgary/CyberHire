@@ -24,7 +24,7 @@ router = APIRouter()
 )
 def get_applicants_applications(*,
                                 db: Session = Depends(dependencies.get_db),
-                                applicant: user_model.User = Depends(dependencies.get_current_user),
+                                applicant: user_model.User = Depends(dependencies.get_current_applicant_user),
                                 q: application_status_model.ApplicationStatusEnum | None = None):
 
     # check if query parameter was specified
@@ -170,6 +170,8 @@ def delete_applicant_application(db: Session = Depends(dependencies.get_db),
     if application is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Application for applicant {applicant.id} and job {job_id} not found.")
+
+    user_profile_job_crud.delete_applicant_application(db, applicant.id, job_id)
 
     # delete the application
     return f"Deleted application for job {job_id} for applicant {applicant.id}."
