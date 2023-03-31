@@ -127,7 +127,7 @@ def get_applications_by_job_id(db: Session = Depends(dependencies.get_db),
         "a job. The applicant cannot submit an application for the same job more than once.",
     response_description="The new application for the specified job."
 )
-def create_applicant_application(db: Session,
+def create_applicant_application(db: Session = Depends(dependencies.get_db),
                                  job_id: int = Path(),
                                  applicant: user_model.User = Depends(dependencies.get_current_applicant_user)):
 
@@ -154,7 +154,6 @@ def create_applicant_application(db: Session,
 # DELETE /applications/{job_id} delete an application
 @router.delete(
     "/applications/me/{job_id}",
-    response_model=user_profile_job_schema.UserProfileJob,
     status_code=status.HTTP_200_OK,
     tags=["Application"],
     summary="DELETE route for an applicant to delete an application for a specific job.",
@@ -162,25 +161,27 @@ def create_applicant_application(db: Session,
     response_description="The deleted user's application."
 )
 def delete_applicant_application(db: Session = Depends(dependencies.get_db),
-                                  job_id: int = Path(),
-                                  applicant: user_model.User = Depends(dependencies.get_current_applicant_user)):
-    
+                                 job_id: int = Path(),
+                                 applicant: user_model.User = Depends(dependencies.get_current_applicant_user)):
+
     # check if the application exists
     application = user_profile_job_crud.get_application_by_user_id_and_job_id(db, applicant.id, job_id)
 
     if application is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Application for applicant {applicant.id} and job {job_id} not found.")
-    
+
     # delete the application
-    return user_profile_job_crud.delete_applicant_application(db, applicant.id, job_id)
+    return f"Deleted application for job {job_id} for applicant {applicant.id}."
 
 
 # PATCH /applications/{job_id}_{applicant_id}/review change status to under review
-@router.patch(
-    "/applications/review/"
-)
+# @router.patch(
+#     "/applications/review/"
+# )
+
+# PATCH /applications/{job_id}_{applicant_id}/further_screening 
 
 # PATCH /applications/{job_id}_{applicant_id}/offer change status to offer sent
 
-# PATCH /applications/ applicationId}/rejected change status to rejected
+# PATCH /applications/{job_id}_{applicant_id}/rejected change status to rejected
