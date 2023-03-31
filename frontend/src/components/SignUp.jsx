@@ -92,7 +92,7 @@ const SignUpPage = () => {
 								data.access_token
 							);
 							if (is_recruiter) {
-								window.location.href = "#/recruiter";
+								window.location.href = "#/recruiterHome";
 							} else {
 								window.location.href = "#/app";
 							}

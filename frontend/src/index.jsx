@@ -8,23 +8,23 @@ import Privacy from "./pages/Privacy";
 import TopBar from "./components/TopBar";
 import ApplicantHome from "./pages/ApplicantHome";
 import NotFound from "./pages/NotFound";
+import RecruiterHome from "./pages/RecruiterHome";
 import SignUpPage from "./components/SignUp";
 import LoginPage from "./components/SignIn";
 
-const root = ReactDOM.createRoot(
-  document.getElementById("root")
-);
+const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <HashRouter>
-	<TopBar/>
+    <TopBar />
     <Routes>
       <Route path="" element={<App />} />
       <Route path="/about" element={<About />} />
-      <Route path="/privacy" element={<Privacy />}/>
+      <Route path="/privacy" element={<Privacy />} />
       <Route path="/app" element={<ApplicantHome />} />
-	  <Route path="/signin" element={<LoginPage />} />
-	  <Route path="/signup" element={<SignUpPage />} />
+      <Route path="/recruiterHome" element={<RecruiterHome />} />
+      <Route path="/signin" element={<LoginPage />} />
+      <Route path="/signup" element={<SignUpPage />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   </HashRouter>
