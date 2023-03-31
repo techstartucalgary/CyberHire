@@ -16,6 +16,7 @@ import "../styles/Modal.css";
 function CreateJobModal(props) {
   const [showSalary, setShowSalary] = useState(false);
   const [salary, setSalary] = useState([0, 0]);
+  const [showGenericError, setShowGenericError] = useState(false);
 
   const handleSalaryChange = (e, newValue) => {
     setSalary(newValue);
@@ -36,8 +37,29 @@ function CreateJobModal(props) {
       min_salary,
       max_salary,
     };
-    
-    
+
+    await fetch("https://chapi.techstartucalgary.com/jobs", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 401) {  
+            window.location.href = "#/signin";
+          } else {
+            setShowGenericError(true);
+          }
+          throw new Error("Job creation failed");
+        }
+        props.closeModal();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const formatCurrency = (num) => {
@@ -84,8 +106,17 @@ function CreateJobModal(props) {
             />
           </div>
         )}
+        <div className="row right-align">
+          {showGenericError && (
+            <Typography color="error">
+              There was an error creating your job. Please try again.
+            </Typography>
+          )}
+        </div>
         <div className="row right-align button-container">
-          <Button variant="outlined">Cancel</Button>
+          <Button variant="outlined" onClick={props.closeModal}>
+            Cancel
+          </Button>
           <Button type="submit" variant="contained">
             Post Job
           </Button>

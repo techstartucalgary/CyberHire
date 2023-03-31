@@ -11,6 +11,10 @@ function RecruiterHome() {
     setShowCreateJobModal(true);
   };
 
+  const closeModal = () => {
+    setShowCreateJobModal(false);
+  };
+
   return (
     <Box className="appHome">
       <Button variant="outlined" onClick={showModal}>
@@ -21,7 +25,10 @@ function RecruiterHome() {
         <Typography>Your Job Listings</Typography>
       </Container>
 
-      <CreateJobModal open={showCreateJobModal} />
+      <CreateJobModal
+        open={showCreateJobModal}
+        closeModal={closeModal}
+      />
     </Box>
   );
 }
