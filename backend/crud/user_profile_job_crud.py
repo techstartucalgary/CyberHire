@@ -61,3 +61,16 @@ def create_applicant_application(db: Session, user_id: int, job_id: int) \
 def delete_applicant_application(db: Session, user_id: int, job_id: int) \
                                  -> user_profile_job_model.UserProfileJob:
     
+
+    
+def update_applicant_application_status(db: Session, user_id: int, job_id: int, 
+                                        new_status: application_status_model.ApplicationStatusEnum) \
+                                        -> user_profile_job_model.UserProfileJob:
+
+    application = get_application_by_user_id_and_job_id(db, user_id, job_id)
+    application.application_status_id = new_status.value
+    #application.application_reviewed_date = datetime.today()
+    db.save(application)
+    db.commit()
+    db.refresh(application)
+    return application

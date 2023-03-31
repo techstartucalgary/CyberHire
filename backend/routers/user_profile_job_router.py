@@ -205,7 +205,7 @@ def change_application_status_to_under_review(db: Session = Depends(dependencies
         status_to_review = user_profile_job_model.UserProfileJob.application_status_id = application_status_model.ApplicationStatusEnum.in_review
 
     #TODO : Save to database using db.save()
-    return status_to_review
+    return user_profile_job_crud.update_applicant_application_status(db, applicant_id, job_id , status_to_review)
 
 # PATCH /applications/{job_id}_{applicant_id}/offer change status to offer sent
 
