@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from fastapi import APIRouter, Depends, status, Path, HTTPException
+from fastapi import APIRouter, Depends, status, Path, HTTPException, Query
 
 from .. import dependencies
 from .. models import user_model
@@ -23,7 +23,9 @@ router = APIRouter()
         "profile of the job poster.",
     response_description="A list of all jobs posted."
 )
-def get_all_jobs(db: Session=Depends(dependencies.get_db)):
+def get_all_jobs(db: Session=Depends(dependencies.get_db),
+                 limit: int=Query(default=10),
+                 offset: int=Query(default=0)):
     """
     GET route to obtain a list of all jobs from the database
 
@@ -38,7 +40,7 @@ def get_all_jobs(db: Session=Depends(dependencies.get_db)):
         a list of pydantic models for jobs, or none if there are no jobs present
     """
 
-    return job_crud.get_all_jobs(db)
+    return job_crud.get_all_jobs(db, limit, offset)
 
 # GET /jobs/me get a list of all a recruiters job postings
 @router.get(
