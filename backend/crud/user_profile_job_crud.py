@@ -15,8 +15,8 @@ def get_applications_by_user_id_and_status(db: Session,
                                             -> list[user_profile_job_model.UserProfileJob]:
     
     return db.query(user_profile_job_model.UserProfileJob) \
-        .filter(user_profile_job_model.UserProfileJob.user_profile_id == user_id and
-                user_profile_job_model.UserProfileJob.application_status_id == q.value).all()
+        .filter(user_profile_job_model.UserProfileJob.user_profile_id == user_id) \
+        .filter(user_profile_job_model.UserProfileJob.application_status_id == q.value).all()
 
 def get_applications_by_job_id_and_status(db: Session,
                                           job_id: int,
@@ -24,16 +24,16 @@ def get_applications_by_job_id_and_status(db: Session,
                                           -> list[user_profile_job_model.UserProfileJob]:
     
     return db.query(user_profile_job_model.UserProfileJob) \
-            .filter(user_profile_job_model.UserProfileJob.job_id == job_id and
-                    user_profile_job_model.UserProfileJob.application_status_id == q.value).all()
+            .filter(user_profile_job_model.UserProfileJob.job_id == job_id) \
+            .filter(user_profile_job_model.UserProfileJob.application_status_id == q.value).all()
 
 def get_application_by_user_id_and_job_id(db: Session,
                                           user_id: int,
                                           job_id: int) -> user_profile_job_model.UserProfileJob | None:
     
     return db.query(user_profile_job_model.UserProfileJob) \
-        .filter(user_profile_job_model.UserProfileJob.user_profile_id == user_id and
-                user_profile_job_model.UserProfileJob.job_id == job_id).first()
+        .filter(user_profile_job_model.UserProfileJob.user_profile_id == user_id) \
+        .filter(user_profile_job_model.UserProfileJob.job_id == job_id).first()
 
 def get_applications_by_job_id(db: Session, job_id: int) -> list[user_profile_job_model.UserProfileJob]:
 
@@ -62,8 +62,8 @@ def delete_applicant_application(db: Session, user_id: int, job_id: int) \
                                  -> user_profile_job_model.UserProfileJob | None:
     
     application = db.query(user_profile_job_model.UserProfileJob) \
-        .filter(user_profile_job_model.UserProfileJob.user_profile_id == user_id and
-                user_profile_job_model.UserProfileJob.job_id == job_id) \
+        .filter(user_profile_job_model.UserProfileJob.user_profile_id == user_id) \
+        .filter(user_profile_job_model.UserProfileJob.job_id == job_id) \
         .first()
     
     db.delete(application)
