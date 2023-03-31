@@ -202,7 +202,8 @@ def change_application_status_to_under_review(db: Session = Depends(dependencies
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail=f"Recruiter is not authorized to change the status of application {application.id}.")
     else:  
-        status_to_review = user_profile_job_model.UserProfileJob.application_status_id = application_status_model.ApplicationStatusEnum.in_review
+        user_profile_job_model.UserProfileJob.application_status_id = application_status_model.ApplicationStatusEnum.in_review
+        status_to_review = user_profile_job_model.UserProfileJob.application_status_id
 
     #TODO : Save to database using db.save()
     return user_profile_job_crud.update_applicant_application_status(db, applicant_id, job_id , status_to_review)
