@@ -17,11 +17,30 @@ router = APIRouter()
     summary="GET route to obtain the top ten jobs for an applicant.",
     description="The applicant must have created a user profile and listed " \
         "their top skills. If the applicant has not listed their top skills " \
-        "then random jobs will be returned.",
+        "then random jobs will be returned. The jobs are returned in order of best " \
+        "match to worst match. Jobs that an applicant have applied for are not returned.",
     response_description="The applicants top ten job matches."
 )
 def get_job_matching(db: Session=Depends(dependencies.get_db),
                      applicant: user_model.User=Depends(dependencies.get_current_applicant_user)):
+    """
+    GET route to obtain a list of the top ten jobs that match the applicant's skills from the
+    database. The jobs are matched based on the number of skills that match between a job and an
+    applicant. The jobs are returned in order of best match to worst match and only jobs that
+    the applicant have not applied to are returned.
+
+    Parameters
+    ----------
+    db: Session
+        a database session
+    applicant: user_model.User
+        a sqlalchemy user object that represents the current authorized applicant
+
+    Returns
+    -------
+    list[job_schema.Job]
+        a list of pydantic models representing the best matched jobs for the applicant
+    """
     
     # Check if they have a user profile
     dependencies.user_profile_exists(db, applicant.id)
