@@ -3,6 +3,7 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 
 from ..models import application_status_model, user_profile_job_model
+from ..crud import application_status_crud
 
 def get_applications_by_user_id(db: Session,
                                 user_id: int) -> list[user_profile_job_model.UserProfileJob]:
@@ -146,15 +147,18 @@ def create_applicant_application(db: Session, user_id: int, job_id: int) \
     user_profile_job_model.UserProfileJob
         a sqlalchemy UserProfileJob object representing the new application
     """
+    application_status_id = application_status_crud\
+        .get_application_status_by_name(db, application_status_model.ApplicationStatusEnum.submitted).id
 
     new_application = user_profile_job_model.UserProfileJob(
         user_profile_id=user_id,
         job_id=job_id,
-        application_status_id=application_status_model.ApplicationStatusEnum.submitted.value,
+        application_status_id=application_status_id,
         application_submitted_date=datetime.today(),
         application_reviewed_date=None,
         application_offer_sent_date=None,
-        application_rejected_date=None
+        application_rejected_date=None,
+        rejection_feedback=None
     )
 
     db.add(new_application)
