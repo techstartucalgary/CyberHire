@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from ..schemas import user_profile_job_schema
 from ..models import user_model, application_status_model
 from .. import dependencies
-from ..crud import user_profile_job_crud, job_crud
+from ..crud import user_profile_job_crud, job_crud, application_status_crud
 
 router = APIRouter()
 
@@ -53,14 +53,15 @@ def get_applicants_applications(*,
     else:
         # if yes query the database for all applications with the applicant's id and 
         # filter by query param
+        application_status = application_status_crud.get_application_status_by_name(db, q.value)
         applications = user_profile_job_crud \
-            .get_applications_by_user_id_and_status(db, applicant.id, q)
+            .get_applications_by_user_id_and_status(db, applicant.id, application_status.id)
 
     if len(applications) == 0:
         if q is None:
             detail = f"No applications were found for user {applicant.id}."
         else:
-            detail = f"No applications were found for user {applicant.id} with status {q.name}."
+            detail = f"No applications were found for user {applicant.id} with status {q.value}."
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=detail)
 
@@ -166,12 +167,17 @@ def get_applications_by_job_id(db: Session = Depends(dependencies.get_db),
         applications = user_profile_job_crud.get_applications_by_job_id(db, job_id)
     else:
         # if yes get all the applications for the job and filter by status
-        applications = user_profile_job_crud.get_applications_by_job_id_and_status(db, job_id, q)
+        application_status = application_status_crud.get_application_status_by_name(db, q.value)
+        applications = user_profile_job_crud.get_applications_by_job_id_and_status(db, job_id, application_status.id)
 
     # check if there were any applications
     if len(applications) == 0:
+        if q is None:
+            detail = f"No applications found for job {job_id}."
+        else:
+            detail = f"No applications found for job {job_id} and status {q.value}."
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail="No applications found for job {job_id}.")
+                            detail=detail)
 
     return applications
 

@@ -27,7 +27,7 @@ def get_applications_by_user_id(db: Session,
 
 def get_applications_by_user_id_and_status(db: Session,
                                            user_id: int,
-                                           q: application_status_model.ApplicationStatusEnum) \
+                                           q: int) \
                                             -> list[user_profile_job_model.UserProfileJob]:
     """
     Utility function to return all applications in the database for a given application user
@@ -50,11 +50,11 @@ def get_applications_by_user_id_and_status(db: Session,
 
     return db.query(user_profile_job_model.UserProfileJob) \
         .filter(user_profile_job_model.UserProfileJob.user_profile_id == user_id) \
-        .filter(user_profile_job_model.UserProfileJob.application_status_id == q.value).all()
+        .filter(user_profile_job_model.UserProfileJob.application_status_id == q).all()
 
 def get_applications_by_job_id_and_status(db: Session,
                                           job_id: int,
-                                          q: application_status_model.ApplicationStatusEnum) \
+                                          q: int) \
                                           -> list[user_profile_job_model.UserProfileJob]:
     """
     Utility function to get all applications for a given job with a specific application
@@ -77,7 +77,7 @@ def get_applications_by_job_id_and_status(db: Session,
 
     return db.query(user_profile_job_model.UserProfileJob) \
             .filter(user_profile_job_model.UserProfileJob.job_id == job_id) \
-            .filter(user_profile_job_model.UserProfileJob.application_status_id == q.value).all()
+            .filter(user_profile_job_model.UserProfileJob.application_status_id == q).all()
 
 def get_application_by_user_id_and_job_id(db: Session,
                                           user_id: int,
