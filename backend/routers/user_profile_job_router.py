@@ -3,9 +3,9 @@ from fastapi import APIRouter, Depends, status, HTTPException, Path
 from sqlalchemy.orm import Session
 
 from ..schemas import user_profile_job_schema
-from ..models import user_profile_job_model, user_model, application_status_model
+from ..models import user_model, application_status_model
 from .. import dependencies
-from ..crud import user_profile_job_crud, job_crud
+from ..crud import user_profile_job_crud, job_crud, application_status_crud
 
 router = APIRouter()
 
@@ -19,13 +19,32 @@ router = APIRouter()
     description="Return a list of all an applicant users applications in the database, " \
         "including the application status, the applicants information, the job information, " \
         "date the application was submitted, reviewed and offer was sent or rejected. " \
-        " Query for applications in a specific status by specifying query parameter q.",
+        "Query for applications in a specific status by specifying query parameter q.",
     response_description="A list of all an applicant users applications."
 )
 def get_applicants_applications(*,
                                 db: Session = Depends(dependencies.get_db),
                                 applicant: user_model.User = Depends(dependencies.get_current_applicant_user),
                                 q: application_status_model.ApplicationStatusEnum | None = None):
+    """
+    GET route to to obtain the current authenticated applicant user's list of applications for all
+    jobs from the datbase. Query for applications in a specific status by specifying query parameter q.
+    An error is returned if no applications were found.
+
+    Parameters
+    ----------
+    db: Session
+        a database session
+    applicant: user_model.User
+        a sqlalchemy object representing the current authenticated applicant user
+    q: application_status_model.ApplicationStatusEnum | None
+        optional parameter to specify the application status type to query for
+
+    Returns
+    -------
+    list[user_profile_job_schema.UserProfileJob]
+        a list of pydantic models for applications created for the current applicant
+    """
 
     # check if query parameter was specified
     if q is None:
@@ -34,14 +53,15 @@ def get_applicants_applications(*,
     else:
         # if yes query the database for all applications with the applicant's id and 
         # filter by query param
+        application_status = application_status_crud.get_application_status_by_name(db, q.value)
         applications = user_profile_job_crud \
-            .get_applications_by_user_id_and_status(db, applicant.id, q)
+            .get_applications_by_user_id_and_status(db, applicant.id, application_status.id)
 
     if len(applications) == 0:
         if q is None:
             detail = f"No applications were found for user {applicant.id}."
         else:
-            detail = f"No applications were found for user {applicant.id} with status {q.name}."
+            detail = f"No applications were found for user {applicant.id} with status {q.value}."
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=detail)
 
@@ -62,7 +82,25 @@ def get_applicants_applications(*,
 )
 def get_applicants_application_by_job_id(db: Session = Depends(dependencies.get_db),
                                          applicant: user_model.User = Depends(dependencies.get_current_applicant_user),
-                                         job_id = Path()):
+                                         job_id: int = Path()):
+    """
+    GET route to obtain the current authenticated applicant user's application for a specific job
+    from the database. An error is returned if no applications are found for the job.
+
+    Parameters
+    ----------
+    db: Session
+        a database session]
+    applicant: user_model.User
+        a sqlalchemy object representing the current authenticated applicant user
+    job_id: int
+        the job's unique identifier in the database
+
+    Returns
+    -------
+    user_profile_job_schema.UserProfileJob
+        a pydantic model for a application created for the specified job
+    """
 
     # query the database for the application
     application = user_profile_job_crud \
@@ -90,6 +128,28 @@ def get_applications_by_job_id(db: Session = Depends(dependencies.get_db),
                                recruiter: user_model.User = Depends(dependencies.get_current_recruiter_user),
                                job_id: int = Path(),
                                q: application_status_model.ApplicationStatusEnum | None = None):
+    """
+    GET route for a recruiter to obtain all applications for a specific job. The recruiter
+    must own the job to get applications for it. If the recruiter does not own the job, an
+    error will be returned.
+
+    Parameters
+    ----------
+    db: Session
+        a database session
+    recruiter: user_model.User
+        a sql alchemy object representing the current authenticated recruiter user
+    job_id: int
+        the job's unique identifier in the database
+    q: application_status_model.ApplicationStatusEnum | None
+        optional query parameter to filter the applications returned by their
+        application status type
+
+    Returns
+    -------
+    list[user_profile_job_schema.UserProfileJob]
+        a list of all applications for the specified job
+    """
 
     # check if the recruiter owners the job
     job = job_crud.get_job_by_id(db, job_id)
@@ -107,12 +167,17 @@ def get_applications_by_job_id(db: Session = Depends(dependencies.get_db),
         applications = user_profile_job_crud.get_applications_by_job_id(db, job_id)
     else:
         # if yes get all the applications for the job and filter by status
-        applications = user_profile_job_crud.get_applications_by_job_id_and_status(db, job_id, q)
+        application_status = application_status_crud.get_application_status_by_name(db, q.value)
+        applications = user_profile_job_crud.get_applications_by_job_id_and_status(db, job_id, application_status.id)
 
     # check if there were any applications
     if len(applications) == 0:
+        if q is None:
+            detail = f"No applications found for job {job_id}."
+        else:
+            detail = f"No applications found for job {job_id} and status {q.value}."
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail="No applications found for job {job_id}.")
+                            detail=detail)
 
     return applications
 
@@ -130,6 +195,24 @@ def get_applications_by_job_id(db: Session = Depends(dependencies.get_db),
 def create_applicant_application(db: Session = Depends(dependencies.get_db),
                                  job_id: int = Path(),
                                  applicant: user_model.User = Depends(dependencies.get_current_applicant_user)):
+    """
+    POST route for an applicant user to create a new application for a specific job. The user is
+    not allowed to submit multiple applications for the same job.
+
+    Parameters
+    ----------
+    db: Session
+        a dtabase session
+    job_id: int
+        the job's unique identifier in the database
+    applicant: user_model.User
+        a sqlalchemy object representing the current authenticated user
+    
+    Returns
+    -------
+    user_profile_job_schema.UserProfileJob
+        a pydantic model representing the new application in the database
+    """
 
     # check if the job exists
     job = job_crud.get_job_by_id(db, job_id)
@@ -163,6 +246,23 @@ def create_applicant_application(db: Session = Depends(dependencies.get_db),
 def delete_applicant_application(db: Session = Depends(dependencies.get_db),
                                  job_id: int = Path(),
                                  applicant: user_model.User = Depends(dependencies.get_current_applicant_user)):
+    """
+    DELETE route to delete for an applicant to delete their own application for a specific job.
+
+    Parameters
+    ----------
+    db: Session
+        a database session
+    job_id: int
+        a job's unique identifier in the database
+    applicant: user_model.User
+        a sqlalchemy object representing the current authenticated applicantuser
+
+    Returns
+    -------
+    str
+        A confirmation message that the application was deleted
+    """
 
     # check if the application exists
     application = user_profile_job_crud.get_application_by_user_id_and_job_id(db, applicant.id, job_id)

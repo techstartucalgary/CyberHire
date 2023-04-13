@@ -12,10 +12,10 @@ class ApplicationStatus(Base):
     id = Column(Integer, primary_key=True, nullable=False)
     status = Column(String(30), nullable=False, unique=True)
 
-class ApplicationStatusEnum(int, Enum):
+class ApplicationStatusEnum(str, Enum):
 
-    submitted = 1
-    in_review = 2
-    screening = 3
-    rejected = 4
-    offer_sent = 5
+    submitted = "SUBMITTED"
+    in_review = "UNDER REVIEW"
+    screening = "UNDERGOING FURTHER SCREENING"
+    rejected = "REJECTED"
+    offer_sent = "OFFER SENT"

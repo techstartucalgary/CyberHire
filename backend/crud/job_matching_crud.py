@@ -1,10 +1,28 @@
 from sqlalchemy.orm import Session
-from sqlalchemy import func, desc
+from sqlalchemy import func
 
 from ..models import jobs_model, job_skill_model, user_profile_model, \
                      user_profile_skill_model, user_profile_job_model
 
 def get_job_matching(db: Session, user_id: int) -> list[jobs_model.Job]:
+    """
+    Utility function to find a list of up to 10 jobs that are the best match
+    for the given user. The jobs are ordered descendingly based on the count of skills
+    that match between the user and the job. Jobs that an applicant have already
+    applied to are filtered out of the list.
+
+    Parameters
+    ----------
+    db: Session
+        a database sesion
+    user_id: int
+        the user's id in the User table
+    
+    Returns
+    -------
+    list[jobs_model.Job]
+        a list of sqlalchemy job objects
+    """
 
     # define subquery to match user_profile to user_profile_skills
     q_inner_user = db.query(user_profile_model.UserProfile, user_profile_skill_model.UserProfileSkill)\
@@ -25,9 +43,6 @@ def get_job_matching(db: Session, user_id: int) -> list[jobs_model.Job]:
         .order_by(func.count(jobs_model.Job.id).desc())\
         .limit(10)
 
-    print(str(q_outer))
-    # print(q_outer.all())
-
     # get a list of job_ids
     job_id_matches = [job_id_and_skill_count[0] for job_id_and_skill_count in q_outer.all()]
 
@@ -35,7 +50,7 @@ def get_job_matching(db: Session, user_id: int) -> list[jobs_model.Job]:
     for job_id in job_id_matches:
         q_jobs = db.query(jobs_model.Job) \
             .filter(jobs_model.Job.id == job_id)
-        
+ 
         jobs.append(q_jobs.first())
 
     return jobs
