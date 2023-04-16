@@ -11,10 +11,10 @@ import "../styles/LandingPage.css";
 const LandingPage = () => {
   return (
     <div>
-      <img src={vector1} />
+      <img src={vector1} alt="" />
 
       <Box className="findJob">
-        <img src={findJob} />
+        <img src={findJob} alt="Find Jobs Stress Free!" />
         <Button
           className="button-1"
           variant="contained"
@@ -25,11 +25,11 @@ const LandingPage = () => {
         </Button>
       </Box>
 
-      <img src={HiringVector} />
+      <img src={HiringVector} alt="" />
 
       <div className="design">
-        <img className="image" src={vector2} />
-        <img className="image" src={vector3} />
+        <img className="image" src={vector2} alt="" />
+        <img className="image" src={vector3} alt="" />
       </div>
     </div>
   );

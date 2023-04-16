@@ -31,7 +31,7 @@ const LoginPage = () => {
       return;
     }
 
-    const response = await fetch("https://chapi.techstartucalgary.com/token", {
+    await fetch("https://chapi.techstartucalgary.com/token", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",

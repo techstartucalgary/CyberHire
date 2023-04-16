@@ -53,22 +53,18 @@ const SignUpPage = () => {
     event.preventDefault();
 
     try {
-      const response = await fetch(
-        "https://chapi.techstartucalgary.com/users/",
-        {
-          method: "POST",
-          mode: "cors",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            username,
-            email,
-            password,
-            is_recruiter,
-          }),
-        }
-      ).then((response) => {
+      await fetch("https://chapi.techstartucalgary.com/users/", {
+        method: "POST",
+        mode: "cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username,
+          email,
+          password,
+          is_recruiter,
+        }),
+      }).then((response) => {
         if (response.ok) {
-          const data = response.json();
           fetch("https://chapi.techstartucalgary.com/token", {
             method: "POST",
             headers: {

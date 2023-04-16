@@ -4,7 +4,6 @@ import {
   Typography,
   Dialog,
   DialogTitle,
-  FormControl,
   TextField,
   Slider,
   FormControlLabel,
