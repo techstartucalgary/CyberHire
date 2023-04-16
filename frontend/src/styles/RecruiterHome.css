@@ -1,20 +1,20 @@
 .appHome {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: flex-start;
-	margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 20px;
 }
 
 .rotate {
-	rotate: 270deg;
-	animation: rotate 2s linear infinite;
+  rotate: 270deg;
+  animation: rotate 2s linear infinite;
 }
 
 .row {
-	display: flex !important;
-	flex-direction: row;
-	align-items: center;
-	justify-content: center;
-	width: 100%;
+  display: flex !important;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }

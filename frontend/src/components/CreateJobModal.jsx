@@ -48,7 +48,7 @@ function CreateJobModal(props) {
     })
       .then((response) => {
         if (!response.ok) {
-          if (response.status === 401) {  
+          if (response.status === 401) {
             window.location.href = "#/signin";
           } else {
             setShowGenericError(true);

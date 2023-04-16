@@ -5,11 +5,11 @@
 }
 
 .row {
-	display: flex !important;
-	flex-direction: row;
-	align-items: center;
-	justify-content: flex-start;
-	width: 100%;
+  display: flex !important;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
 }
 
 .right-align {
@@ -22,6 +22,7 @@
   width: 90% !important;
 }
 
-.MuiTextField-root, .MuiFormControlLabel-root {
+.MuiTextField-root,
+.MuiFormControlLabel-root {
   margin-bottom: 20px !important;
 }

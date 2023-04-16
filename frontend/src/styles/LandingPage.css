@@ -1,39 +1,39 @@
 img {
-	max-width: 100%;
-	height: auto;
-	padding: 0;
-	margin: 0;
+  max-width: 100%;
+  height: auto;
+  padding: 0;
+  margin: 0;
 }
 .group2 {
-	position: absolute;
+  position: absolute;
 }
 
 .findJob {
-	display: flex;
-	flex-direction: column;
-	width: 70%;
-	justify-content: space-evenly;
-	align-items: flex-end;
-	margin: 25px 10px 25px auto;
-	gap: 10px 0;
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  justify-content: space-evenly;
+  align-items: flex-end;
+  margin: 25px 10px 25px auto;
+  gap: 10px 0;
 }
 .design {
-	display: flex;
-	justify-content: space-between;
-	align-items: flex-end;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
 }
 .image {
-	width: 20%;
-	margin-top: 40px;
+  width: 20%;
+  margin-top: 40px;
 }
 @media only screen and (min-width: 768px) {
-	.findJob {
-		align-items: center;
-		margin-right: 60px;
-		gap: 20px 0;
-	}
-	.image {
-		margin-top: 10px;
-		width: 10%;
-	}
+  .findJob {
+    align-items: center;
+    margin-right: 60px;
+    gap: 20px 0;
+  }
+  .image {
+    margin-top: 10px;
+    width: 10%;
+  }
 }

@@ -25,10 +25,7 @@ function RecruiterHome() {
         <Typography>Your Job Listings</Typography>
       </Container>
 
-      <CreateJobModal
-        open={showCreateJobModal}
-        closeModal={closeModal}
-      />
+      <CreateJobModal open={showCreateJobModal} closeModal={closeModal} />
     </Box>
   );
 }

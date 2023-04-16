@@ -9,30 +9,30 @@ import findJob from "../img/findJob.png";
 import "../styles/LandingPage.css";
 
 const LandingPage = () => {
-	return (
-		<div>
-			<img src={vector1} />
+  return (
+    <div>
+      <img src={vector1} />
 
-			<Box className="findJob">
-				<img src={findJob} />
-				<Button
-					className="button-1"
-					variant="contained"
-					sx={{ color: "black", backgroundColor: "#f9e393" }}
-					href="#/signup"
-				>
-					Get Started
-				</Button>
-			</Box>
+      <Box className="findJob">
+        <img src={findJob} />
+        <Button
+          className="button-1"
+          variant="contained"
+          sx={{ color: "black", backgroundColor: "#f9e393" }}
+          href="#/signup"
+        >
+          Get Started
+        </Button>
+      </Box>
 
-			<img src={HiringVector} />
+      <img src={HiringVector} />
 
-			<div className="design">
-				<img className="image" src={vector2} />
-				<img className="image" src={vector3} />
-			</div>
-		</div>
-	);
+      <div className="design">
+        <img className="image" src={vector2} />
+        <img className="image" src={vector3} />
+      </div>
+    </div>
+  );
 };
 
 export default LandingPage;
