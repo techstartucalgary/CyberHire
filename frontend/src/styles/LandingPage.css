@@ -1,0 +1,47 @@
+img {
+    max-width: 100%;
+    height: auto;
+    padding: 0;
+    margin: 0;
+}
+.group2 {
+    position: absolute;
+}
+
+.button-1{
+    background-color: green;
+    font-size: xx-large;
+}
+.findJob{
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    justify-content:space-evenly;
+    align-items: flex-end;
+    margin-left: auto;
+    margin-right: 10px;
+    gap: 10px 0;
+}
+.design{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    
+
+}
+.image{
+    width: 20%;
+    margin-top: 40px;
+}
+@media only screen and (min-width: 768px) {
+    .findJob{
+        align-items: center;
+        margin-right: 60px;
+        gap:20px 0;
+    }
+    .image{
+        margin-top: 10px;
+        width: 10%;
+    }
+
+}
