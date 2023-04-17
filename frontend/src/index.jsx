@@ -27,5 +27,5 @@ root.render(
       <Route path="/signup" element={<SignUpPage />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
-  </HashRouter>
+  </HashRouter>,
 );
