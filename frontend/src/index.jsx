@@ -33,5 +33,5 @@ root.render(
       <Route path="/skills" element={<SkillsSelector />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
-  </HashRouter>
+  </HashRouter>,
 );
