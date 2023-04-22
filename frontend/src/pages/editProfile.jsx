@@ -55,6 +55,7 @@ function EditProfile() {
         "https://chapi.techstartucalgary.com/users/profile/me",
         {
           method: "PATCH",
+          mode: "cors",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -78,6 +79,7 @@ function EditProfile() {
           "https://chapi.techstartucalgary.com/users/profile/profile_picture",
           {
             method: "PATCH",
+            mode: "cors",
             headers: {
               Authorization: `Bearer ${localStorage.getItem("access_token")}`,
             },
@@ -98,6 +100,7 @@ function EditProfile() {
           "https://chapi.techstartucalgary.com/users/profile/resume",
           {
             method: "PATCH",
+            mode: "cors",
             headers: {
               Authorization: `Bearer ${localStorage.getItem("access_token")}`,
             },

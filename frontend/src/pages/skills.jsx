@@ -44,6 +44,9 @@ function SkillsSelector() {
       );
       console.log(response);
       const data = await response.json();
+      if (response.ok) {
+        window.location.href = "#/app";
+      }
       console.log(data);
     } catch (error) {
       console.error(error);

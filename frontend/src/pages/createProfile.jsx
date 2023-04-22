@@ -51,10 +51,12 @@ function CreateProfile() {
     };
 
     try {
+      var allRequestsSucceeded = true;
       const response = await fetch(
         "https://chapi.techstartucalgary.com/users/profile/",
         {
           method: "POST",
+          mode: "cors",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -64,6 +66,7 @@ function CreateProfile() {
       );
 
       if (!response.ok) {
+        allRequestsSucceeded = false;
         throw new Error("Failed to create profile");
       }
 
@@ -78,6 +81,7 @@ function CreateProfile() {
           "https://chapi.techstartucalgary.com/users/profile/profile_picture",
           {
             method: "PATCH",
+            mode: "cors",
             headers: {
               Authorization: `Bearer ${localStorage.getItem("access_token")}`,
             },
@@ -86,6 +90,7 @@ function CreateProfile() {
         );
 
         if (!imageResponse.ok) {
+          allRequestsSucceeded = false;
           throw new Error("Failed to update profile picture");
         }
       }
@@ -98,6 +103,7 @@ function CreateProfile() {
           "https://chapi.techstartucalgary.com/users/profile/resume",
           {
             method: "PATCH",
+            mode: "cors",
             headers: {
               Authorization: `Bearer ${localStorage.getItem("access_token")}`,
             },
@@ -106,8 +112,13 @@ function CreateProfile() {
         );
 
         if (!resumeResponse.ok) {
+          allRequestsSucceeded = false;
           throw new Error("Failed to update resume");
         }
+      }
+
+      if (allRequestsSucceeded) {
+        window.location.href = "#/skills";
       }
     } catch (error) {
       console.error(error);

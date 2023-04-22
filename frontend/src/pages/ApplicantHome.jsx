@@ -14,7 +14,7 @@ function ApplicantHome() {
 
   return (
     <Box className="appHome">
-      <Button variant="outlined">
+      <Button variant="outlined" href="#/editProfile">
         <Typography>Update my Profile</Typography>
       </Button>
 
