@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
-function CreateProfile() {
+function EditProfile() {
   const [profileData, setProfileData] = useState({
     firstName: "",
     lastName: "",
@@ -52,9 +52,9 @@ function CreateProfile() {
   
     try {
       const response = await fetch(
-        "https://chapi.techstartucalgary.com/users/profile/",
+        "https://chapi.techstartucalgary.com/users/profile/me",
         {
-          method: "POST",
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -113,10 +113,11 @@ function CreateProfile() {
       console.error(error);
     }
   }
+  
   return (
     <Container maxWidth="sm">
       <Typography variant="h1" align="center" gutterBottom>
-        Create Profile
+        Edit Profile
       </Typography>
 
       <form onSubmit={handleSubmit}>
@@ -209,7 +210,7 @@ function CreateProfile() {
           </Grid>
           <Grid item xs={12}>
             <Button type="submit" variant="contained" color="primary" fullWidth>
-              Submit
+              Update
             </Button>
           </Grid>
         </Grid>
@@ -217,4 +218,4 @@ function CreateProfile() {
     </Container>
   );
 }
-export default CreateProfile;
+export default EditProfile;
