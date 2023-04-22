@@ -44,12 +44,12 @@ function CreateProfile() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-  
+
     const profileFormData = {
       first_name: profileData.firstName,
       last_name: profileData.lastName,
     };
-  
+
     try {
       const response = await fetch(
         "https://chapi.techstartucalgary.com/users/profile/",
@@ -62,18 +62,18 @@ function CreateProfile() {
           body: JSON.stringify(profileFormData),
         }
       );
-  
+
       if (!response.ok) {
         throw new Error("Failed to create profile");
       }
-  
+
       const data = await response.json();
       console.log(data);
-  
+
       if (profileData.profilePicture) {
         const imageFormData = new FormData();
         imageFormData.append("profile_picture", profileData.profilePicture);
-  
+
         const imageResponse = await fetch(
           "https://chapi.techstartucalgary.com/users/profile/profile_picture",
           {
@@ -84,16 +84,16 @@ function CreateProfile() {
             body: imageFormData,
           }
         );
-  
+
         if (!imageResponse.ok) {
           throw new Error("Failed to update profile picture");
         }
       }
-  
+
       if (profileData.resume) {
         const resumeFormData = new FormData();
         resumeFormData.append("resume", profileData.resume);
-  
+
         const resumeResponse = await fetch(
           "https://chapi.techstartucalgary.com/users/profile/resume",
           {
@@ -104,7 +104,7 @@ function CreateProfile() {
             body: resumeFormData,
           }
         );
-  
+
         if (!resumeResponse.ok) {
           throw new Error("Failed to update resume");
         }

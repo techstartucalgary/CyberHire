@@ -1,23 +1,23 @@
-import React, { useState } from 'react';
-import { Autocomplete } from '@mui/material';
-import { Typography, TextField, Button } from '@mui/material';
+import React, { useState } from "react";
+import { Autocomplete } from "@mui/material";
+import { Typography, TextField, Button } from "@mui/material";
 
 const skills = [
-  'JavaScript',
-  'TypeScript',
-  'React',
-  'Angular',
-  'Vue.js',
-  'Node.js',
-  'Express.js',
-  'Django',
-  'Flask',
-  'Python',
-  'Java',
-  'C#',
-  'PHP',
-  'Ruby',
-  'Swift',
+  "JavaScript",
+  "TypeScript",
+  "React",
+  "Angular",
+  "Vue.js",
+  "Node.js",
+  "Express.js",
+  "Django",
+  "Flask",
+  "Python",
+  "Java",
+  "C#",
+  "PHP",
+  "Ruby",
+  "Swift",
 ];
 
 function SkillsSelector() {
@@ -31,13 +31,13 @@ function SkillsSelector() {
     event.preventDefault();
     try {
       const response = await fetch(
-        'https://chapi.techstartucalgary.com/users/profile/me/skills',
+        "https://chapi.techstartucalgary.com/users/profile/me/skills",
         {
-          method: 'POST',
-          mode: 'cors',
+          method: "POST",
+          mode: "cors",
           headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           },
           body: JSON.stringify(selectedSkills.map((skill) => ({ skill }))),
         }
@@ -51,8 +51,8 @@ function SkillsSelector() {
   };
 
   return (
-    <div style={{ margin: '40px', marginTop: '60px' }}>
-      <Typography variant='h3' align='center' gutterBottom>
+    <div style={{ margin: "40px", marginTop: "60px" }}>
+      <Typography variant="h3" align="center" gutterBottom>
         Choose Skills
       </Typography>
       <Autocomplete
@@ -61,14 +61,14 @@ function SkillsSelector() {
         value={selectedSkills}
         onChange={handleSkillSelection}
         renderInput={(params) => (
-          <TextField {...params} label='Choose Skills' variant='outlined' />
+          <TextField {...params} label="Choose Skills" variant="outlined" />
         )}
       />
       <Button
-        style={{ marginTop: '30px' }}
-        type='submit'
-        variant='contained'
-        color='primary'
+        style={{ marginTop: "30px" }}
+        type="submit"
+        variant="contained"
+        color="primary"
         fullWidth
         onClick={handleSubmit}
       >
