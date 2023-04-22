@@ -62,7 +62,7 @@ function CreateProfile() {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           },
           body: JSON.stringify(profileFormData),
-        }
+        },
       );
 
       if (!response.ok) {
@@ -86,7 +86,7 @@ function CreateProfile() {
               Authorization: `Bearer ${localStorage.getItem("access_token")}`,
             },
             body: imageFormData,
-          }
+          },
         );
 
         if (!imageResponse.ok) {
@@ -108,7 +108,7 @@ function CreateProfile() {
               Authorization: `Bearer ${localStorage.getItem("access_token")}`,
             },
             body: resumeFormData,
-          }
+          },
         );
 
         if (!resumeResponse.ok) {
@@ -118,7 +118,11 @@ function CreateProfile() {
       }
 
       if (allRequestsSucceeded) {
-        window.location.href = "#/skills";
+        if (localStorage.getItem("is_recruiter") === "true") {
+          window.location.href = "#/recruiterHome";
+        } else {
+          window.location.href = "#/skills";
+        }
       }
     } catch (error) {
       console.error(error);

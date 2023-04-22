@@ -85,10 +85,9 @@ const SignUpPage = () => {
             .then((data) => {
               localStorage.setItem("access_token", data.access_token);
               if (is_recruiter) {
-                window.location.href = "#/recruiterHome";
-              } else {
-                window.location.href = "#/createProfile";
+                localStorage.setItem("is_recruiter", "true");
               }
+              window.location.href = "#/createProfile";
             })
             .catch((error) => console.error(error));
         } else if (response.status === 400) {
