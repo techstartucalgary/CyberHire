@@ -1,6 +1,6 @@
 import React from "react";
 import { AppBar, Button, Toolbar, Typography, Grid } from "@mui/material";
-import logo from "./CyberHireLogo.png";
+import logo from "../img/CyberHireLogo.png";
 import "../styles/TopBar.css";
 
 function TopBar() {

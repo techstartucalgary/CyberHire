@@ -9,7 +9,7 @@ from passlib.context import CryptContext
 from datetime import timedelta, datetime
 
 password_ctx = CryptContext(schemes=["bcrypt"], deprecated="auto")
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 10080
 SECRET_KEY = "c22354c13199c37439977b0f2ca2698b84d839bb387b38f59c5edcda787bf6ef"
 ALGORITHM = "HS256"
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")

@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from ..models import jobs_model
 from ..schemas import job_schema
 
-def get_all_jobs(db: Session) -> list[jobs_model.Job]:
+def get_all_jobs(db: Session, limit=10, offset=0) -> list[jobs_model.Job]:
     """
     Utility function to return all jobs in the database
 
@@ -17,7 +17,7 @@ def get_all_jobs(db: Session) -> list[jobs_model.Job]:
         list of sqlalchemy Job objects
     """
 
-    return db.query(jobs_model.Job).all()
+    return db.query(jobs_model.Job).limit(limit=limit).offset(offset=offset).all()
 
 def get_job_by_id(db: Session, job_id: int) -> jobs_model.Job | None:
     """

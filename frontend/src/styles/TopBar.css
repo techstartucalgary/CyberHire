@@ -1,42 +1,42 @@
 .MuiToolbar-root {
-	height: 90px;
-	background-color: azure;
-	justify-content: center;
+  height: 90px;
+  background-color: azure;
+  justify-content: center;
 }
 
 .MuiButton-root {
-	border-radius: 30px !important;
-	max-height: 30px;
+  border-radius: 30px !important;
+  max-height: 30px;
 }
 
 .buttonContainer {
-	text-align: end;
+  text-align: end;
 }
 
 .signup,
 .signin {
-	width: 100px;
+  width: 100px;
 }
 
 .signin {
-	margin-left: 10px !important;
+  margin-left: 10px !important;
 }
 
 @media screen and (max-width: 600px) {
-	.signin {
-		margin-left: 0px !important;
-		margin-top: 5px !important;
-	}
+  .signin {
+    margin-left: 0px !important;
+    margin-top: 5px !important;
+  }
 
-	.signup {
-		margin-top: 5px !important;
-	}
+  .signup {
+    margin-top: 5px !important;
+  }
 }
 
 .logoContainer {
-	text-align: center;
+  text-align: center;
 }
 
 .logo {
-	max-height: 45px;
+  max-height: 45px;
 }

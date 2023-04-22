@@ -3,6 +3,9 @@ from .skill_schema import Skill
 from .user_profile_schema import UserProfile
 
 class JobBase(BaseModel):
+    """
+    Base model for a job.
+    """
 
     title : str = Field(max_length=100)
     description : str = Field(max_length=2000)
@@ -12,6 +15,9 @@ class JobBase(BaseModel):
     max_salary : int | None = None
 
 class JobCreate(JobBase):
+    """
+    Model for creating a new job in the database.
+    """
 
     class Config:
         schema_extra = {
@@ -26,6 +32,9 @@ class JobCreate(JobBase):
         }
 
 class JobPatch(JobBase):
+    """
+    Model for partial updates to a job.
+    """
 
     title : str | None = Field(default=None, max_length=100)
     description : str | None = Field(default=None, max_length=2000)
@@ -48,12 +57,18 @@ class JobPatch(JobBase):
 
 
 class JobInDb(JobBase):
+    """
+    Model for updating a job in the database.
+    """
 
     id : int
     user_profile_id : int
 
 class Job(JobBase):
-    
+    """
+    Model for returning a job.
+    """
+
     id : int
     user_profile_id : int
     skills : list[Skill]

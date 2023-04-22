@@ -1,0 +1,28 @@
+.form {
+  padding: 20px !important;
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex !important;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.right-align {
+  text-align: right;
+  justify-content: flex-end;
+}
+
+.MuiSlider-root {
+  margin-top: 40px;
+  width: 90% !important;
+}
+
+.MuiTextField-root,
+.MuiFormControlLabel-root {
+  margin-bottom: 20px !important;
+}
