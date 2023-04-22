@@ -87,7 +87,7 @@ const SignUpPage = () => {
               if (is_recruiter) {
                 window.location.href = "#/recruiterHome";
               } else {
-                window.location.href = "#/app";
+                window.location.href = "#/createProfile";
               }
             })
             .catch((error) => console.error(error));
