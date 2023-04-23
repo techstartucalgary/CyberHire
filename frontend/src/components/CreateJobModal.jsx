@@ -29,12 +29,14 @@ function CreateJobModal(props) {
     const title = formData.get("title");
     const description = formData.get("description");
     const location = formData.get("location");
+    const company_name = formData.get("company_name");
     const data = {
       title,
       description,
       location,
       min_salary,
       max_salary,
+      company_name,
     };
 
     await fetch("https://chapi.techstartucalgary.com/jobs", {
@@ -81,6 +83,8 @@ function CreateJobModal(props) {
           required
         />
         <TextField name="location" label="Location" required />
+        <TextField name="company_name" label="Company Name" required />
+
         <FormControlLabel
           control={
             <Switch

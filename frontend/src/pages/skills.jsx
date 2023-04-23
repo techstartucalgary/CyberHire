@@ -40,7 +40,7 @@ function SkillsSelector() {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           },
           body: JSON.stringify(selectedSkills.map((skill) => ({ skill }))),
-        }
+        },
       );
       console.log(response);
       const data = await response.json();
