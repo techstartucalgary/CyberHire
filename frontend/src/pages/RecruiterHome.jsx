@@ -32,7 +32,6 @@ function RecruiterHome() {
     setShouldFetchJobs(true);
   };
 
-
   const fetchJobs = async () => {
     try {
       const response = await fetch(
@@ -44,7 +43,7 @@ function RecruiterHome() {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           },
-        }
+        },
       );
 
       if (response.status === 404) {
@@ -71,7 +70,7 @@ function RecruiterHome() {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           },
-        }
+        },
       );
 
       if (response.status === 200) {
@@ -141,7 +140,8 @@ function RecruiterHome() {
                         sx={{ mb: 1.5 }}
                         color="text.secondary"
                       >
-                        {formatCurrency(job.min_salary)} - {formatCurrency(job.max_salary)}
+                        {formatCurrency(job.min_salary)} -{" "}
+                        {formatCurrency(job.max_salary)}
                       </Typography>
                     )}
 
@@ -176,16 +176,15 @@ function RecruiterHome() {
             ))}
           </Grid>
         </Box>
-          ) : (
-            <Typography className="noJobs">
-              You haven't posted any jobs yet.
-            </Typography>
-          )}
-        
-          <CreateJobModal open={showCreateJobModal} closeModal={closeModal} />
-        </Box>
-        );
-        }
-        
-        export default RecruiterHome;
-     
+      ) : (
+        <Typography className="noJobs">
+          You haven't posted any jobs yet.
+        </Typography>
+      )}
+
+      <CreateJobModal open={showCreateJobModal} closeModal={closeModal} />
+    </Box>
+  );
+}
+
+export default RecruiterHome;

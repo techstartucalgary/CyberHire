@@ -1,4 +1,4 @@
- .appHome {
+.appHome {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,8 +27,8 @@
   border-radius: 15px;
   padding: 20px;
   width: 90%;
-  min-width: 500px; 
-  min-height: 200px; 
+  min-width: 500px;
+  min-height: 200px;
   margin-bottom: 20px;
   margin-left: 20px;
   margin-right: 20px;
@@ -89,4 +89,4 @@
     justify-content: space-between;
     width: 80%;
   }
-} 
+}

@@ -61,7 +61,7 @@ function EditProfile() {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           },
           body: JSON.stringify(profileFormData),
-        }
+        },
       );
 
       if (!response.ok) {
@@ -84,7 +84,7 @@ function EditProfile() {
               Authorization: `Bearer ${localStorage.getItem("access_token")}`,
             },
             body: imageFormData,
-          }
+          },
         );
 
         if (!imageResponse.ok) {
@@ -105,7 +105,7 @@ function EditProfile() {
               Authorization: `Bearer ${localStorage.getItem("access_token")}`,
             },
             body: resumeFormData,
-          }
+          },
         );
 
         if (!resumeResponse.ok) {
