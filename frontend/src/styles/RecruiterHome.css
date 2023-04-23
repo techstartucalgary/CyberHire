@@ -1,20 +1,92 @@
-.appHome {
+ .appHome {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  margin-top: 20px;
-}
-
-.rotate {
-  rotate: 270deg;
-  animation: rotate 2s linear infinite;
-}
-
-.row {
-  display: flex !important;
-  flex-direction: row;
   align-items: center;
   justify-content: center;
   width: 100%;
 }
+
+.Button {
+  background-color: #3f51b5;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.noJobs {
+  margin-top: 20px;
+}
+
+.jobContainer {
+  background-color: bisque;
+  border-radius: 15px;
+  padding: 20px;
+  width: 90%;
+  min-width: 500px; 
+  min-height: 200px; 
+  margin-bottom: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.jobTitle {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.jobCompany {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.jobLocation {
+  font-size: 15px;
+}
+
+.jobSalary {
+  font-size: 15px;
+}
+
+.jobDescription {
+  font-size: 15px;
+}
+
+.descContainer {
+  background-color: azure;
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 10px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  max-width: 100%;
+}
+
+.jobSkill {
+  font-size: 15px;
+  margin-top: 10px;
+  display: inline-block;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  padding: 3px 10px;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  border: 1px solid #dee2e6;
+}
+
+.applyButton {
+  background-color: #3f51b5;
+  color: white;
+  margin-top: 10px;
+}
+
+@media (min-width: 768px) {
+  .row {
+    justify-content: space-between;
+    width: 80%;
+  }
+} 
