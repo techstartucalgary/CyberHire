@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Typography,
@@ -13,9 +13,28 @@ import {
 import "../styles/Modal.css";
 
 function CreateJobModal(props) {
+  const [isEditing, setIsEditing] = useState(false);
   const [showSalary, setShowSalary] = useState(false);
   const [salary, setSalary] = useState([0, 0]);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [location, setLocation] = useState("");
+  const [company_name, setCompanyName] = useState("");
   const [showGenericError, setShowGenericError] = useState(false);
+
+  useEffect(() => {
+    if (props.job) {
+      setIsEditing(true);
+      setTitle(props.job.title);
+      setDescription(props.job.description);
+      setLocation(props.job.location);
+      setCompanyName(props.job.company_name);
+      if (props.job.min_salary) {
+        setShowSalary(true);
+        setSalary([props.job.min_salary, props.job.max_salary]);
+      }
+    }
+  }, [props]);
 
   const handleSalaryChange = (e, newValue) => {
     setSalary(newValue);
@@ -39,28 +58,53 @@ function CreateJobModal(props) {
       company_name,
     };
 
-    await fetch("https://chapi.techstartucalgary.com/jobs", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          if (response.status === 401) {
-            window.location.href = "#/signin";
-          } else {
-            setShowGenericError(true);
-          }
-          throw new Error("Job creation failed");
-        }
-        props.closeModal();
+    if (isEditing) {
+      await fetch(`https://chapi.techstartucalgary.com/jobs/${props.job.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+        body: JSON.stringify(data),
       })
-      .catch((error) => {
-        console.error(error);
-      });
+        .then((response) => {
+          if (!response.ok) {
+            if (response.status === 401) {
+              window.location.href = "#/signin";
+            } else {
+              setShowGenericError(true);
+            }
+            throw new Error("Job creation failed");
+          }
+          cancelModal();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      await fetch("https://chapi.techstartucalgary.com/jobs", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            if (response.status === 401) {
+              window.location.href = "#/signin";
+            } else {
+              setShowGenericError(true);
+            }
+            throw new Error("Job creation failed");
+          }
+          props.closeModal();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   };
 
   const formatCurrency = (num) => {
@@ -71,19 +115,53 @@ function CreateJobModal(props) {
     });
   };
 
+  const cancelModal = () => {
+    setTitle("");
+    setDescription("");
+    setLocation("");
+    setCompanyName("");
+    setShowSalary(false);
+    setShowGenericError(false);
+    setSalary([0, 0]);
+    setIsEditing(false);
+    props.closeModal();
+  };
+
   return (
     <Dialog open={props.open} fullWidth>
-      <DialogTitle>Create New Job</DialogTitle>
-      <form className="form" onSubmit={submitNewJob}>
-        <TextField name="title" label="Job Title" required />
+      <DialogTitle>
+        {isEditing ? `Update Existing Job` : `Create New Job`}
+      </DialogTitle>
+      <form id="jobForm" className="form" onSubmit={submitNewJob}>
+        <TextField
+          name="title"
+          label="Job Title"
+          onChange={(e) => setTitle(e.target.value)}
+          value={title}
+          required
+        />
         <TextField
           name="description"
           label="Job Description"
+          onChange={(e) => setDescription(e.target.value)}
+          value={description}
           multiline
           required
         />
-        <TextField name="location" label="Location" required />
-        <TextField name="company_name" label="Company Name" required />
+        <TextField
+          name="location"
+          label="Location"
+          onChange={(e) => setLocation(e.target.value)}
+          value={location}
+          required
+        />
+        <TextField
+          name="company_name"
+          label="Company Name"
+          onChange={(e) => setCompanyName(e.target.value)}
+          value={company_name}
+          required
+        />
 
         <FormControlLabel
           control={
@@ -117,11 +195,11 @@ function CreateJobModal(props) {
           )}
         </div>
         <div className="row right-align button-container">
-          <Button variant="outlined" onClick={props.closeModal}>
+          <Button variant="outlined" onClick={cancelModal}>
             Cancel
           </Button>
           <Button type="submit" variant="contained">
-            Post Job
+            {isEditing ? `Update Job` : `Post Job`}
           </Button>
         </div>
       </form>
