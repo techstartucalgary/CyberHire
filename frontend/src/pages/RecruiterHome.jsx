@@ -14,8 +14,9 @@ import {
 function RecruiterHome() {
   const [showCreateJobModal, setShowCreateJobModal] = useState(false);
   const [jobs, setJobs] = useState([]);
-  const [shouldFetchJobs, setShouldFetchJobs] = useState(false);
+  const [shouldFetchJobs, setShouldFetchJobs] = useState(true);
   const [hasJobs, setHasJobs] = useState(false);
+  const [jobData, setJobData] = useState(null);
 
   useEffect(() => {
     if (shouldFetchJobs) {
@@ -30,6 +31,7 @@ function RecruiterHome() {
   const closeModal = () => {
     setShowCreateJobModal(false);
     setShouldFetchJobs(true);
+    setJobData(null);
   };
 
   const fetchJobs = async () => {
@@ -59,6 +61,7 @@ function RecruiterHome() {
       console.error(error);
     }
   };
+
   const deleteJob = async (jobId) => {
     try {
       const response = await fetch(
@@ -86,6 +89,11 @@ function RecruiterHome() {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const editJob = (job) => {
+    setJobData(job);
+    showModal();
   };
 
   const formatCurrency = (num) => {
@@ -170,6 +178,13 @@ function RecruiterHome() {
                     >
                       <Typography>Delete Job</Typography>
                     </Button>
+                    <Button
+                      variant="outlined"
+                      className="editButton"
+                      onClick={() => editJob(job)}
+                    >
+                      <Typography>Edit Job</Typography>
+                    </Button>
                   </CardContent>
                 </Card>
               </Grid>
@@ -182,7 +197,13 @@ function RecruiterHome() {
         </Typography>
       )}
 
-      <CreateJobModal open={showCreateJobModal} closeModal={closeModal} />
+      {showCreateJobModal && (
+        <CreateJobModal
+          open={showCreateJobModal}
+          job={jobData}
+          closeModal={closeModal}
+        />
+      )}
     </Box>
   );
 }
