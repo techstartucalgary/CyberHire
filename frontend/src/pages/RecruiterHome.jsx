@@ -33,8 +33,6 @@ function RecruiterHome() {
   };
 
 
-  
-
   const fetchJobs = async () => {
     try {
       const response = await fetch(
@@ -91,6 +89,14 @@ function RecruiterHome() {
     }
   };
 
+  const formatCurrency = (num) => {
+    return num.toLocaleString("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 0,
+    });
+  };
+
   return (
     <Box className="appHome">
       <Button className="Button" onClick={showModal}>
@@ -129,16 +135,15 @@ function RecruiterHome() {
                     >
                       {job.location}
                     </Typography>
-                      {job.min_salary > 0 && job.max_salary > 0 && (
-                        <Typography
-                          className="jobSalary"
-                          sx={{ mb: 1.5 }}
-                          color="text.secondary"
-                        >
-                          {job.min_salary} - {job.max_salary}
-                        </Typography>
-                      )}
-
+                    {job.min_salary > 0 && job.max_salary > 0 && (
+                      <Typography
+                        className="jobSalary"
+                        sx={{ mb: 1.5 }}
+                        color="text.secondary"
+                      >
+                        {formatCurrency(job.min_salary)} - {formatCurrency(job.max_salary)}
+                      </Typography>
+                    )}
 
                     {job?.description && (
                       <div className="descContainer">
@@ -171,15 +176,16 @@ function RecruiterHome() {
             ))}
           </Grid>
         </Box>
-      ) : (
-        <Typography className="noJobs">
-          You haven't posted any jobs yet.
-        </Typography>
-      )}
-
-      <CreateJobModal open={showCreateJobModal} closeModal={closeModal} />
-    </Box>
-  );
-}
-
-export default RecruiterHome;                    
+          ) : (
+            <Typography className="noJobs">
+              You haven't posted any jobs yet.
+            </Typography>
+          )}
+        
+          <CreateJobModal open={showCreateJobModal} closeModal={closeModal} />
+        </Box>
+        );
+        }
+        
+        export default RecruiterHome;
+     
