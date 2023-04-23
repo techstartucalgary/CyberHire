@@ -117,14 +117,16 @@ function RecruiterHome() {
   };
   return (
     <Box className="appHome">
-      <Button className="Button" onClick={showModal}>
+      <Button className="Button" variant="contained" onClick={showModal}>
         <Typography>Post New Job</Typography>
       </Button>
-  
-      <Container className="row" sx={{ marginTop: "20px" }}>
-        <Typography>Your Job Listings</Typography>
-      </Container>
-  
+
+
+      <Typography variant="h5" textAlign="center" sx={{ marginTop: "20px" }}>
+        Your Job Listings
+      </Typography>
+
+
       {hasJobs ? (
         <Box sx={{ flexGrow: 1, marginTop: "20px" }}>
           <Grid container spacing={2}>
