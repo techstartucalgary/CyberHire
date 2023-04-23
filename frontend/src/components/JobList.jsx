@@ -7,7 +7,12 @@ function JobList(props) {
   const [jobs, setJobs] = useState([]);
 
   const getJobs = async () => {
-    await fetch("https://chapi.techstartucalgary.com/jobs")
+    await fetch("https://chapi.techstartucalgary.com/job_matching/", {
+      mode: "cors",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => setJobs(data))
       .catch((error) => console.error(error));
