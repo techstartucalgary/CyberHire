@@ -12,9 +12,8 @@ import {
   Select,
   MenuItem,
   FormControl,
-  InputLabel
+  InputLabel,
 } from "@mui/material";
-
 
 function RecruiterHome() {
   const [showCreateJobModal, setShowCreateJobModal] = useState(false);
@@ -28,7 +27,6 @@ function RecruiterHome() {
   const handleStatusChange = (jobId, event) => {
     setJobStatus({ ...jobStatus, [jobId]: event.target.value });
   };
-  
 
   useEffect(() => {
     if (shouldFetchJobs) {
@@ -121,11 +119,9 @@ function RecruiterHome() {
         <Typography>Post New Job</Typography>
       </Button>
 
-
       <Typography variant="h5" textAlign="center" sx={{ marginTop: "20px" }}>
         Your Job Listings
       </Typography>
-
 
       {hasJobs ? (
         <Box sx={{ flexGrow: 1, marginTop: "20px" }}>
@@ -165,7 +161,7 @@ function RecruiterHome() {
                         {formatCurrency(job.max_salary)}
                       </Typography>
                     )}
-  
+
                     {job?.description && (
                       <div className="descContainer">
                         <Typography className="jobDescription">
@@ -184,25 +180,27 @@ function RecruiterHome() {
                         </Typography>
                       ))}
                     </div>
-              <FormControl fullWidth variant="standard" className="formControl">
-                <InputLabel>Status</InputLabel>
-                <Select
-                value={jobStatus[job.id] || ""}
-                onChange={(event) => handleStatusChange(job.id, event)}
-                sx={{ minWidth: '100%' }} 
-              >
-                <MenuItem value={""}>Select Status</MenuItem>
-                <MenuItem value={"SUBMITTED"}>Submitted</MenuItem>
-                <MenuItem value={"UNDER_REVIEW"}>Under Review</MenuItem>
-                <MenuItem value={"UNDERGOING_FURTHER_SCREENING"}>Undergoing Further Screening</MenuItem>
-                <MenuItem value={"REJECTED"}>Rejected</MenuItem>
-                <MenuItem value={"OFFER_SENT"}>Offer Sent</MenuItem>
-              </Select>
-              </FormControl> 
-
-
-
-
+                    <FormControl
+                      fullWidth
+                      variant="standard"
+                      className="formControl"
+                    >
+                      <InputLabel>Status</InputLabel>
+                      <Select
+                        value={jobStatus[job.id] || ""}
+                        onChange={(event) => handleStatusChange(job.id, event)}
+                        sx={{ minWidth: "100%" }}
+                      >
+                        <MenuItem value={""}>Select Status</MenuItem>
+                        <MenuItem value={"SUBMITTED"}>Submitted</MenuItem>
+                        <MenuItem value={"UNDER_REVIEW"}>Under Review</MenuItem>
+                        <MenuItem value={"UNDERGOING_FURTHER_SCREENING"}>
+                          Undergoing Further Screening
+                        </MenuItem>
+                        <MenuItem value={"REJECTED"}>Rejected</MenuItem>
+                        <MenuItem value={"OFFER_SENT"}>Offer Sent</MenuItem>
+                      </Select>
+                    </FormControl>
 
                     <Button
                       variant="contained"
@@ -222,7 +220,7 @@ function RecruiterHome() {
                     <Button
                       variant="outlined"
                       className="updateStatus"
-                      disabled      // Disabled for now - Until API call available
+                      disabled // Disabled for now - Until API call available
                     >
                       <Typography>Update Status</Typography>
                     </Button>
@@ -237,7 +235,7 @@ function RecruiterHome() {
           You haven't posted any jobs yet.
         </Typography>
       )}
-  
+
       {showCreateJobModal && (
         <CreateJobModal
           open={showCreateJobModal}
@@ -247,7 +245,6 @@ function RecruiterHome() {
       )}
     </Box>
   );
-  
 }
 
 export default RecruiterHome;
