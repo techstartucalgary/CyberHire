@@ -9,7 +9,8 @@ app = FastAPI()
 origins = [
     "http://localhost:8000",
     "https://chapi.techstartucalgary.com/docs",
-    "http://localhost:3000"
+    "http://localhost:3000",
+    "https://cyberhire.techstartucalgary.com/",
 ]
 
 app.add_middleware(
