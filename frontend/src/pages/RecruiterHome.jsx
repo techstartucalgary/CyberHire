@@ -9,6 +9,10 @@ import {
   Grid,
   Card,
   CardContent,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 
 function RecruiterHome() {
@@ -17,6 +21,12 @@ function RecruiterHome() {
   const [shouldFetchJobs, setShouldFetchJobs] = useState(true);
   const [hasJobs, setHasJobs] = useState(false);
   const [jobData, setJobData] = useState(null);
+
+  const [jobStatus, setJobStatus] = useState({});
+
+  const handleStatusChange = (jobId, event) => {
+    setJobStatus({ ...jobStatus, [jobId]: event.target.value });
+  };
 
   useEffect(() => {
     if (shouldFetchJobs) {
@@ -103,7 +113,6 @@ function RecruiterHome() {
       maximumFractionDigits: 0,
     });
   };
-
   return (
     <Box className="appHome">
       <Button className="Button" variant="contained" onClick={showModal}>
@@ -142,7 +151,7 @@ function RecruiterHome() {
                     >
                       {job.location}
                     </Typography>
-                    {job.min_salary > 0 && job.max_salary > 0 && (
+                    {job.min_salary >= 0 && job.max_salary >= 0 && (
                       <Typography
                         className="jobSalary"
                         sx={{ mb: 1.5 }}
@@ -160,8 +169,8 @@ function RecruiterHome() {
                         </Typography>
                       </div>
                     )}
-                    {job.skills.map((skill) => {
-                      return (
+                    <div className="skillsContainer">
+                      {job.skills.map((skill) => (
                         <Typography
                           className="jobSkill"
                           key={skill.id}
@@ -169,8 +178,30 @@ function RecruiterHome() {
                         >
                           {skill.skill}
                         </Typography>
-                      );
-                    })}
+                      ))}
+                    </div>
+                    <FormControl
+                      fullWidth
+                      variant="standard"
+                      className="formControl"
+                    >
+                      <InputLabel>Status</InputLabel>
+                      <Select
+                        value={jobStatus[job.id] || ""}
+                        onChange={(event) => handleStatusChange(job.id, event)}
+                        sx={{ minWidth: "100%" }}
+                      >
+                        <MenuItem value={""}>Select Status</MenuItem>
+                        <MenuItem value={"SUBMITTED"}>Submitted</MenuItem>
+                        <MenuItem value={"UNDER_REVIEW"}>Under Review</MenuItem>
+                        <MenuItem value={"UNDERGOING_FURTHER_SCREENING"}>
+                          Undergoing Further Screening
+                        </MenuItem>
+                        <MenuItem value={"REJECTED"}>Rejected</MenuItem>
+                        <MenuItem value={"OFFER_SENT"}>Offer Sent</MenuItem>
+                      </Select>
+                    </FormControl>
+
                     <Button
                       variant="contained"
                       className="applyButton"
@@ -184,6 +215,14 @@ function RecruiterHome() {
                       onClick={() => editJob(job)}
                     >
                       <Typography>Edit Job</Typography>
+                    </Button>
+
+                    <Button
+                      variant="outlined"
+                      className="updateStatus"
+                      disabled // Disabled for now - Until API call available
+                    >
+                      <Typography>Update Status</Typography>
                     </Button>
                   </CardContent>
                 </Card>

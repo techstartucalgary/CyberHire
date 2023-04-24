@@ -8,9 +8,12 @@ import {
   Slider,
   FormControlLabel,
   Switch,
+  Autocomplete,
 } from "@mui/material";
 
 import "../styles/Modal.css";
+
+const skills = ["Python", "Java", "SQL", "JavaScript", "C++", "C#", "C"];
 
 function CreateJobModal(props) {
   const [isEditing, setIsEditing] = useState(false);
@@ -21,6 +24,8 @@ function CreateJobModal(props) {
   const [location, setLocation] = useState("");
   const [company_name, setCompanyName] = useState("");
   const [showGenericError, setShowGenericError] = useState(false);
+
+  const [selectedSkills, setSelectedSkills] = useState([]);
 
   useEffect(() => {
     if (props.job) {
@@ -40,6 +45,29 @@ function CreateJobModal(props) {
     setSalary(newValue);
   };
 
+  const handleSkillSelection = (event, value) => {
+    setSelectedSkills(value);
+  };
+
+  const submitJobSkills = async (jobId, skills) => {
+    await fetch(`https://chapi.techstartucalgary.com/jobs/skills/${jobId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+      body: JSON.stringify(skills.map((skill) => ({ skill }))),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Skills update failed");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   const submitNewJob = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -56,6 +84,7 @@ function CreateJobModal(props) {
       min_salary,
       max_salary,
       company_name,
+      skills: selectedSkills.map((skill) => ({ skill })),
     };
 
     if (isEditing) {
@@ -67,7 +96,7 @@ function CreateJobModal(props) {
         },
         body: JSON.stringify(data),
       })
-        .then((response) => {
+        .then(async (response) => {
           if (!response.ok) {
             if (response.status === 401) {
               window.location.href = "#/signin";
@@ -76,6 +105,7 @@ function CreateJobModal(props) {
             }
             throw new Error("Job creation failed");
           }
+          await submitJobSkills(props.job.id, selectedSkills);
           cancelModal();
         })
         .catch((error) => {
@@ -90,7 +120,7 @@ function CreateJobModal(props) {
         },
         body: JSON.stringify(data),
       })
-        .then((response) => {
+        .then(async (response) => {
           if (!response.ok) {
             if (response.status === 401) {
               window.location.href = "#/signin";
@@ -99,6 +129,8 @@ function CreateJobModal(props) {
             }
             throw new Error("Job creation failed");
           }
+          const jobData = await response.json();
+          await submitJobSkills(jobData.id, selectedSkills);
           props.closeModal();
         })
         .catch((error) => {
@@ -130,8 +162,9 @@ function CreateJobModal(props) {
   return (
     <Dialog open={props.open} fullWidth>
       <DialogTitle>
-        {isEditing ? `Update Existing Job` : `Create New Job`}
+        {isEditing ? "Update Existing Job" : "Create New Job"}
       </DialogTitle>
+
       <form id="jobForm" className="form" onSubmit={submitNewJob}>
         <TextField
           name="title"
@@ -155,6 +188,15 @@ function CreateJobModal(props) {
           value={location}
           required
         />
+        <Autocomplete
+          multiple
+          options={skills}
+          value={selectedSkills}
+          onChange={handleSkillSelection}
+          renderInput={(params) => (
+            <TextField {...params} label="Required Skills" variant="outlined" />
+          )}
+        />
         <TextField
           name="company_name"
           label="Company Name"
@@ -162,7 +204,6 @@ function CreateJobModal(props) {
           value={company_name}
           required
         />
-
         <FormControlLabel
           control={
             <Switch

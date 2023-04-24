@@ -67,16 +67,35 @@
   max-width: 100%;
 }
 
+.skillsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
 .jobSkill {
-  font-size: 15px;
-  margin-top: 10px;
-  display: inline-block;
-  margin-right: 5px;
-  margin-bottom: 5px;
-  padding: 3px 10px;
-  background-color: #f8f9fa;
-  border-radius: 5px;
-  border: 1px solid #dee2e6;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.formControl {
+  margin-top: 15px !important;
+  width: 100%;
+  margin-bottom: 20px !important;
+}
+
+.formControl .MuiInputLabel-root {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.formControl .MuiSelect-root {
+  font-size: 1rem;
+  font-weight: 400;
 }
 
 .applyButton {
@@ -86,6 +105,10 @@
 }
 
 .editButton {
+  margin-left: 10px !important;
+}
+
+.updateStatus {
   margin-left: 10px !important;
 }
 
