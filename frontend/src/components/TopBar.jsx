@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   AppBar,
   Button,
@@ -18,6 +18,9 @@ function TopBar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isRecruiter, setIsRecruiter] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+
+  const accessToken = localStorage.getItem("access_token");
+  const getAccessToken = useCallback(() => accessToken ?? null, [accessToken]);
 
   useEffect(() => {
     async function fetchData() {
@@ -58,7 +61,7 @@ function TopBar() {
       }
     }
     fetchData();
-  }, [localStorage.getItem("access_token")]);
+  }, [getAccessToken]);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
