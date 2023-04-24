@@ -15,6 +15,7 @@ jobs:
           key: ${{secrets.EC2_SSH_KEY}}
           script: |
             pkill gunicorn
+            pkill uvicorn
             cd ${{secrets.TARGET_DIR}}/backend
             python3 -m pip install -r reqs.txt
             cd ${{secrets.TARGET_DIR}}
