@@ -68,6 +68,106 @@ def get_user_profile_me(db: Session = Depends(dependencies.get_db),
     return user_profile_crud.get_user_profile_by_id(db, current_user.id)
 
 @router.get(
+    "/users/profile/me/profile_picture",
+    status_code=status.HTTP_200_OK,
+    tags=["UserProfile"],
+    summary="Retrieve the current user's profile picture from the database.",
+    description="Retrieve the current user's profile picture from the database as a jpg file.",
+    response_description="The current user's profile picture."
+)
+def get_user_profile_picture_me(
+    db: Session = Depends(dependencies.get_db),
+    current_user: user_model.User = Depends(dependencies.get_current_user)
+):
+    """
+    A GET route to obtain the current authenticated user's profile picture.
+
+    Parameters
+    ----------
+    db: Session
+        a database session
+    current_user: models.user_model.User
+        a sqlalchemy pbject representing the current authenticated user
+
+    Returns
+    -------
+    fastapi.Response
+        a response with the profile picture
+    """
+    dependencies.user_profile_exists(db, current_user.id)
+    database_user_profile : user_profile_model.UserProfile = user_profile_crud.get_user_profile_by_id(
+        db,
+        current_user.id
+    )
+
+    if database_user_profile is not None:
+        file = database_user_profile.profile_picture
+
+        if file is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"User {current_user.id} does not have a profile picture in the database."
+            )
+
+        return Response(
+            content=file,
+            media_type="image/jpg",
+            headers={
+                "content-disposition": f"attachment; \
+                    filename={current_user.username}_profile_picture.jpg"
+            }
+        )
+
+@router.get(
+    "/users/profile/me/resume",
+    status_code=status.HTTP_200_OK,
+    tags=["UserProfile"],
+    summary="Retrieve the current user's resume from the database.",
+    description="Retrieve the current user's resume from the database as a pdf file.",
+    response_description="The current user's resume."
+)
+def get_user_resume_me(
+    db: Session = Depends(dependencies.get_db),
+    current_user: user_model.User = Depends(dependencies.get_current_user)
+):
+    """
+    A GET route to obtain the current authenticated user's resume.
+
+    Parameters
+    ----------
+    db: Session
+        a database session
+    current_user: models.user_model.User
+        a sqlalchemy pbject representing the current authenticated user
+
+    Returns
+    -------
+    fastapi.Response
+        a response with the resume
+    """
+    dependencies.user_profile_exists(db, current_user.id)
+    database_user_profile : user_profile_model.UserProfile = user_profile_crud.get_user_profile_by_id(
+        db,
+        current_user.id
+    )
+
+    if database_user_profile is not None:
+        file = database_user_profile.resume
+
+        if file is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"User {current_user.id} does not have a resume in the database."
+            )
+
+        return Response(content=file, media_type="application/pdf",
+            headers={
+                "content-disposition": f"attachment; \
+                    filename={current_user.username}_resume.pdf"
+            }
+        )
+
+@router.get(
     "/users/profile/{username}",
     response_model=user_profile_schema.UserProfile | None,
     status_code=status.HTTP_200_OK,
@@ -114,7 +214,7 @@ def create_user_profile(*, db: Session = Depends(dependencies.get_db),
         ):
     """
     A POST route to create a new user profile for the current authenticated user.
-    
+
     Parameters
     ----------
     db: Session
@@ -123,7 +223,7 @@ def create_user_profile(*, db: Session = Depends(dependencies.get_db),
         a sqlalchemy User object representing the current authenticated user
     user_profile: schemas.user_profile_schema.UserProfileCreate
         a pydantic model representing the current authenticated user's profile information
-    
+
     Returns
     -------
     schemas.user_profile_schema.UserProfile
@@ -158,7 +258,7 @@ def delete_user_profile_me(db: Session = Depends(dependencies.get_db),
         a database session
     current_user:models.user_model.User
          a sqlalchemy User object representing the current authenticated user
-    
+
     Returns
     -------
     schemas.user_profile_schema.UserProfile

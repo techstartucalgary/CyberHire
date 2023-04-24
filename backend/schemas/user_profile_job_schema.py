@@ -46,6 +46,7 @@ class UserProfileJob(UserProfileJobBase):
     application_reviewed_date : date | None
     application_offer_sent_date : date | None
     application_rejected_date : date | None
+    rejection_feedback : str | None
     application_status : ApplicationStatus
     applicant : UserProfile
     job: Job
