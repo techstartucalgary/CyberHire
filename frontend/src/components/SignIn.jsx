@@ -70,11 +70,16 @@ const LoginPage = () => {
             return response.json();
           })
           .then((data) => {
+            localStorage.setItem(
+              "is_recruiter",
+              data.is_recruiter ? "true" : "false",
+            );
             if (data.is_recruiter) {
-              window.location.href = "#/app";
+              window.location.href = "#/recruiterHome";
             } else {
-              window.location.href = "#/recruiter";
+              window.location.href = "#/app";
             }
+            window.location.reload();
           });
       })
       .catch((error) => console.error(error));

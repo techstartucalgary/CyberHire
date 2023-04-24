@@ -84,10 +84,12 @@ const SignUpPage = () => {
             })
             .then((data) => {
               localStorage.setItem("access_token", data.access_token);
-              if (is_recruiter) {
-                localStorage.setItem("is_recruiter", "true");
-              }
+              localStorage.setItem(
+                "is_recruiter",
+                data.is_recruiter ? "true" : "false",
+              );
               window.location.href = "#/createProfile";
+              window.location.reload();
             })
             .catch((error) => console.error(error));
         } else if (response.status === 400) {

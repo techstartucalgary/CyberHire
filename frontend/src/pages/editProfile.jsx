@@ -152,7 +152,7 @@ function EditProfile() {
                     : ""
                 }
               />
-              <span style={{ marginLeft: 10 }}>Upload Profile</span>
+              <span style={{ marginLeft: 10 }}>Upload Profile Picture</span>
             </IconButton>
             <input
               id="profilePicture"
@@ -184,6 +184,16 @@ function EditProfile() {
               fullWidth
               required
             />
+          </Grid>
+          <Grid item xs={12}>
+            <Button
+              href="#/skills"
+              variant="contained"
+              color="primary"
+              fullWidth
+            >
+              Update Skills
+            </Button>
           </Grid>
           <Grid
             item
