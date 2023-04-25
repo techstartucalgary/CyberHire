@@ -210,4 +210,48 @@ def change_application_status_to_under_review(db: Session = Depends(dependencies
 
 # PATCH /applications/{job_id}_{applicant_id}/offer change status to offer sent
 
+def change_application_status_to_offer_sent(db: Session = Depends(dependencies.get_db),
+                                              job_id: int = Path(),
+                                              applicant_id: int = Path(),
+                                              recruiter: user_model.User = Depends(dependencies.get_current_recruiter_user)):
+    
+    application = user_profile_job_crud.get_application_by_user_id_and_job_id(db, applicant_id, job_id)
+
+    if application is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Application for applicant {applicant_id} and job {job_id} not found.")
+    
+    # check if the recruiter owns the job
+    if application.job.user_profile_id != recruiter.id:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail=f"Recruiter is not authorized to change the status of application {application.id}.")
+    else:  
+        user_profile_job_model.UserProfileJob.application_status_id = application_status_model.ApplicationStatusEnum.offer_sent
+        status_to_offer_sent = user_profile_job_model.UserProfileJob.application_status_id
+
+    #TODO : Save to database using db.save()
+    return user_profile_job_crud.update_applicant_application_status(db, applicant_id, job_id , status_to_offer_sent)
+
 # PATCH /applications/ applicationId}/rejected change status to rejected
+
+def change_application_status_to_rejected(db: Session = Depends(dependencies.get_db),
+                                              job_id: int = Path(),
+                                              applicant_id: int = Path(),
+                                              recruiter: user_model.User = Depends(dependencies.get_current_recruiter_user)):
+    
+    application = user_profile_job_crud.get_application_by_user_id_and_job_id(db, applicant_id, job_id)
+
+    if application is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Application for applicant {applicant_id} and job {job_id} not found.")
+    
+    # check if the recruiter owns the job
+    if application.job.user_profile_id != recruiter.id:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail=f"Recruiter is not authorized to change the status of application {application.id}.")
+    else:  
+        user_profile_job_model.UserProfileJob.application_status_id = application_status_model.ApplicationStatusEnum.rejected
+        status_to_rejected = user_profile_job_model.UserProfileJob.application_status_id
+
+    #TODO : Save to database using db.save()
+    return user_profile_job_crud.update_applicant_application_status(db, applicant_id, job_id , status_to_rejected)
