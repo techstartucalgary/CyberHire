@@ -1,0 +1,39 @@
+.jobContainer {
+  background-color: bisque;
+  border-radius: 15px;
+  margin-bottom: 10px;
+  padding: 20px;
+  width: 100%;
+}
+
+.jobContainer * {
+  margin-bottom: 10px;
+}
+
+.jobTitle {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.jobCompany {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.jobLocation {
+  font-size: 15px;
+}
+
+.jobSalary {
+  font-size: 15px;
+}
+
+.jobDescription {
+  font-size: 15px;
+}
+
+.descContainer {
+  background-color: azure;
+  border-radius: 15px;
+  padding: 20px;
+}

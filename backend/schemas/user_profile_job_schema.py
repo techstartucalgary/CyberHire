@@ -7,22 +7,37 @@ from .application_status_schema import ApplicationStatus
 
 
 class UserProfileJobBase(BaseModel):
+    """
+    Base model for a UserProfileJob (an application).
+    """
 
     pass
 
 class UserProfileJobCreate(UserProfileJobBase):
+    """
+    Model for creating a new UserProfileJob (an application) in the database.
+    """
 
     pass
 
 class UserProfileJobPatch(UserProfileJobBase):
+    """
+    Model for partial updates to a UserProfileJob (an application).
+    """
 
     pass
 
 class UserProfileJobInDb(UserProfileJobBase):
+    """
+    Model for updating a UserProfileJob (an application) in the database.
+    """
 
     pass
 
 class UserProfileJob(UserProfileJobBase):
+    """
+    Model for returning a UserProfileJob (an application).
+    """
 
     user_profile_id : int
     job_id : int
@@ -31,6 +46,7 @@ class UserProfileJob(UserProfileJobBase):
     application_reviewed_date : date | None
     application_offer_sent_date : date | None
     application_rejected_date : date | None
+    rejection_feedback : str | None
     application_status : ApplicationStatus
     applicant : UserProfile
     job: Job
@@ -66,4 +82,3 @@ class UserProfileJob(UserProfileJobBase):
                 }
             }
         }
-

@@ -99,6 +99,7 @@ CREATE TABLE IF NOT EXISTS cyberhire."user_profile_job" (
 	application_reviewed_date date NULL,
 	application_offer_sent_date date NULL,
 	application_rejected_date date NULL,
+	rejection_feedback varchar(2000) NULL,
 	CONSTRAINT user_profile_job_pkey PRIMARY KEY (user_profile_id, job_id),
 	CONSTRAINT user_profile_job_fk FOREIGN KEY (user_profile_id) REFERENCES cyberhire."user_profile" (user_id),
 	CONSTRAINT user_profile_job_fk2 FOREIGN KEY (job_id) REFERENCES cyberhire."job" (id),

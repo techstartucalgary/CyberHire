@@ -21,7 +21,8 @@ function PrivacyPolicy() {
         ask you to provide certain information by which you can be identified
         when using this Website, then you can be assured that it will only be
         used in accordance with this Privacy Policy.
-        <br /><br />
+        <br />
+        <br />
         We may collect the following personal information:
         <br />
         <List>
@@ -59,8 +60,11 @@ function PrivacyPolicy() {
         You have the right to access your personal information and request that
         it be corrected or deleted. You may also make a complaint about our
         handling of your personal information. To exercise these rights, please
-        contact our Privacy Compliance Officer at <a href="mailto:cyberhiretsu+privacy@gmail.com">cyberhiretsu+privacy@gmail.com</a>.
-        We will fulfill your request within 30 days.
+        contact our Privacy Compliance Officer at{" "}
+        <a href="mailto:cyberhiretsu+privacy@gmail.com">
+          cyberhiretsu+privacy@gmail.com
+        </a>
+        . We will fulfill your request within 30 days.
         <br />
         We may update this Privacy Policy from time to time by updating this
         page. You should check this page from time to time to ensure that you
@@ -72,7 +76,11 @@ function PrivacyPolicy() {
         By using our Website, you consent to our collection, use, and storage of
         your personal information as described in this Privacy Policy. If you
         have any questions or concerns, please contact our Privacy Compliance
-        Officer at <a href="mailto:cyberhiretsu+privacy@gmail.com">cyberhiretsu+privacy@gmail.com</a>.
+        Officer at{" "}
+        <a href="mailto:cyberhiretsu+privacy@gmail.com">
+          cyberhiretsu+privacy@gmail.com
+        </a>
+        .
       </Typography>
     </Box>
   );
