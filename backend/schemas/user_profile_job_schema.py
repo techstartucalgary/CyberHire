@@ -44,6 +44,7 @@ class UserProfileJob(UserProfileJobBase):
     application_status_id : int
     application_submitted_date : date | None
     application_reviewed_date : date | None
+    application_further_screening_date : date | None
     application_offer_sent_date : date | None
     application_rejected_date : date | None
     rejection_feedback : str | None
@@ -59,12 +60,13 @@ class UserProfileJob(UserProfileJobBase):
                 "job_id": 1,
                 "application_status_id": 1,
                 "application_submitted_date": "2023-01-01",
-                "application_reviewed_date": None,
-                "application_offer_sent_date": None,
+                "application_reviewed_date": "2023-01-02",
+                "application_further_screening_date": "2023-01-02",
+                "application_offer_sent_date": "2023-01-03",
                 "application_rejected_date": None,
                 "application_status": {
                     "id": 1,
-                    "status": "Application Submitted"
+                    "status": "SUBMITTED"
                 },
                 "applicant": {
                     "user_id": 1,
