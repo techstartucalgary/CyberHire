@@ -255,3 +255,5 @@ def change_application_status_to_rejected(db: Session = Depends(dependencies.get
 
     #TODO : Save to database using db.save()
     return user_profile_job_crud.update_applicant_application_status(db, applicant_id, job_id , status_to_rejected)
+
+#Test
