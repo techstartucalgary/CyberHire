@@ -195,14 +195,34 @@ def delete_applicant_application(db: Session, user_id: int, job_id: int) \
     db.commit()
     return application
 
-def update_applicant_application_status(db: Session, user_id: int, job_id: int, 
-                                        new_status: application_status_model.ApplicationStatusEnum) \
+def update_applicant_application_status(db: Session,
+                                        user_id: int, 
+                                        job_id: int,
+                                        new_status: application_status_model.ApplicationStatusEnum,
+                                        rejection_feedback: str | None) \
                                         -> user_profile_job_model.UserProfileJob:
+    # Get the application
+    current_application = get_application_by_user_id_and_job_id(db, user_id, job_id)
 
-    application = get_application_by_user_id_and_job_id(db, user_id, job_id)
-    application.application_status_id = new_status.value
-    #application.application_reviewed_date = datetime.today()
-    db.save(application)
+    # Get the id for the new application status
+    new_application_status_id = application_status_crud.get_application_status_by_name(db, new_status.value).id 
+
+    # Update the current applications id
+    current_application.application_status_id = new_application_status_id
+
+    # Update the other attributes of the current application depending on the new status
+    if new_status.value == application_status_model.ApplicationStatusEnum.submitted.value:
+        current_application.application_submitted_date = datetime.today()
+    elif new_status.value == application_status_model.ApplicationStatusEnum.in_review.value:
+        current_application.application_reviewed_date = datetime.today()
+    elif new_status.value == application_status_model.ApplicationStatusEnum.screening.value:
+        current_application.application_further_screening_date = datetime.today()
+    elif new_status.value == application_status_model.ApplicationStatusEnum.rejected.value:
+        current_application.application_rejected_date = datetime.today()
+        current_application.rejection_feedback = rejection_feedback
+    elif new_status.value == application_status_model.ApplicationStatusEnum.offer_sent.value:
+        current_application.application_offer_sent_date = datetime.today()
+
     db.commit()
-    db.refresh(application)
-    return application
+    db.refresh(current_application)
+    return current_application
