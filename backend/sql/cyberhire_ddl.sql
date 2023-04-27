@@ -84,10 +84,11 @@ CREATE TABLE IF NOT EXISTS cyberhire."application_status" (
 
 INSERT INTO cyberhire."application_status" (status)
 VALUES 
-('Application Submitted'),
-('Application Under Review'),
-('Offer Sent'),
-('Rejected')
+('SUBMITTED'),
+('UNDER REVIEW'),
+('UNDERGOING FURTHER SCREENING')
+('REJECTED'),
+('OFFER SENT')
 ;
 
 -- Create for the user_profile_job table
@@ -97,6 +98,7 @@ CREATE TABLE IF NOT EXISTS cyberhire."user_profile_job" (
 	application_status_id int4 NOT NULL,
 	application_submitted_date date NOT NULL,
 	application_reviewed_date date NULL,
+	application_further_screening_date date NULL,
 	application_offer_sent_date date NULL,
 	application_rejected_date date NULL,
 	rejection_feedback varchar(2000) NULL,
