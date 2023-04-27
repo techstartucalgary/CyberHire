@@ -12,6 +12,19 @@ function JobPost(props) {
     });
   };
 
+  const  applyHandler = async (job) => {
+    const response = await fetch(`https://chapi.techstartucalgary.com/applications/${props.job.id}`, {
+      method: "POST",
+      headers: {
+        'Content-Type' : 'application/json',
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    })
+    const data = await response.json()
+    console.log(data)
+  }
+
+
   return (
     <div className="jobContainer">
       <Typography className="jobTitle">{props.job.title}</Typography>
@@ -37,7 +50,7 @@ function JobPost(props) {
           </Typography>
         );
       })}
-      <Button variant="contained" className="applyButton">
+      <Button variant="contained" onClick={applyHandler} className="applyButton">
         <Typography>Apply</Typography>
       </Button>
     </div>
