@@ -14,7 +14,7 @@
 .row {
   display: flex !important;
   flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-left: auto;
 }

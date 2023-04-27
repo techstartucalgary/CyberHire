@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, Column, ForeignKey, Date
+from sqlalchemy import Integer, Column, ForeignKey, Date, String
 from ..database import Base
 from sqlalchemy.orm import relationship
 from .application_status_model import ApplicationStatus
@@ -15,8 +15,10 @@ class UserProfileJob(Base):
     application_status_id = Column(Integer, ForeignKey("application_status.id"), nullable=False)
     application_submitted_date = Column(Date, nullable=False)
     application_reviewed_date = Column(Date, nullable=True)
+    application_further_screening_date = Column(Date, nullable=True)
     application_offer_sent_date = Column(Date, nullable=True)
-    application_rejected_date =Column(Date, nullable=True)
+    application_rejected_date = Column(Date, nullable=True)
+    rejection_feedback = Column(String, nullable=True)
 
     application_status = relationship("ApplicationStatus")
     applicant = relationship("UserProfile", back_populates="applications")

@@ -14,14 +14,19 @@ function ApplicantHome() {
 
   return (
     <Box className="appHome">
-      <Button variant="outlined">
+      <Button variant="outlined" href="#/editProfile">
         <Typography>Update my Profile</Typography>
       </Button>
 
       <Container className="row" sx={{ marginTop: "20px" }}>
-        <Typography>Job List</Typography>
+        <Typography align="center" variant="h5">
+          Job List
+        </Typography>
         <IconButton className="toggleJobs" onClick={toggleJobs}>
-          <ArrowDropDownIcon className={showJobs ? "rotate" : ""} />
+          <ArrowDropDownIcon
+            fontSize="large"
+            className={showJobs ? "rotate" : ""}
+          />
         </IconButton>
       </Container>
 
