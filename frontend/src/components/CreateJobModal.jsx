@@ -29,10 +29,12 @@ function CreateJobModal(props) {
     const title = formData.get("title");
     const description = formData.get("description");
     const location = formData.get("location");
+    const company_name = formData.get("company_name")
     const data = {
       title,
       description,
       location,
+      company_name,
       min_salary,
       max_salary,
     };
@@ -74,6 +76,7 @@ function CreateJobModal(props) {
       <DialogTitle>Create New Job</DialogTitle>
       <form className="form" onSubmit={submitNewJob}>
         <TextField name="title" label="Job Title" required />
+        <TextField name="company_name" label = "Company Name" required />
         <TextField
           name="description"
           label="Job Description"
