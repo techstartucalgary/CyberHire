@@ -8,14 +8,14 @@ import JobApply from "../components/JobApply";
 
 function ApplicantHome() {
   const [showJobs, setShowJobs] = useState(false);
-  const [appliedList, setAppliedList] = useState(false)
+  const [appliedList, setAppliedList] = useState(false);
 
   const toggleJobs = () => {
     setShowJobs(!showJobs);
   };
   const toggleAppliedJobs = () => {
-    setAppliedList(!appliedList)
-  }
+    setAppliedList(!appliedList);
+  };
 
   return (
     <Box className="appHome">
@@ -27,7 +27,7 @@ function ApplicantHome() {
         <Typography align="center" variant="h5">
           Job List
         </Typography>
-        
+
         <IconButton className="toggleJobs" onClick={toggleJobs}>
           <ArrowDropDownIcon
             fontSize="large"
@@ -35,7 +35,7 @@ function ApplicantHome() {
           />
         </IconButton>
 
-        <Typography align = "left" variant="h5">
+        <Typography align="left" variant="h5">
           Applied Jobs
         </Typography>
         <IconButton className="toggleJobs" onClick={toggleAppliedJobs}>

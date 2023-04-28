@@ -5,15 +5,10 @@
   padding: 20px;
   width: 50% !important;
   flex-direction: column;
-  
- 
-  
 }
 
 .jobContainer * {
   margin-bottom: 10px;
-  
-  
 }
 
 .jobTitle {
@@ -51,7 +46,6 @@
     align-items: center;
     justify-content: space-between;
     width: 10% !important;
-    
   }
 
   .descContainer {
@@ -59,7 +53,6 @@
     display: flex;
     align-items: center;
     box-sizing: border-box;
-    
   }
 
   .jobDescription {
@@ -70,10 +63,5 @@
   .jobContainer * {
     margin-bottom: 15px;
     width: 50% !important ;
-    
-    
   }
-
-
-
 }

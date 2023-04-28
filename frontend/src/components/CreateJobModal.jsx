@@ -29,7 +29,7 @@ function CreateJobModal(props) {
     const title = formData.get("title");
     const description = formData.get("description");
     const location = formData.get("location");
-    const company_name = formData.get("company_name")
+    const company_name = formData.get("company_name");
     const data = {
       title,
       description,
@@ -39,28 +39,28 @@ function CreateJobModal(props) {
       max_salary,
     };
 
-      await fetch("https://chapi.techstartucalgary.com/jobs", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
-        body: JSON.stringify(data),
-      })
+    await fetch("https://chapi.techstartucalgary.com/jobs", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+      body: JSON.stringify(data),
+    })
       .then((response) => {
-          if (!response.ok) {
-            if (response.status === 401) {
-              window.location.href = "#/signin";
-            } else {
-              setShowGenericError(true);
-            }
-            throw new Error("Job creation failed");
+        if (!response.ok) {
+          if (response.status === 401) {
+            window.location.href = "#/signin";
+          } else {
+            setShowGenericError(true);
           }
-          props.closeModal();
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+          throw new Error("Job creation failed");
+        }
+        props.closeModal();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const formatCurrency = (num) => {
@@ -76,7 +76,7 @@ function CreateJobModal(props) {
       <DialogTitle>Create New Job</DialogTitle>
       <form className="form" onSubmit={submitNewJob}>
         <TextField name="title" label="Job Title" required />
-        <TextField name="company_name" label = "Company Name" required />
+        <TextField name="company_name" label="Company Name" required />
         <TextField
           name="description"
           label="Job Description"
@@ -116,9 +116,7 @@ function CreateJobModal(props) {
           )}
         </div>
         <div className="row right-align button-container">
-          <Button variant="outlined" /*onClick={cancelModal}*/>
-            Cancel
-          </Button>
+          <Button variant="outlined" /*onClick={cancelModal}*/>Cancel</Button>
           <Button type="submit" variant="contained">
             {/*isEditing ? `Update Job` : `Post Job`*/}
           </Button>
