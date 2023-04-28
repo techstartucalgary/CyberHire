@@ -114,115 +114,116 @@ function RecruiterHome() {
       style: "currency",
       currency: "USD",
       maximumFractionDigits: 0,
-      });
-      };
-      return (
-      <Box className="appHome">
+    });
+  };
+  return (
+    <Box className="appHome">
       <Button className="Button" variant="contained" onClick={showModal}>
-      <Typography>Post New Job</Typography>
+        <Typography>Post New Job</Typography>
       </Button>
       <Typography variant="h5" textAlign="center" sx={{ marginTop: "20px" }}>
-    Your Job Listings
-  </Typography>
+        Your Job Listings
+      </Typography>
 
-  {hasJobs ? (
-    <Box sx={{ flexGrow: 1, marginTop: "20px" }}>
-      <Grid container spacing={2}>
-        {jobs.map((job) => (
-          <Grid item xs={12} md={6} key={job.id}>
-            <Card className="jobContainer">
-              <CardContent className="CardContent">
-                <Typography
-                  className="jobTitle"
-                  variant="h5"
-                  component="div"
-                >
-                  {job.title}
-                </Typography>
-                <Typography
-                  className="jobCompany"
-                  sx={{ mb: 1.5 }}
-                  color="text.secondary"
-                >
-                  {job.owner.company}
-                </Typography>
-                <Typography
-                  className="jobLocation"
-                  sx={{ mb: 1.5 }}
-                  color="text.secondary"
-                >
-                  {job.location}
-                </Typography>
-                {job.min_salary >= 0 && job.max_salary >= 0 && (
-                  <Typography
-                    className="jobSalary"
-                    sx={{ mb: 1.5 }}
-                    color="text.secondary"
-                  >
-                    {formatCurrency(job.min_salary)} -{" "}
-                    {formatCurrency(job.max_salary)}
-                  </Typography>
-                )}
-
-                {job?.description && (
-                  <div className="descContainer">
-                    <Typography className="jobDescription">
-                      {job.description}
-                    </Typography>
-                  </div>
-                )}
-                <div className="skillsContainer" style={{marginBottom: '30px' }}>
-                  {job.skills.map((skill) => (
+      {hasJobs ? (
+        <Box sx={{ flexGrow: 1, marginTop: "20px" }}>
+          <Grid container spacing={2}>
+            {jobs.map((job) => (
+              <Grid item xs={12} md={6} key={job.id}>
+                <Card className="jobContainer">
+                  <CardContent className="CardContent">
                     <Typography
-                      className="jobSkill"
-                      key={skill.id}
-                      sx={{ mt: 1 }}
+                      className="jobTitle"
+                      variant="h5"
+                      component="div"
                     >
-                      {skill.skill}
+                      {job.title}
                     </Typography>
-                  ))}
-                </div>
-                <Button
-                  variant="contained"
-                  className="applyButton"
-                  onClick={() => deleteJob(job.id)}
-                >
-                  <Typography>Delete Job</Typography>
-                </Button>
-                <Button
-                  variant="outlined"
-                  className="editButton"
-                  onClick={() => editJob(job)}
-                >
-                  <Typography>Edit Job</Typography>
-                </Button>
-              </CardContent>
-            </Card>
+                    <Typography
+                      className="jobCompany"
+                      sx={{ mb: 1.5 }}
+                      color="text.secondary"
+                    >
+                      {job.owner.company}
+                    </Typography>
+                    <Typography
+                      className="jobLocation"
+                      sx={{ mb: 1.5 }}
+                      color="text.secondary"
+                    >
+                      {job.location}
+                    </Typography>
+                    {job.min_salary >= 0 && job.max_salary >= 0 && (
+                      <Typography
+                        className="jobSalary"
+                        sx={{ mb: 1.5 }}
+                        color="text.secondary"
+                      >
+                        {formatCurrency(job.min_salary)} -{" "}
+                        {formatCurrency(job.max_salary)}
+                      </Typography>
+                    )}
+
+                    {job?.description && (
+                      <div className="descContainer">
+                        <Typography className="jobDescription">
+                          {job.description}
+                        </Typography>
+                      </div>
+                    )}
+                    <div
+                      className="skillsContainer"
+                      style={{ marginBottom: "30px" }}
+                    >
+                      {job.skills.map((skill) => (
+                        <Typography
+                          className="jobSkill"
+                          key={skill.id}
+                          sx={{ mt: 1 }}
+                        >
+                          {skill.skill}
+                        </Typography>
+                      ))}
+                    </div>
+                    <Button
+                      variant="contained"
+                      className="applyButton"
+                      onClick={() => deleteJob(job.id)}
+                    >
+                      <Typography>Delete Job</Typography>
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      className="editButton"
+                      onClick={() => editJob(job)}
+                    >
+                      <Typography>Edit Job</Typography>
+                    </Button>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
           </Grid>
-        ))}
-      </Grid>
+        </Box>
+      ) : (
+        <Typography className="noJobs">
+          You haven't posted any jobs yet.
+        </Typography>
+      )}
+      <RecruiterApplicantsPage jobId={selectedJobId} />
+
+      <br />
+      <br />
+
+      {showCreateJobModal && (
+        <CreateJobModal
+          open={showCreateJobModal}
+          job={jobData}
+          closeModal={closeModal}
+        />
+      )}
     </Box>
-  ) : (
-    <Typography className="noJobs">
-      You haven't posted any jobs yet.
-    </Typography>
-  )}
-  <RecruiterApplicantsPage jobId={selectedJobId} />
-
-<br />
-<br />
-
-{showCreateJobModal && (
-  <CreateJobModal
-    open={showCreateJobModal}
-    job={jobData}
-    closeModal={closeModal}
-  />
-)}
-</Box>
-);
+  );
 }
 
 export default RecruiterHome;
-
-

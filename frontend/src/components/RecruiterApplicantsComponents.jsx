@@ -1,21 +1,34 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Box, Checkbox, TableRow, TableCell, TableHead, TableSortLabel, Toolbar, Tooltip, IconButton, Typography, OutlinedInput, InputAdornment } from '@mui/material';
+import React from "react";
+import PropTypes from "prop-types";
+import {
+  Box,
+  Checkbox,
+  TableRow,
+  TableCell,
+  TableHead,
+  TableSortLabel,
+  Toolbar,
+  Tooltip,
+  IconButton,
+  Typography,
+  OutlinedInput,
+  InputAdornment,
+} from "@mui/material";
 
 // Label Component
 const Label = ({ color, children }) => {
   return (
     <Box
       sx={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: '8px',
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: "8px",
         minWidth: 72,
         minHeight: 32,
         px: 1,
-        color: 'white',
-        backgroundColor: color === 'success' ? 'success.main' : 'error.main',
+        color: "white",
+        backgroundColor: color === "success" ? "success.main" : "error.main",
       }}
     >
       {children}
@@ -30,7 +43,18 @@ Label.propTypes = {
 
 // Iconify Component
 const Iconify = ({ icon, width = 20, sx, ...other }) => (
-  <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width, height: width, ...sx }} {...other}>
+  <Box
+    component="span"
+    sx={{
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      width,
+      height: width,
+      ...sx,
+    }}
+    {...other}
+  >
     <i className={icon} />
   </Box>
 );
@@ -44,7 +68,7 @@ Iconify.propTypes = {
 // Scrollbar Component
 const Scrollbar = ({ children, sx, ...other }) => {
   return (
-    <Box sx={{ overflowX: 'auto', ...sx }} {...other}>
+    <Box sx={{ overflowX: "auto", ...sx }} {...other}>
       {children}
     </Box>
   );
@@ -103,9 +127,8 @@ const UserListHead = ({
   );
 };
 
-
 UserListHead.propTypes = {
-  order: PropTypes.oneOf(['asc', 'desc']),
+  order: PropTypes.oneOf(["asc", "desc"]),
   orderBy: PropTypes.string,
   rowCount: PropTypes.number,
   headLabel: PropTypes.array,
@@ -113,18 +136,23 @@ UserListHead.propTypes = {
   onRequestSort: PropTypes.func,
   onSelectAllClick: PropTypes.func,
 };
-const UserListToolbar = ({ numSelected, filterName, onFilterName, backgroundColor }) => {
+const UserListToolbar = ({
+  numSelected,
+  filterName,
+  onFilterName,
+  backgroundColor,
+}) => {
   return (
     <Toolbar
       sx={{
         height: 96,
-        display: 'flex',
-        justifyContent: 'space-between',
+        display: "flex",
+        justifyContent: "space-between",
         padding: 1,
-        backgroundColor: 'background.paper', // Add this line to set the background color to white
+        backgroundColor: "background.paper", // Add this line to set the background color to white
         ...(numSelected > 0 && {
-          color: 'primary.main',
-          bgcolor: 'primary.lighter',
+          color: "primary.main",
+          bgcolor: "primary.lighter",
         }),
       }}
     >
@@ -139,19 +167,22 @@ const UserListToolbar = ({ numSelected, filterName, onFilterName, backgroundColo
           placeholder="Search applicant..."
           startAdornment={
             <InputAdornment position="start">
-              <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled', width: 20, height: 20 }} />
+              <Iconify
+                icon="eva:search-fill"
+                sx={{ color: "text.disabled", width: 20, height: 20 }}
+              />
             </InputAdornment>
           }
           sx={{
             width: 240,
-            transition: 'all 0.3s',
-            '&.Mui-focused': {
+            transition: "all 0.3s",
+            "&.Mui-focused": {
               width: 320,
               boxShadow: 8,
             },
-            '& fieldset': {
+            "& fieldset": {
               borderWidth: `1px !important`,
-              borderColor: 'rgba(0, 0, 0, 0.23) !important',
+              borderColor: "rgba(0, 0, 0, 0.23) !important",
             },
           }}
         />
@@ -166,5 +197,4 @@ UserListToolbar.propTypes = {
   onFilterName: PropTypes.func,
 };
 
-    
-    export { Label, Iconify, Scrollbar, UserListHead, UserListToolbar };
+export { Label, Iconify, Scrollbar, UserListHead, UserListToolbar };

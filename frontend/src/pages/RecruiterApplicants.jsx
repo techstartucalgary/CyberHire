@@ -49,14 +49,17 @@ const RecruiterApplicantsPage = () => {
 
   const fetchJobs = async () => {
     try {
-      const response = await fetch("https://chapi.techstartucalgary.com/jobs/me", {
-        method: "GET",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      const response = await fetch(
+        "https://chapi.techstartucalgary.com/jobs/me",
+        {
+          method: "GET",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
         },
-      });
+      );
 
       if (response.ok) {
         const data = await response.json();
@@ -69,12 +72,12 @@ const RecruiterApplicantsPage = () => {
       console.error(error);
     }
   };
-  
+
   const fetchApplicants = async (jobId) => {
     try {
       const idsToFetch = jobId ? [jobId] : jobIds;
       let allApplicants = [];
-  
+
       for (const id of idsToFetch) {
         const response = await fetch(
           `https://chapi.techstartucalgary.com/applications/${id}`,
@@ -85,10 +88,9 @@ const RecruiterApplicantsPage = () => {
               "Content-Type": "application/json",
               Authorization: `Bearer ${localStorage.getItem("access_token")}`,
             },
-          }
+          },
         );
 
-  
         if (response.status === 404) {
           setApplicants([]);
         } else {
@@ -102,17 +104,17 @@ const RecruiterApplicantsPage = () => {
           }
         }
       }
-  
+
       setApplicants(allApplicants);
     } catch (error) {
       console.error(error);
     }
   };
-  
+
   const downloadResume = (resume, filename) => {
     const element = document.createElement("a");
     element.href = URL.createObjectURL(
-      new Blob([resume], { type: "application/pdf" })
+      new Blob([resume], { type: "application/pdf" }),
     );
     element.download = filename;
     document.body.appendChild(element);
@@ -127,7 +129,7 @@ const RecruiterApplicantsPage = () => {
   const filteredApplicants = applicants.filter((applicant) =>
     `${applicant.applicant.first_name} ${applicant.applicant.last_name}`
       .toLowerCase()
-      .includes(filterName.toLowerCase())
+      .includes(filterName.toLowerCase()),
   );
 
   const handleDialogOpen = (row) => {
@@ -154,11 +156,11 @@ const RecruiterApplicantsPage = () => {
             new_status: dialogData.application_status.status,
             rejection_feedback: dialogData.application_status.feedback,
           }),
-        }
+        },
       );
-  
+
       if (response.ok) {
-        fetchApplicants(); 
+        fetchApplicants();
         handleDialogClose();
       } else {
         console.error("Failed to update the status");
@@ -167,23 +169,20 @@ const RecruiterApplicantsPage = () => {
       console.error(error);
     }
   };
-  
 
   return (
     <Container maxWidth="lg">
-
-<Box
-      sx={{
-        pb: 5,
-        minHeight: "100px", 
-        borderRadius: "10px",  // Testing - For now added inline styling
-        boxShadow: 1, 
-        bgcolor: "background.page", 
-        marginTop: "30px",
-        
-      }}
-    >
-      <UserListToolbar
+      <Box
+        sx={{
+          pb: 5,
+          minHeight: "100px",
+          borderRadius: "10px", // Testing - For now added inline styling
+          boxShadow: 1,
+          bgcolor: "background.page",
+          marginTop: "30px",
+        }}
+      >
+        <UserListToolbar
           filterName={filterName}
           onFilterName={handleFilterByName}
         />
@@ -195,7 +194,6 @@ const RecruiterApplicantsPage = () => {
                 order="asc"
                 orderBy="name"
                 headLabel={[
-
                   { id: "name", label: "Name", alignRight: false },
                   { id: "role", label: "Role", alignRight: false },
                   { id: "status", label: "Status", alignRight: false },
@@ -207,8 +205,8 @@ const RecruiterApplicantsPage = () => {
               />
               <TableBody>
                 {filteredApplicants.map((row) => (
-                  <TableRow key={row.user_profile_id} tabIndex={-1} >
-                    <TableCell component="th" scope="row" padding="none" >
+                  <TableRow key={row.user_profile_id} tabIndex={-1}>
+                    <TableCell component="th" scope="row" padding="none">
                       <img
                         src={
                           row.applicant.profile_picture
@@ -226,23 +224,23 @@ const RecruiterApplicantsPage = () => {
                       />
                     </TableCell>
 
-                      <TableCell component="th" scope="row" padding="none">
-                        <Typography
-                          variant="body1"
-                          sx={{
-                            margin: 0,
-                            fontWeight: 600,
-                            lineHeight: 1.57142,
-                            fontSize: "0.875rem",
-                            fontFamily: "Public Sans, sans-serif",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          {`${row.applicant.first_name} ${row.applicant.last_name}`}
-                        </Typography>
-                      </TableCell>
+                    <TableCell component="th" scope="row" padding="none">
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          margin: 0,
+                          fontWeight: 600,
+                          lineHeight: 1.57142,
+                          fontSize: "0.875rem",
+                          fontFamily: "Public Sans, sans-serif",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {`${row.applicant.first_name} ${row.applicant.last_name}`}
+                      </Typography>
+                    </TableCell>
 
                     <TableCell>{row.job.title}</TableCell>
                     <TableCell>
@@ -263,7 +261,7 @@ const RecruiterApplicantsPage = () => {
                           e.preventDefault();
                           downloadResume(
                             row.applicant.resume,
-                            `${row.applicant.first_name}_${row.applicant.last_name}_Resume.pdf`
+                            `${row.applicant.first_name}_${row.applicant.last_name}_Resume.pdf`,
                           );
                         }}
                       >
@@ -272,12 +270,16 @@ const RecruiterApplicantsPage = () => {
                     </TableCell>
                     <TableCell>
                       <Button
-                          variant="outlined"
-                          onClick={() => handleDialogOpen(row)}
-                          sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
-                        >
-                          Update Status
-                        </Button>
+                        variant="outlined"
+                        onClick={() => handleDialogOpen(row)}
+                        sx={{
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                      >
+                        Update Status
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}

@@ -67,7 +67,7 @@ function CreateJobModal(props) {
         console.error(error);
       });
   };
-  
+
   const submitNewJob = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
