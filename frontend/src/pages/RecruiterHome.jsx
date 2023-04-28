@@ -129,7 +129,7 @@ function RecruiterHome() {
         <Box sx={{ flexGrow: 1, marginTop: "20px" }}>
           <Grid container spacing={2}>
             {jobs.map((job) => (
-              <Grid item xs={12} md={12} key={job.id}>
+              <Grid item xs={12} key={job.id}>
                 <Card className="jobContainer">
                   <CardContent className="CardContent">
                     <Typography
