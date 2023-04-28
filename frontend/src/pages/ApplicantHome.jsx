@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import "../styles/ApplicantHome.css";
 import JobList from "../components/JobList";
-import { Button, Container, IconButton, Typography, Box } from "@mui/material";
+import { Button, IconButton, Typography, Box } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import JobApply from "../components/JobApply";
 
