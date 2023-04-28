@@ -117,6 +117,58 @@ def get_user_profile_picture_me(
                     filename={current_user.username}_profile_picture.jpg"
             }
         )
+    
+@router.get(
+    "/users/profile/{user_id}/profile_picture",
+    status_code=status.HTTP_200_OK,
+    tags=["UserProfile"],
+    summary="Retrieve the profile picture of the user with id == user_id from the database.",
+    description="Retrieve the specified users' profile picture from the database as a jpg file.",
+    response_description="The specified users' profile picture."
+)
+def get_user_profile_picture(db: Session = Depends(dependencies.get_db),
+                             user_id: int = Path()):
+    
+    """
+    GET route to obtain a user's profile picture by user_id.
+
+    Parameters
+    ----------
+    db: Session
+        a database session
+    user_id: int
+        the user's unique identifier
+
+    Returns
+    -------
+    fastapi.Response
+        a response with the profile picture
+    """
+    
+    # Check that the user has a profile
+    dependencies.user_profile_exists(db, user_id)
+
+    user_profile = user_profile_crud.get_user_profile_by_id(db, user_id)
+
+    # Check that the user has a profile picture
+    if user_profile is not None:
+        file = user_profile.profile_picture
+
+        if file is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"User {user_id} does not have a profile picture in the database."
+            )
+        
+        return Response(
+            content=file,
+            media_type="image/jpg",
+            headers={
+                "content-disposition": f"attachment; \
+                filename={user_profile.first_name}_profile_picture.jpg"
+            }
+        )
+
 
 @router.get(
     "/users/profile/me/resume",
@@ -164,6 +216,54 @@ def get_user_resume_me(
             headers={
                 "content-disposition": f"attachment; \
                     filename={current_user.username}_resume.pdf"
+            }
+        )
+    
+@router.get(
+    "/users/profile/{user_id}/resume",
+    status_code=status.HTTP_200_OK,
+    tags=["UserProfile"],
+    summary="Retrieve the resume of the user with id == user_id from the database.",
+    description="Retrieve the specified users' resume from the database as a pdf file.",
+    response_description="The specified users' resume."
+)
+def get_user_resume(db: Session = Depends(dependencies.get_db),
+                    user_id: int = Path()):
+    """
+    GET route to obtain the resume of the user with id == user_id.
+
+    Parameters
+    ----------
+    db: Session
+        a database session
+    user_id: int
+        the unique identifier of the user
+
+    Returns
+    -------
+    fastapi.Response
+        a response with the resume
+    """
+    
+    dependencies.user_profile_exists(db, user_id)
+
+    user_profile = user_profile_crud.get_user_profile_by_id(db, user_id)
+
+    if user_profile is not None:
+        file = user_profile.resume
+
+        if file is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"User {user_id} does not have a resume in the database."
+            )
+        
+        return Response(
+            content=file, 
+            media_type="application/pdf",
+            headers={
+                "content-disposition": f"attachment; \
+                    filename={user_profile.first_name}_resume.pdf"
             }
         )
 
