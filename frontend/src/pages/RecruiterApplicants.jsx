@@ -269,7 +269,6 @@ const RecruiterApplicantsPage = () => {
             <Table>
               <UserListHead
                 order="asc"
-                orderBy="name"
                 headLabel={[
                   { id: "name", label: "Name", alignRight: false },
                   { id: "role", label: "Role", alignRight: false },
