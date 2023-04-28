@@ -14,6 +14,7 @@ import LoginPage from "./components/SignIn";
 import CreateProfile from "./pages/createProfile";
 import SkillsSelector from "./pages/skills";
 import EditProfile from "./pages/editProfile";
+import RecruiterApplicantsPage from "./pages/RecruiterApplicants";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -31,6 +32,7 @@ root.render(
       <Route path="/createProfile" element={<CreateProfile />} />
       <Route path="/editProfile" element={<EditProfile />} />
       <Route path="/skills" element={<SkillsSelector />} />
+      <Route path="/recruiterApplicant" element={<RecruiterApplicantsPage />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   </HashRouter>,

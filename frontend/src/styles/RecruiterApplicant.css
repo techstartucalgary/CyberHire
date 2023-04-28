@@ -1,0 +1,40 @@
+.applicantsPage {
+  padding: 1rem;
+}
+
+.mainGrid {
+  height: 100vh;
+}
+
+.leftContainer {
+  border-right: 1px solid black;
+  height: 100%;
+  padding-right: 1rem;
+  background-color: rgb(148, 218, 218);
+}
+
+.searchBar {
+  margin-top: 20px !important;
+  margin-left: 20px !important;
+  margin-bottom: 1rem;
+  width: 95% !important;
+}
+
+.jobList {
+  /* height: calc(100% - 56px); */
+  height: 80%;
+  overflow-y: auto;
+}
+
+.jobListItem {
+  background-color: #322525;
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  min-width: 500px;
+}
+
+.rightContainer {
+  padding-left: 1rem;
+}

@@ -8,11 +8,8 @@ import {
   Grid,
   Card,
   CardContent,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
 } from "@mui/material";
+import RecruiterApplicantsPage from "./RecruiterApplicants";
 
 function RecruiterHome() {
   const [showCreateJobModal, setShowCreateJobModal] = useState(false);
@@ -20,12 +17,17 @@ function RecruiterHome() {
   const [shouldFetchJobs, setShouldFetchJobs] = useState(true);
   const [hasJobs, setHasJobs] = useState(false);
   const [jobData, setJobData] = useState(null);
+  // const [jobStatus, setJobStatus] = useState({});
+  const [selectedJobId, setSelectedJobId] = useState(null);
 
-  const [jobStatus, setJobStatus] = useState({});
+  // const handleStatusChange = (jobId, event) => {
+  //   setSelectedJobId(jobId);
+  //   setJobStatus({ ...jobStatus, [jobId]: event.target.value });
+  // };
 
-  const handleStatusChange = (jobId, event) => {
-    setJobStatus({ ...jobStatus, [jobId]: event.target.value });
-  };
+  // const handleSelectedJob = (jobId) => {
+  //   setSelectedJobId(jobId);
+  // };
 
   useEffect(() => {
     if (shouldFetchJobs) {
@@ -72,6 +74,7 @@ function RecruiterHome() {
   };
 
   const deleteJob = async (jobId) => {
+    setSelectedJobId(jobId);
     try {
       const response = await fetch(
         `https://chapi.techstartucalgary.com/jobs/${jobId}`,
@@ -101,6 +104,7 @@ function RecruiterHome() {
   };
 
   const editJob = (job) => {
+    setSelectedJobId(job.id);
     setJobData(job);
     showModal();
   };
@@ -117,7 +121,6 @@ function RecruiterHome() {
       <Button className="Button" variant="contained" onClick={showModal}>
         <Typography>Post New Job</Typography>
       </Button>
-
       <Typography variant="h5" textAlign="center" sx={{ marginTop: "20px" }}>
         Your Job Listings
       </Typography>
@@ -126,7 +129,7 @@ function RecruiterHome() {
         <Box sx={{ flexGrow: 1, marginTop: "20px" }}>
           <Grid container spacing={2}>
             {jobs.map((job) => (
-              <Grid item xs={12} md={6} key={job.id}>
+              <Grid item xs={12} md={12} key={job.id}>
                 <Card className="jobContainer">
                   <CardContent className="CardContent">
                     <Typography
@@ -168,7 +171,10 @@ function RecruiterHome() {
                         </Typography>
                       </div>
                     )}
-                    <div className="skillsContainer">
+                    <div
+                      className="skillsContainer"
+                      style={{ marginBottom: "30px" }}
+                    >
                       {job.skills.map((skill) => (
                         <Typography
                           className="jobSkill"
@@ -179,28 +185,6 @@ function RecruiterHome() {
                         </Typography>
                       ))}
                     </div>
-                    <FormControl
-                      fullWidth
-                      variant="standard"
-                      className="formControl"
-                    >
-                      <InputLabel>Status</InputLabel>
-                      <Select
-                        value={jobStatus[job.id] || ""}
-                        onChange={(event) => handleStatusChange(job.id, event)}
-                        sx={{ minWidth: "100%" }}
-                      >
-                        <MenuItem value={""}>Select Status</MenuItem>
-                        <MenuItem value={"SUBMITTED"}>Submitted</MenuItem>
-                        <MenuItem value={"UNDER_REVIEW"}>Under Review</MenuItem>
-                        <MenuItem value={"UNDERGOING_FURTHER_SCREENING"}>
-                          Undergoing Further Screening
-                        </MenuItem>
-                        <MenuItem value={"REJECTED"}>Rejected</MenuItem>
-                        <MenuItem value={"OFFER_SENT"}>Offer Sent</MenuItem>
-                      </Select>
-                    </FormControl>
-
                     <Button
                       variant="contained"
                       className="applyButton"
@@ -215,14 +199,6 @@ function RecruiterHome() {
                     >
                       <Typography>Edit Job</Typography>
                     </Button>
-
-                    <Button
-                      variant="outlined"
-                      className="updateStatus"
-                      disabled // Disabled for now - Until API call available
-                    >
-                      <Typography>Update Status</Typography>
-                    </Button>
                   </CardContent>
                 </Card>
               </Grid>
@@ -234,6 +210,7 @@ function RecruiterHome() {
           You haven't posted any jobs yet.
         </Typography>
       )}
+      <RecruiterApplicantsPage jobId={selectedJobId} />
 
       {showCreateJobModal && (
         <CreateJobModal
