@@ -63,15 +63,14 @@ const RecruiterApplicantsPage = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           },
-        }
+        },
       );
 
       if (response.ok) {
         const data = await response.json();
         const jobIds = data.map((job) => job.id);
         setJobIds(jobIds);
-      } 
-      else {
+      } else {
         console.error("Failed to fetch jobs for the recruiter");
       }
     } catch (error) {
@@ -94,7 +93,7 @@ const RecruiterApplicantsPage = () => {
               "Content-Type": "application/json",
               Authorization: `Bearer ${localStorage.getItem("access_token")}`,
             },
-          }
+          },
         );
 
         if (response.status === 404) {
@@ -107,10 +106,10 @@ const RecruiterApplicantsPage = () => {
             const applicantsWithProfilePictures = await Promise.all(
               data.map(async (applicant) => {
                 const profilePictureUrl = await fetchProfilePicture(
-                  applicant.user_profile_id
+                  applicant.user_profile_id,
                 );
                 return { ...applicant, profile_picture: profilePictureUrl };
-              })
+              }),
             );
             allApplicants = [
               ...allApplicants,
@@ -167,7 +166,7 @@ const RecruiterApplicantsPage = () => {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           },
-        }
+        },
       );
 
       if (response.ok) {
@@ -190,7 +189,7 @@ const RecruiterApplicantsPage = () => {
   const filteredApplicants = applicants.filter((applicant) =>
     `${applicant.applicant.first_name} ${applicant.applicant.last_name}`
       .toLowerCase()
-      .includes(filterName.toLowerCase())
+      .includes(filterName.toLowerCase()),
   );
 
   const handleDialogOpen = (row) => {
@@ -217,7 +216,7 @@ const RecruiterApplicantsPage = () => {
             new_status: dialogData.application_status.status,
             rejection_feedback: dialogData.application_status.feedback,
           }),
-        }
+        },
       );
 
       if (response.ok) {

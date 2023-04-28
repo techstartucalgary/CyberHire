@@ -83,8 +83,6 @@ function SkillsSelector() {
 
 export default SkillsSelector;
 
-
-
 // import React, { useState, useEffect } from "react";
 
 // const App = () => {
@@ -131,10 +129,6 @@ export default SkillsSelector;
 // };
 
 // export default App;
-
-
-
-
 
 // import React, { useState } from 'react';
 // import { Button, Dialog, DialogTitle, DialogContent } from '@mui/material';
@@ -208,5 +202,3 @@ export default SkillsSelector;
 // }
 
 // export default DownloadResumeButton;
-
-

@@ -22,7 +22,7 @@ const Label = ({ color, children }) => {
     info: "info.main",
     primary: "primary.main",
     secondary: "secondary.main",
-    offerSent: "#4CAF50", 
+    offerSent: "#4CAF50",
   };
 
   return (
@@ -37,8 +37,8 @@ const Label = ({ color, children }) => {
         px: 1,
         color: "white",
         fontSize: "0.55rem",
-        fontWeight:'bold',
-        padding:'4px',
+        fontWeight: "bold",
+        padding: "4px",
         backgroundColor: backgroundColors[color] || "error.main",
       }}
     >
@@ -46,7 +46,6 @@ const Label = ({ color, children }) => {
     </Box>
   );
 };
-
 
 Label.propTypes = {
   color: PropTypes.string.isRequired,
@@ -107,7 +106,7 @@ const UserListHead = ({
   return (
     <TableHead
       sx={{
-        bgcolor: "grey.200", 
+        bgcolor: "grey.200",
       }}
     >
       <TableRow>
@@ -161,7 +160,7 @@ const UserListToolbar = ({
         display: "flex",
         justifyContent: "space-between",
         padding: 1,
-        backgroundColor: "background.paper", 
+        backgroundColor: "background.paper",
         ...(numSelected > 0 && {
           color: "primary.main",
           bgcolor: "primary.lighter",
