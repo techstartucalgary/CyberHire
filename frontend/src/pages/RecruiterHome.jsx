@@ -8,11 +8,8 @@ import {
   Grid,
   Card,
   CardContent,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
 } from "@mui/material";
+import RecruiterApplicantsPage from "./RecruiterApplicants";
 
 function RecruiterHome() {
   const [showCreateJobModal, setShowCreateJobModal] = useState(false);
@@ -20,11 +17,16 @@ function RecruiterHome() {
   const [shouldFetchJobs, setShouldFetchJobs] = useState(true);
   const [hasJobs, setHasJobs] = useState(false);
   const [jobData, setJobData] = useState(null);
-
   const [jobStatus, setJobStatus] = useState({});
+  const [selectedJobId, setSelectedJobId] = useState(null);
 
   const handleStatusChange = (jobId, event) => {
+    setSelectedJobId(jobId);
     setJobStatus({ ...jobStatus, [jobId]: event.target.value });
+  };
+
+  const handleSelectedJob = (jobId) => {
+    setSelectedJobId(jobId);
   };
 
   useEffect(() => {
@@ -72,6 +74,7 @@ function RecruiterHome() {
   };
 
   const deleteJob = async (jobId) => {
+    setSelectedJobId(jobId);
     try {
       const response = await fetch(
         `https://chapi.techstartucalgary.com/jobs/${jobId}`,
@@ -101,6 +104,7 @@ function RecruiterHome() {
   };
 
   const editJob = (job) => {
+    setSelectedJobId(job.id);
     setJobData(job);
     showModal();
   };
@@ -110,140 +114,115 @@ function RecruiterHome() {
       style: "currency",
       currency: "USD",
       maximumFractionDigits: 0,
-    });
-  };
-  return (
-    <Box className="appHome">
+      });
+      };
+      return (
+      <Box className="appHome">
       <Button className="Button" variant="contained" onClick={showModal}>
-        <Typography>Post New Job</Typography>
+      <Typography>Post New Job</Typography>
       </Button>
-
       <Typography variant="h5" textAlign="center" sx={{ marginTop: "20px" }}>
-        Your Job Listings
-      </Typography>
+    Your Job Listings
+  </Typography>
 
-      {hasJobs ? (
-        <Box sx={{ flexGrow: 1, marginTop: "20px" }}>
-          <Grid container spacing={2}>
-            {jobs.map((job) => (
-              <Grid item xs={12} md={6} key={job.id}>
-                <Card className="jobContainer">
-                  <CardContent className="CardContent">
-                    <Typography
-                      className="jobTitle"
-                      variant="h5"
-                      component="div"
-                    >
-                      {job.title}
+  {hasJobs ? (
+    <Box sx={{ flexGrow: 1, marginTop: "20px" }}>
+      <Grid container spacing={2}>
+        {jobs.map((job) => (
+          <Grid item xs={12} md={6} key={job.id}>
+            <Card className="jobContainer">
+              <CardContent className="CardContent">
+                <Typography
+                  className="jobTitle"
+                  variant="h5"
+                  component="div"
+                >
+                  {job.title}
+                </Typography>
+                <Typography
+                  className="jobCompany"
+                  sx={{ mb: 1.5 }}
+                  color="text.secondary"
+                >
+                  {job.owner.company}
+                </Typography>
+                <Typography
+                  className="jobLocation"
+                  sx={{ mb: 1.5 }}
+                  color="text.secondary"
+                >
+                  {job.location}
+                </Typography>
+                {job.min_salary >= 0 && job.max_salary >= 0 && (
+                  <Typography
+                    className="jobSalary"
+                    sx={{ mb: 1.5 }}
+                    color="text.secondary"
+                  >
+                    {formatCurrency(job.min_salary)} -{" "}
+                    {formatCurrency(job.max_salary)}
+                  </Typography>
+                )}
+
+                {job?.description && (
+                  <div className="descContainer">
+                    <Typography className="jobDescription">
+                      {job.description}
                     </Typography>
+                  </div>
+                )}
+                <div className="skillsContainer" style={{marginBottom: '30px' }}>
+                  {job.skills.map((skill) => (
                     <Typography
-                      className="jobCompany"
-                      sx={{ mb: 1.5 }}
-                      color="text.secondary"
+                      className="jobSkill"
+                      key={skill.id}
+                      sx={{ mt: 1 }}
                     >
-                      {job.owner.company}
+                      {skill.skill}
                     </Typography>
-                    <Typography
-                      className="jobLocation"
-                      sx={{ mb: 1.5 }}
-                      color="text.secondary"
-                    >
-                      {job.location}
-                    </Typography>
-                    {job.min_salary >= 0 && job.max_salary >= 0 && (
-                      <Typography
-                        className="jobSalary"
-                        sx={{ mb: 1.5 }}
-                        color="text.secondary"
-                      >
-                        {formatCurrency(job.min_salary)} -{" "}
-                        {formatCurrency(job.max_salary)}
-                      </Typography>
-                    )}
-
-                    {job?.description && (
-                      <div className="descContainer">
-                        <Typography className="jobDescription">
-                          {job.description}
-                        </Typography>
-                      </div>
-                    )}
-                    <div className="skillsContainer">
-                      {job.skills.map((skill) => (
-                        <Typography
-                          className="jobSkill"
-                          key={skill.id}
-                          sx={{ mt: 1 }}
-                        >
-                          {skill.skill}
-                        </Typography>
-                      ))}
-                    </div>
-                    <FormControl
-                      fullWidth
-                      variant="standard"
-                      className="formControl"
-                    >
-                      <InputLabel>Status</InputLabel>
-                      <Select
-                        value={jobStatus[job.id] || ""}
-                        onChange={(event) => handleStatusChange(job.id, event)}
-                        sx={{ minWidth: "100%" }}
-                      >
-                        <MenuItem value={""}>Select Status</MenuItem>
-                        <MenuItem value={"SUBMITTED"}>Submitted</MenuItem>
-                        <MenuItem value={"UNDER_REVIEW"}>Under Review</MenuItem>
-                        <MenuItem value={"UNDERGOING_FURTHER_SCREENING"}>
-                          Undergoing Further Screening
-                        </MenuItem>
-                        <MenuItem value={"REJECTED"}>Rejected</MenuItem>
-                        <MenuItem value={"OFFER_SENT"}>Offer Sent</MenuItem>
-                      </Select>
-                    </FormControl>
-
-                    <Button
-                      variant="contained"
-                      className="applyButton"
-                      onClick={() => deleteJob(job.id)}
-                    >
-                      <Typography>Delete Job</Typography>
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      className="editButton"
-                      onClick={() => editJob(job)}
-                    >
-                      <Typography>Edit Job</Typography>
-                    </Button>
-
-                    <Button
-                      variant="outlined"
-                      className="updateStatus"
-                      disabled // Disabled for now - Until API call available
-                    >
-                      <Typography>Update Status</Typography>
-                    </Button>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
+                  ))}
+                </div>
+                <Button
+                  variant="contained"
+                  className="applyButton"
+                  onClick={() => deleteJob(job.id)}
+                >
+                  <Typography>Delete Job</Typography>
+                </Button>
+                <Button
+                  variant="outlined"
+                  className="editButton"
+                  onClick={() => editJob(job)}
+                >
+                  <Typography>Edit Job</Typography>
+                </Button>
+              </CardContent>
+            </Card>
           </Grid>
-        </Box>
-      ) : (
-        <Typography className="noJobs">
-          You haven't posted any jobs yet.
-        </Typography>
-      )}
-
-      {showCreateJobModal && (
-        <CreateJobModal
-          open={showCreateJobModal}
-          job={jobData}
-          closeModal={closeModal}
-        />
-      )}
+        ))}
+      </Grid>
     </Box>
-  );
+  ) : (
+    <Typography className="noJobs">
+      You haven't posted any jobs yet.
+    </Typography>
+  )}
+  <RecruiterApplicantsPage jobId={selectedJobId} />
+
+<br />
+<br />
+
+{showCreateJobModal && (
+  <CreateJobModal
+    open={showCreateJobModal}
+    job={jobData}
+    closeModal={closeModal}
+  />
+)}
+</Box>
+);
 }
 
 export default RecruiterHome;
+
+
