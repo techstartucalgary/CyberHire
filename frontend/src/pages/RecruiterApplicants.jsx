@@ -7,7 +7,6 @@ import {
   TableCell,
   TableRow,
   Typography,
-  Link,
   Button,
   Dialog,
   DialogTitle,
@@ -27,6 +26,7 @@ import {
   UserListToolbar,
 } from "../components/RecruiterApplicantsComponents";
 import defaultProfile from "../img/defaultProfile.jpg";
+import GetAppIcon from "@mui/icons-material/GetApp";
 
 const RecruiterApplicantsPage = () => {
   const [filterName, setFilterName] = useState("");
@@ -34,6 +34,11 @@ const RecruiterApplicantsPage = () => {
   const [jobIds, setJobIds] = useState([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogData, setDialogData] = useState({});
+
+  const [resumeURL, setResumeURL] = useState("");
+  const [open, setOpen] = useState(false);
+
+  const [profilePictures, setProfilePictures] = useState({});
 
   useEffect(() => {
     fetchJobs();
@@ -58,14 +63,15 @@ const RecruiterApplicantsPage = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           },
-        },
+        }
       );
 
       if (response.ok) {
         const data = await response.json();
         const jobIds = data.map((job) => job.id);
         setJobIds(jobIds);
-      } else {
+      } 
+      else {
         console.error("Failed to fetch jobs for the recruiter");
       }
     } catch (error) {
@@ -88,16 +94,28 @@ const RecruiterApplicantsPage = () => {
               "Content-Type": "application/json",
               Authorization: `Bearer ${localStorage.getItem("access_token")}`,
             },
-          },
+          }
         );
 
         if (response.status === 404) {
           setApplicants([]);
         } else {
           const data = await response.json();
-          // Check if data is an array before setting the state
+
+          // had to check if data is an array or not for error checking
           if (Array.isArray(data)) {
-            allApplicants = [...allApplicants, ...data];
+            const applicantsWithProfilePictures = await Promise.all(
+              data.map(async (applicant) => {
+                const profilePictureUrl = await fetchProfilePicture(
+                  applicant.user_profile_id
+                );
+                return { ...applicant, profile_picture: profilePictureUrl };
+              })
+            );
+            allApplicants = [
+              ...allApplicants,
+              ...applicantsWithProfilePictures,
+            ];
           } else {
             setApplicants([]);
             console.error("Fetched data is not an array:", data);
@@ -111,15 +129,58 @@ const RecruiterApplicantsPage = () => {
     }
   };
 
-  const downloadResume = (resume, filename) => {
-    const element = document.createElement("a");
-    element.href = URL.createObjectURL(
-      new Blob([resume], { type: "application/pdf" }),
-    );
-    element.download = filename;
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
+  const handleDownloadClick = async (userId) => {
+    const endpoint = `https://chapi.techstartucalgary.com/users/profile/${userId}/resume`;
+
+    try {
+      const response = await fetch(endpoint, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/pdf",
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch resume");
+      }
+
+      const blob = await response.blob();
+      const objectURL = URL.createObjectURL(blob);
+      setResumeURL(objectURL);
+      setOpen(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const fetchProfilePicture = async (userId) => {
+    try {
+      const response = await fetch(
+        `https://chapi.techstartucalgary.com/users/profile/${userId}/profile_picture`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.blob();
+        return URL.createObjectURL(data);
+      } else {
+        console.error("Failed to fetch profile picture");
+        return defaultProfile;
+      }
+    } catch (error) {
+      console.error(error);
+      return defaultProfile;
+    }
   };
 
   const handleFilterByName = (event) => {
@@ -129,7 +190,7 @@ const RecruiterApplicantsPage = () => {
   const filteredApplicants = applicants.filter((applicant) =>
     `${applicant.applicant.first_name} ${applicant.applicant.last_name}`
       .toLowerCase()
-      .includes(filterName.toLowerCase()),
+      .includes(filterName.toLowerCase())
   );
 
   const handleDialogOpen = (row) => {
@@ -156,7 +217,7 @@ const RecruiterApplicantsPage = () => {
             new_status: dialogData.application_status.status,
             rejection_feedback: dialogData.application_status.feedback,
           }),
-        },
+        }
       );
 
       if (response.ok) {
@@ -167,6 +228,23 @@ const RecruiterApplicantsPage = () => {
       }
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "SUBMITTED":
+        return "success";
+      case "UNDER REVIEW":
+        return "info";
+      case "UNDERGOING FURTHER SCREENING":
+        return "warning";
+      case "REJECTED":
+        return "error";
+      case "OFFER SENT":
+        return "offerSent";
+      default:
+        return "secondary";
     }
   };
 
@@ -208,22 +286,18 @@ const RecruiterApplicantsPage = () => {
                   <TableRow key={row.user_profile_id} tabIndex={-1}>
                     <TableCell component="th" scope="row" padding="none">
                       <img
-                        src={
-                          row.applicant.profile_picture
-                            ? `data:image/jpeg;base64,${row.applicant.profile_picture}`
-                            : defaultProfile
-                        }
+                        src={row.profile_picture || defaultProfile}
                         alt={""}
                         style={{
                           borderRadius: "50%",
-                          width: "40px",
-                          height: "40px",
+                          width: "35px",
+                          height: "35px",
                           marginRight: "8px",
+                          marginLeft: "8px",
                           verticalAlign: "middle",
                         }}
                       />
                     </TableCell>
-
                     <TableCell component="th" scope="row" padding="none">
                       <Typography
                         variant="body1"
@@ -236,6 +310,7 @@ const RecruiterApplicantsPage = () => {
                           overflow: "hidden",
                           textOverflow: "ellipsis",
                           whiteSpace: "nowrap",
+                          marginLeft: "8px",
                         }}
                       >
                         {`${row.applicant.first_name} ${row.applicant.last_name}`}
@@ -244,7 +319,7 @@ const RecruiterApplicantsPage = () => {
 
                     <TableCell>{row.job.title}</TableCell>
                     <TableCell>
-                      <Label
+                      {/* <Label
                         color={
                           row.application_status.status === "SUBMITTED"
                             ? "success"
@@ -252,22 +327,37 @@ const RecruiterApplicantsPage = () => {
                         }
                       >
                         {row.application_status.status}
+                      </Label> */}
+                      <Label
+                        color={getStatusColor(row.application_status.status)}
+                      >
+                        {row.application_status.status}
                       </Label>
                     </TableCell>
+
                     <TableCell>
-                      <Link
-                        href="#"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          downloadResume(
-                            row.applicant.resume,
-                            `${row.applicant.first_name}_${row.applicant.last_name}_Resume.pdf`,
-                          );
+                      <Button
+                        variant="outlined"
+                        onClick={() => handleDownloadClick(row.user_profile_id)}
+                        startIcon={<GetAppIcon />}
+                        sx={{
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          bgcolor: "primary.main",
+                          color: "white",
+                          fontSize: "14px",
+                          marginLeft: "6px",
+                          marginRight: "0px",
+                          fontWeight: "bold",
+                          "&:hover": {
+                            bgcolor: "primary.dark",
+                          },
                         }}
-                      >
-                        {`${row.applicant.first_name}_${row.applicant.last_name}_Resume.pdf`}
-                      </Link>
+                      ></Button>
                     </TableCell>
+
+                    {/* </TableCell> */}
                     <TableCell>
                       <Button
                         variant="outlined"
@@ -276,6 +366,17 @@ const RecruiterApplicantsPage = () => {
                           whiteSpace: "nowrap",
                           overflow: "hidden",
                           textOverflow: "ellipsis",
+                          border: "2px solid grey",
+                          borderRadius: "4px",
+                          color: "grey",
+                          fontWeight: "bold",
+                          padding: "6px 12px",
+                          transition: "background-color 0.3s",
+                          "&:hover": {
+                            // backgroundColor: "#4CAF50",
+                            backgroundColor: "primary.dark",
+                            color: "#fff",
+                          },
                         }}
                       >
                         Update Status
@@ -306,6 +407,22 @@ const RecruiterApplicantsPage = () => {
           )}
         </Scrollbar>
       </Box>
+
+      <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+        <DialogTitle>Resume</DialogTitle>
+        <DialogContent>
+          <iframe
+            src={resumeURL}
+            title="Resume"
+            width="100%"
+            height="600px"
+          ></iframe>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Close</Button>
+        </DialogActions>
+      </Dialog>
+
       <Dialog
         open={dialogOpen}
         onClose={handleDialogClose}

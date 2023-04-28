@@ -8,8 +8,6 @@ import {
   TableHead,
   TableSortLabel,
   Toolbar,
-  Tooltip,
-  IconButton,
   Typography,
   OutlinedInput,
   InputAdornment,
@@ -17,6 +15,16 @@ import {
 
 // Label Component
 const Label = ({ color, children }) => {
+  const backgroundColors = {
+    success: "success.main",
+    error: "error.main",
+    warning: "warning.main",
+    info: "info.main",
+    primary: "primary.main",
+    secondary: "secondary.main",
+    offerSent: "#4CAF50", 
+  };
+
   return (
     <Box
       sx={{
@@ -28,13 +36,17 @@ const Label = ({ color, children }) => {
         minHeight: 32,
         px: 1,
         color: "white",
-        backgroundColor: color === "success" ? "success.main" : "error.main",
+        fontSize: "0.55rem",
+        fontWeight:'bold',
+        padding:'4px',
+        backgroundColor: backgroundColors[color] || "error.main",
       }}
     >
       {children}
     </Box>
   );
 };
+
 
 Label.propTypes = {
   color: PropTypes.string.isRequired,
@@ -95,7 +107,7 @@ const UserListHead = ({
   return (
     <TableHead
       sx={{
-        bgcolor: "grey.200", // Add this line to set the background color to grey
+        bgcolor: "grey.200", 
       }}
     >
       <TableRow>
@@ -149,7 +161,7 @@ const UserListToolbar = ({
         display: "flex",
         justifyContent: "space-between",
         padding: 1,
-        backgroundColor: "background.paper", // Add this line to set the background color to white
+        backgroundColor: "background.paper", 
         ...(numSelected > 0 && {
           color: "primary.main",
           bgcolor: "primary.lighter",
