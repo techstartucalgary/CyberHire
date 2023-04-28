@@ -38,7 +38,7 @@ const RecruiterApplicantsPage = () => {
   const [resumeURL, setResumeURL] = useState("");
   const [open, setOpen] = useState(false);
 
-  const [profilePictures, setProfilePictures] = useState({});
+  // const [profilePictures, setProfilePictures] = useState({});
 
   useEffect(() => {
     fetchJobs();
@@ -50,7 +50,7 @@ const RecruiterApplicantsPage = () => {
         fetchApplicants(jobId);
       });
     }
-  }, [jobIds]);
+  }, [jobIds]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchJobs = async () => {
     try {

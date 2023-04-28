@@ -17,17 +17,17 @@ function RecruiterHome() {
   const [shouldFetchJobs, setShouldFetchJobs] = useState(true);
   const [hasJobs, setHasJobs] = useState(false);
   const [jobData, setJobData] = useState(null);
-  const [jobStatus, setJobStatus] = useState({});
+  // const [jobStatus, setJobStatus] = useState({});
   const [selectedJobId, setSelectedJobId] = useState(null);
 
-  const handleStatusChange = (jobId, event) => {
-    setSelectedJobId(jobId);
-    setJobStatus({ ...jobStatus, [jobId]: event.target.value });
-  };
+  // const handleStatusChange = (jobId, event) => {
+  //   setSelectedJobId(jobId);
+  //   setJobStatus({ ...jobStatus, [jobId]: event.target.value });
+  // };
 
-  const handleSelectedJob = (jobId) => {
-    setSelectedJobId(jobId);
-  };
+  // const handleSelectedJob = (jobId) => {
+  //   setSelectedJobId(jobId);
+  // };
 
   useEffect(() => {
     if (shouldFetchJobs) {
