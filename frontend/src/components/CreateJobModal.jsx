@@ -116,11 +116,11 @@ function CreateJobModal(props) {
           )}
         </div>
         <div className="row right-align button-container">
-          <Button variant="outlined" onClick={cancelModal}>
+          <Button variant="outlined" /*onClick={cancelModal}*/>
             Cancel
           </Button>
           <Button type="submit" variant="contained">
-            {isEditing ? `Update Job` : `Post Job`}
+            {/*isEditing ? `Update Job` : `Post Job`*/}
           </Button>
         </div>
       </form>

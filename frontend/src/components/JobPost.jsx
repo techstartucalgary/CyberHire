@@ -1,9 +1,18 @@
 import React from "react";
+import { useState } from "react";
 import { Button, Typography } from "@mui/material";
 
 import "../styles/JobPost.css";
 
+
 function JobPost(props) {
+
+  const [apply, setApply] = useState(false)
+
+
+
+
+
   const formatCurrency = (num) => {
     return num.toLocaleString("en-US", {
       style: "currency",
@@ -11,6 +20,40 @@ function JobPost(props) {
       maximumFractionDigits: 0,
     });
   };
+
+  const applyHandler = async () => {
+    setApply(true)
+    try{
+
+   
+    const response = await fetch(`https://chapi.techstartucalgary.com/applications/${props.job.id}`, {
+      method:"POST",
+      mode:"cors",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+     
+    })
+    if (response.ok) {
+      alert("Job was succesful")
+      setApply(false)
+      window.location.reload();
+    }else {
+      throw new Error("Job application failed. Please try again later")
+    }
+  }catch(error){
+    console.error(error)
+    alert(error.message)
+    setApply(false)
+  }
+  
+ 
+
+  }
+  
+
+ 
 
   return (
     <div className="jobContainer">
@@ -37,8 +80,15 @@ function JobPost(props) {
           </Typography>
         );
       })}
-      <Button variant="contained" className="applyButton">
-        <Typography>Apply</Typography>
+      <Button
+       variant="contained" 
+       href=""  className="applyButton"
+       disabled = {apply}
+       onClick = {applyHandler}
+       
+       >
+        {apply ? <Typography>Applying...</Typography> : <Typography>Apply</Typography>}
+       
       </Button>
     </div>
   );
