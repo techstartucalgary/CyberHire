@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Button, Typography } from "@mui/material";
+import { Label } from "../components/RecruiterApplicantsComponents";
 
 import "../styles/JobPost.css";
 
@@ -13,6 +14,23 @@ function JobPost(props) {
       currency: "CAD",
       maximumFractionDigits: 0,
     });
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "SUBMITTED":
+        return "success";
+      case "UNDER REVIEW":
+        return "info";
+      case "UNDERGOING FURTHER SCREENING":
+        return "warning";
+      case "REJECTED":
+        return "error";
+      case "OFFER SENT":
+        return "offerSent";
+      default:
+        return "secondary";
+    }
   };
 
   const applyHandler = async () => {
@@ -68,19 +86,23 @@ function JobPost(props) {
           </Typography>
         );
       })}
-      <Button
-        variant="contained"
-        href=""
-        className="applyButton"
-        disabled={apply}
-        onClick={applyHandler}
-      >
-        {apply ? (
-          <Typography>Applying...</Typography>
-        ) : (
-          <Typography>Apply</Typography>
-        )}
-      </Button>
+      {!props.disabled ? (
+        <Button
+          variant="contained"
+          href=""
+          className="applyButton"
+          disabled={apply}
+          onClick={applyHandler}
+        >
+          {apply ? (
+            <Typography>Applying...</Typography>
+          ) : (
+            <Typography>Apply</Typography>
+          )}
+        </Button>
+      ) : (
+        <Label color={getStatusColor(props.status)}>{props.status}</Label>
+      )}
     </div>
   );
 }

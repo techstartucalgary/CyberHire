@@ -26,9 +26,13 @@ const JobApply = () => {
     <div>
       {appliedJobs.length > 0 ? (
         <div>
-          <Typography>Applied Jobs</Typography>
           {appliedJobs.map((appliedJob) => (
-            <JobPost key={appliedJob.id} job={appliedJob.job} disabled={true} />
+            <JobPost
+              key={appliedJob.id}
+              job={appliedJob.job}
+              disabled={true}
+              status={appliedJob.application_status.status}
+            />
           ))}
         </div>
       ) : (

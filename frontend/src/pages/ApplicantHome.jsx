@@ -23,31 +23,33 @@ function ApplicantHome() {
         <Typography>Update my Profile</Typography>
       </Button>
 
-      <Container className="row" sx={{ marginTop: "20px" }}>
-        <Typography align="center" variant="h5">
-          Job List
-        </Typography>
+      <Box className="column" sx={{ marginTop: "20px" }}>
+        <div className="row">
+          <Typography align="center" variant="h5">
+            Jobs For You
+          </Typography>
+          <IconButton className="toggleJobs" onClick={toggleJobs}>
+            <ArrowDropDownIcon
+              fontSize="large"
+              className={showJobs ? "rotate" : ""}
+            />
+          </IconButton>
+        </div>
+        {showJobs && <JobList />}
 
-        <IconButton className="toggleJobs" onClick={toggleJobs}>
-          <ArrowDropDownIcon
-            fontSize="large"
-            className={showJobs ? "rotate" : ""}
-          />
-        </IconButton>
-
-        <Typography align="left" variant="h5">
-          Applied Jobs
-        </Typography>
-        <IconButton className="toggleJobs" onClick={toggleAppliedJobs}>
-          <ArrowDropDownIcon
-            fontSize="large"
-            className={showJobs ? "rotate" : ""}
-          />
-        </IconButton>
-      </Container>
-
-      {showJobs && <JobList />}
-      {appliedList && <JobApply />}
+        <div className="row">
+          <Typography align="left" variant="h5">
+            Pending Jobs
+          </Typography>
+          <IconButton className="toggleJobs" onClick={toggleAppliedJobs}>
+            <ArrowDropDownIcon
+              fontSize="large"
+              className={appliedList ? "rotate" : ""}
+            />
+          </IconButton>
+        </div>
+        {appliedList && <JobApply />}
+      </Box>
     </Box>
   );
 }
