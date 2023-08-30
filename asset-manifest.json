@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.b951591c.css",
+    "main.js": "/static/js/main.14e31573.js",
+    "static/media/HiringVector.png": "/static/media/HiringVector.6841c66197f9e2840b46.png",
+    "static/media/CyberHireLogo.png": "/static/media/CyberHireLogo.d1571fa51fb92884f6ab.png",
+    "static/media/findJob.png": "/static/media/findJob.25f3b693dc6cfa865ce5.png",
+    "index.html": "/index.html",
+    "main.b951591c.css.map": "/static/css/main.b951591c.css.map",
+    "main.14e31573.js.map": "/static/js/main.14e31573.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b951591c.css",
+    "static/js/main.14e31573.js"
+  ]
+}
